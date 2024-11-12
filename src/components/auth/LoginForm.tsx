@@ -39,7 +39,8 @@ export function LoginForm() {
 
       router.push("/");
       router.refresh();
-    } catch (error) {
+    } catch (error: unknown) {
+      console.error(error); // Log the error if needed
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
@@ -79,14 +80,6 @@ export function LoginForm() {
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Signing in..." : "Sign in"}
       </Button>
-
-      <div className="text-sm text-center text-gray-500">
-        Use these credentials:
-        <br />
-        Email: admin@example.com
-        <br />
-        Password: password
-      </div>
     </form>
   );
 }

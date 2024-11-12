@@ -5,7 +5,7 @@ declare module "clsx" {
     | boolean
     | undefined
     | null
-    | { [key: string]: any }
+    | { [key: string]: unknown }
     | ClassValue[];
   export default function clsx(...inputs: ClassValue[]): string;
 }

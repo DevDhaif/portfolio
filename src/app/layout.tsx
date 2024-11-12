@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { Header } from "@/components/layout/Header";
 // import { Footer } from "@/components/layout/Footer";

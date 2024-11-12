@@ -7,9 +7,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const VALID_EMAIL = "admin@example.com";
 const VALID_PASSWORD = "password";
 
-// Add a static secret key
-const NEXTAUTH_SECRET = "your-secret-key-here";
-
 const config: NextAuthConfig = {
   providers: [
     CredentialsProvider({

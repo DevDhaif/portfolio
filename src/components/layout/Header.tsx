@@ -8,9 +8,9 @@ import { Button } from "@/components/shared/Button";
 import { Container } from "@/components/shared/Container";
 
 export function Header() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  //   const pathname = usePathname();
+  const { status } = useSession();
+  //   const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut({ redirect: true, callbackUrl: "/" });
