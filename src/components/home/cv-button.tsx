@@ -9,12 +9,12 @@ export function CVButton() {
     const handleDownload = async () => {
         try {
             setIsLoading(true)
-            const response = await fetch('/cv/Dhaifallah front-end resume.pdf')
+            const response = await fetch('/cv/Dhaifallah front-end resume-new.pdf')
             const blob = await response.blob()
             const url = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', 'Dhaifallah front-end resume.pdf')
+            link.setAttribute('download', 'Dhaifallah front-end resume-new.pdf')
             document.body.appendChild(link)
             link.click()
             link.parentNode?.removeChild(link)
