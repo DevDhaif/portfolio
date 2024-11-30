@@ -4,6 +4,7 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useGlobal } from "@/context/global-context";
+import { Code, Code2, Hammer, Wrench } from "lucide-react";
 
 export function Hero() {
     const { social, author } = useGlobal();
@@ -27,13 +28,19 @@ export function Hero() {
 
             {/* Main content */}
             <div className="container px-4 md:px-6">
-                <div className="flex flex-col items-center space-y-8 text-center">
+                <div className="flex flex-col items-center space-y-8 justify-center text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="relative pr-6 flex items-center font-bold bg-green-100 border text-green-800 border-green-500 p-2 rounded-full  bg-muted px-3 py-1 text-sm">
+                        <div className="flex gap-4 my-4 items-center  relative pr-6 font-bold bg-green-100 border text-red-800 border-red-500 p-2 rounded-full  bg-muted px-3 py-2">
+                            {/* <Wrench size={30} className="text-red-600" /> */}
+                            <span className="text-xl ">Work In Progress</span>
+                            <Hammer size={30} />
+                            <Code2 size={30} />
+                        </div>
+                        <div className="relative pr-6 max-w-fit flex mx-auto items-center font-bold bg-green-100 border text-green-800 border-green-500 p-2 rounded-full  bg-muted px-3 py-1 text-sm">
                             <span className="absolute right-2 animate-pulse w-2 h-2 bg-green-700  rounded-full"></span>
                             Available for work
                         </div>
