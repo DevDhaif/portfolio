@@ -1,18 +1,18 @@
-// src/middleware.ts
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+// // src/middleware.ts
+// // import { withAuth } from "next-auth/middleware";
+// import { NextResponse } from "next/server";
 
-export default withAuth(
-  function middleware(req) {
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
-  }
-);
+// export default withAuth(
+//   function middleware(req) {
+//     return NextResponse.next();
+//   },
+//   {
+//     callbacks: {
+//       authorized: ({ token }) => !!token,
+//     },
+//   }
+// );
 
-export const config = {
-  matcher: ["/blog/create", "/blog/edit/:path*"],
-};
+// export const config = {
+//   matcher: ["/blog/create", "/blog/edit/:path*"],
+// };

@@ -1,13 +1,13 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/lib/auth";
+// import { redirect } from "next/navigation";
+// import { getServerSession } from "next-auth";
+// import { authConfig } from "@/lib/auth";
 
 export default async function EditBlogPage() {
-  const session = await getServerSession(authConfig);
+//   const session = await getServerSession(authConfig);
 
-  if (!session) {
-    redirect("/login");
-  }
+//   if (!session) {
+//     redirect("/login");
+//   }
 
   return (
     <div className="container mx-auto py-8">

@@ -1,21 +1,21 @@
-// src/hooks/useRequireAuth.
-"use client";
+// // src/hooks/useRequireAuth.
+// "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+// // import { useSession } from "next-auth/react";
+// import { useRouter } from "next/navigation";
+// import { useEffect } from "react";
 
-export function useRequireAuth() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+// export function useRequireAuth() {
+// //   const { data: session, status } = useSession();
+//   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "loading") return;
+//   useEffect(() => {
+//     if (status === "loading") return;
 
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, status, router]);
+//     if (!session) {
+//       router.push("/login");
+//     }
+//   }, [session, status, router]);
 
-  return { session, status };
-}
+//   return { session, status };
+// }
