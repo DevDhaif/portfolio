@@ -4,6 +4,9 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { CVButton } from "../home/cv-button"
+import { useState } from "react"
+import { X, Menu } from "lucide-react"
+import Link from "next/link"
 
 const navItems = [
     { name: "Home", href: "#" },
@@ -13,49 +16,60 @@ const navItems = [
 ]
 
 export function Navbar() {
+    const [isOpen, setIsOpen] = useState(false)
+
     return (
-        <motion.nav
-            className="flex h-16 items-center justify-between"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-        >
-            {/* Logo */}
-            <a className="text-2xl font-bold" href="/">
-                DevDhaif
-            </a>
+        <>
+            <motion.nav
+                className="flex h-16 items-center justify-between"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+            >
+                {/* Logo */}
+                <Link className="text-2xl font-bold" href="/">
+                    DevDhaif
+                </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6">
-                {navItems.map((item) => (
-                    <a
-                        key={item.name}
-                        href={item.href}
-                        className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                        {item.name}
-                    </a>
-                ))}
-                <CVButton />
-            </div>
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center gap-6">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {item.name}
+                        </Link>
+                    ))}
+                    <CVButton />
+                </div>
 
-            {/* Mobile Menu Button */}
-            <Button variant="ghost" size="icon" className="md:hidden">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                </svg>
-            </Button>
-        </motion.nav>
+                {/* Mobile Menu Button */}
+                <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+                    {isOpen ? <X size={24} /> : <Menu size={24} />}
+                </Button>
+            </motion.nav>
+
+            {/* Mobile Menu */}
+            {isOpen && (
+                <div className="fixed bg-gray-50 inset-x-0 top-16 bg-background border-t md:hidden">
+                    <div className="flex flex-col p-6 space-y-4">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                        <div className="pt-2">
+                            <CVButton />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }

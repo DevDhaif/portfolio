@@ -86,7 +86,7 @@ export function Hero() {
                                 <path d="m12 5 7 7-7 7" />
                             </svg>
                         </Button>
-                        <Button variant="outline" size="lg" className="gap-2">
+                        <Button variant="outline" size="lg" className="gap-2 hidden lg:block">
                             Let's Talk
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +118,7 @@ export function Hero() {
                     >
                         <p className="text-sm text-muted-foreground">Tech Stack</p>
                         <div className="flex flex-wrap justify-center gap-4">
-                            {["React", "Next.js", "TypeScript", "Node.js", "Tailwind"].map((tech, i) => (
+                            {["React", "Next.js", "TypeScript", "Laravel", "Tailwind"].map((tech, i) => (
                                 <motion.span
                                     key={tech}
                                     initial={{ opacity: 0, scale: 0.5 }}

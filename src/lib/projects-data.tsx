@@ -215,10 +215,10 @@ export const projectsData: Project[] = [
         "skills": [
             "React.js",
             "TypeScript",
-            "Material UI",
-            "Redux",
-            "React Query",
-            "React Hook Form"
+            "Shadcn UI",
+            "Context API",
+            "axios",
+            "tailwindcss"
         ],
         "highlights": [
             "Built 10+ administrative pages for complete website management",
@@ -401,8 +401,7 @@ export const projectsData: Project[] = [
         "skills": [
             "React.js",
             "Redux",
-            "Node.js",
-            "MongoDB"
+            "tailwindcss",
         ],
         "highlights": [
             "Implemented shopping cart functionality",
