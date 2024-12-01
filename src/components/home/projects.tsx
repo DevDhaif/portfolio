@@ -39,7 +39,7 @@ export function Projects() {
                     Interested in more projects?
                 </p>
                 <a
-                    href="https://github.com/yourusername"
+                    href="https://github.com/devdhaif"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"

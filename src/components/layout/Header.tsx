@@ -21,7 +21,7 @@ export function Header() {
             <Container>
                 <div className="flex h-16 items-center justify-between">
                     <Link href="/" className="font-bold">
-                        Your Name
+                        Dhaifallah
                     </Link>
 
                     <nav className="flex items-center gap-6">
