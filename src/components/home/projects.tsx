@@ -1,9 +1,10 @@
-// src/components/home/projects.tsx
+ 
 "use client"
 
 import { motion } from "framer-motion";
 import { ProjectCard } from "./project-card";
 import { projectsData } from "@/lib/projects-data";
+import Link from "next/link";
 export function Projects() {
     return (
         <section id="projects" className="container py-24 sm:py-32">
@@ -38,14 +39,14 @@ export function Projects() {
                 <p className="text-muted-foreground mb-4">
                     Interested in more projects?
                 </p>
-                <a
+                <Link
                     href="https://github.com/devdhaif"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                     View More on GitHub
-                </a>
+                </Link>
             </motion.div>
         </section>
     );

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 // src/components/layout/footer.tsx
 export function Footer() {
     return (
@@ -7,22 +9,22 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-4">
-                <a
+                <Link
                     href="https://github.com/devdhaif"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                     GitHub
-                </a>
-                <a
+                </Link>
+                <Link
                     href="https://linkedin.com/in/devdhaif"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                     LinkedIn
-                </a>
+                </Link>
             </div>
         </div>
     )
