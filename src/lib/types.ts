@@ -57,6 +57,6 @@ export interface StaticProject {
     highlights: string[];
 }
 
-interface StaticProjectCardProps extends StaticProject {
-    index: number;
-}
+// interface StaticProjectCardProps extends StaticProject {
+//     index: number;
+// }

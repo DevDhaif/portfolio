@@ -4,7 +4,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { SkillCategory, SkillItem } from "@/lib/types";
+import type { SkillCategory } from "@/lib/types";
 
 interface SkillCardProps extends SkillCategory {
     index: number;

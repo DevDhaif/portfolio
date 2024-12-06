@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import type { Project, StaticProject } from "@/lib/types";
 import Link from 'next/link'
+import Image from 'next/image';
 
 interface ProjectCardProps extends StaticProject {
     index: number;
@@ -24,9 +25,11 @@ export function ProjectCard({ id, name, description, skills, githubUrl, liveUrl,
         >
             <Card className="group relative overflow-hidden border transition-colors hover:border-foreground/50">
                 <div className="relative h-52 w-full overflow-hidden">
-                    <img
+                    <Image
                         src={mainImage || "/api/placeholder/800/600"}
                         alt={name}
+                        width={800}
+                        height={600}
                         className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                     />
                     {/* Media indicators */}

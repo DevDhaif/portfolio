@@ -8,7 +8,7 @@ export function getStorageImagePath(filename: string) {
 }
 
 // Then in your projects page:
-const { data: { publicUrl: mainImageUrl } } = supabase
-    .storage
-    .from('projects-images')
-    .getPublicUrl(getStorageImagePath(project.main_image))
+// const { data: { publicUrl: mainImageUrl } } = supabase
+//     .storage
+//     .from('projects-images')
+//     .getPublicUrl(getStorageImagePath(project.main_image))

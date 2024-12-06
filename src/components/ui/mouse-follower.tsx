@@ -4,6 +4,14 @@
 import React from "react"
 import { motion, useSpring, useMotionValue, useTransform } from "framer-motion"
 
+interface MousePosition {
+    x: number;
+    y: number;
+}
+
+type Timeout = ReturnType<typeof setTimeout>;
+
+
 export function MouseFollower() {
     // Use motion values for better performance
     const mouseX = useMotionValue(0)
@@ -36,18 +44,23 @@ export function MouseFollower() {
     }, [isClicking, isHovered, scale])
 
     React.useEffect(() => {
-        let timeout: NodeJS.Timeout
+        let timeout: ReturnType<typeof setTimeout> | undefined;
 
         const handleMouseMove = (e: MouseEvent) => {
-            // If cursor isn't visible yet, make it visible
             if (!isVisible) {
-                setIsVisible(true)
+                setIsVisible(true);
             }
+            mouseX.set(e.clientX - 16);
+            mouseY.set(e.clientY - 16);
+        };
 
-            // Update position
-            mouseX.set(e.clientX - 16)
-            mouseY.set(e.clientY - 16)
-        }
+        const throttledMouseMove = (e: MouseEvent) => {
+            if (timeout) return;
+            timeout = setTimeout(() => {
+                handleMouseMove(e);
+                timeout = undefined;
+            }, 10);
+        };
 
         const handleMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement
@@ -68,13 +81,7 @@ export function MouseFollower() {
         const handleMouseEnter = () => setIsVisible(true)
 
         // Throttled event listeners for better performance
-        const throttledMouseMove = (e: MouseEvent) => {
-            if (timeout) return
-            timeout = setTimeout(() => {
-                handleMouseMove(e)
-                timeout = null as any
-            }, 10) // 10ms throttle
-        }
+
 
         window.addEventListener("mousemove", throttledMouseMove, { passive: true })
         window.addEventListener("mouseover", handleMouseOver, { passive: true })

@@ -4,17 +4,9 @@
 import Link from "next/link";
 // import { usePathname, useRouter } from "next/navigation";
 // import { signOut, useSession } from "next-auth/react";
-import { Button } from "@/components/shared/Button";
 import { Container } from "@/components/shared/Container";
 
 export function Header() {
-    //   const pathname = usePathname();
-    //   const { status } = useSession();
-    //   const router = useRouter();
-
-    const handleSignOut = async () => {
-        // await signOut({ redirect: true, callbackUrl: "/" });
-    };
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
