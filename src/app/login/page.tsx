@@ -3,7 +3,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { login, signup } from '@/app/auth/actions'
+import { login } from '@/app/auth/actions'
 import { SessionProvider } from '@/components/SessionProvider'
 
 function LoginMessages() {
@@ -61,12 +61,6 @@ export default function LoginPage() {
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                         >
                             Log in
-                        </button>
-                        <button
-                            formAction={signup}
-                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                        >
-                            Sign up
                         </button>
                     </div>
                 </form>

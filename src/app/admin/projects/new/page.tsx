@@ -2,14 +2,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useFormStatus, useFormState } from 'react-dom'
 import { createClient } from '@/utils/supabase/client'
 import ImageUpload from '@/components/ImageUpload'
 import { createProject } from '../actions'
 
 function SubmitButton() {
     const { pending } = useFormStatus()
-
     return (
         <button
             type="submit"
@@ -42,56 +41,35 @@ export default function NewProjectPage() {
 
             if (mainImageError) throw mainImageError
 
-            // 2. Store project data
-            const { data: project, error: projectError } = await supabase
-                .from('projects')
-                .insert([{
-                    name: formData.get('name'),
-                    description: formData.get('description'),
-                    long_description: formData.get('longDescription'),
-                    main_image: mainImageName, // Store just the filename
-                    skills: formData.get('skills')?.toString().split(',').map(s => s.trim()) || [],
-                    github_url: formData.get('githubUrl'),
-                    live_url: formData.get('liveUrl'),
-                    highlights: formData.get('highlights')?.toString().split('\n').filter(Boolean) || []
-                }])
-                .select()
-                .single()
+            // Add the main image to formData
+            formData.set('mainImage', mainImageName)
 
-            if (projectError) throw projectError
-
-            // 3. Upload and store project images
+            // 3. Upload project images and collect URLs
+            const projectImageUrls = []
             if (projectImages.length > 0) {
-                const projectImagesData = await Promise.all(
-                    projectImages.map(async (file) => {
-                        const fileName = `${Date.now()}-${file.name}`
-                        const { error: uploadError } = await supabase.storage
-                            .from('projects-images')
-                            .upload(fileName, file)
+                for (const file of projectImages) {
+                    const fileName = `${Date.now()}-${file.name}`
+                    const { error: uploadError } = await supabase.storage
+                        .from('projects-images')
+                        .upload(fileName, file)
 
-                        if (uploadError) throw uploadError
-
-                        return {
-                            project_id: project.id,
-                            url: fileName,
-                            alt: project.name
-                        }
-                    })
-                )
-
-                const { error: imagesError } = await supabase
-                    .from('project_images')
-                    .insert(projectImagesData)
-
-                if (imagesError) throw imagesError
+                    if (uploadError) throw uploadError
+                    projectImageUrls.push(fileName)
+                }
             }
 
+            // Add project images to formData
+            formData.set('projectImages', JSON.stringify(projectImageUrls))
+
+            // Call the server action with the prepared formData
+            await createProject(formData)
 
         } catch (error) {
             console.error('Error:', error)
             alert('Error creating project. Please try again.')
         }
     }
+
     return (
         <div className="max-w-2xl mx-auto py-8">
             <h1 className="text-2xl font-bold mb-6">Create New Project</h1>

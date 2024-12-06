@@ -2,6 +2,9 @@
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import Image from 'next/image'
+import { deleteProject } from './actions'
+
+import { DeleteProjectButton } from '@/components/DeleteProjectButton'
 
 export default async function ProjectsPage() {
     const supabase = await createClient()
@@ -98,6 +101,10 @@ export default async function ProjectsPage() {
                                         >
                                             Edit
                                         </Link>
+                                        <DeleteProjectButton
+                                            projectId={project.id}
+                                            onDelete={deleteProject}
+                                        />
                                     </div>
                                 </div>
                             </div>
