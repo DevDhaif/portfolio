@@ -35,7 +35,6 @@ export function Hero() {
                         transition={{ duration: 0.5 }}
                     >
                         <div className="flex gap-4 my-4 items-center  relative pr-6 font-bold bg-green-100 border text-red-800 border-red-500 p-2 rounded-full  bg-muted px-3 py-2">
-                            {/* <Wrench size={30} className="text-red-600" /> */}
                             <span className="text-xl ">Work In Progress</span>
                             <Hammer size={30} />
                             <Code2 size={30} />
@@ -53,7 +52,7 @@ export function Hero() {
                         className="space-y-4"
                     >
                         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                            Hey, I'm <span className="text-primary">{author.name}</span> 👋
+                            Hey, I&apos;m <span className="text-primary">{author.name}</span> 👋
                         </h1>
                         <p className="mx-auto max-w-[700px] text-lg text-muted-foreground md:text-xl">
                             I craft modern web experiences with{" "}
@@ -87,7 +86,7 @@ export function Hero() {
                             </svg>
                         </Button>
                         <Button variant="outline" size="lg" className="gap-2 hidden lg:block">
-                            Let's Talk
+                            Let&apos;s Talk
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"

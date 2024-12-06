@@ -35,10 +35,10 @@ export function Contact() {
                     className="max-w-2xl mx-auto text-center mb-12"
                 >
                     <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-                        Let's Work Together
+                        Let&apos;s Work Together
                     </h2>
                     <p className="text-muted-foreground">
-                        Have a project in mind? Let's discuss how we can help your business grow.
+                        Have a project in mind? Let&apos;s discuss how we can help your business grow.
                     </p>
                 </motion.div>
 
