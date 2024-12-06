@@ -9,7 +9,8 @@ import { GlobalProvider } from "@/context/global-context"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
-import { SessionProvider } from "@/components/SessionProvider"
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -50,6 +51,8 @@ export default function RootLayout({
 
                             <GlobalProvider>
                                 {children}
+                                <Analytics />
+                                <SpeedInsights />
                             </GlobalProvider>
                             {/* </SessionProvider> */}
 
