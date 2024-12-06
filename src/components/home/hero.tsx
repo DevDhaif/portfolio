@@ -4,10 +4,10 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useGlobal } from "@/context/global-context";
-import { Code, Code2, Hammer, Wrench } from "lucide-react";
+import { Code2, Hammer } from "lucide-react";
 
 export function Hero() {
-    const { social, author } = useGlobal();
+    const { author } = useGlobal();
     return (
         <section className="relative h-[calc(100vh-4rem)] flex items-center">
             {/* Background decorative elements */}
