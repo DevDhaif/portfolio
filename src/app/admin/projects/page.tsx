@@ -1,6 +1,7 @@
 // app/admin/projects/page.tsx
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
+import Image from 'next/image'
 
 export default async function ProjectsPage() {
     const supabase = await createClient()
@@ -58,9 +59,11 @@ export default async function ProjectsPage() {
                     <div key={project.id} className="bg-white rounded-lg shadow p-6">
                         <div className="flex items-start gap-4">
                             {project.mainImageUrl && (
-                                <img
+                                <Image
                                     src={project.mainImageUrl}
                                     alt={project.name}
+                                    width={200}
+                                    height={200}
                                     className="w-48 h-32 object-cover rounded"
                                 />
                             )}
@@ -75,10 +78,12 @@ export default async function ProjectsPage() {
                                         {project.projectImages && project.projectImages.length > 0 && (
                                             <div className="mt-4 flex gap-2">
                                                 {project.projectImages.map((image: any, index: number) => (
-                                                    <img
+                                                    <Image
                                                         key={image.id}
                                                         src={image.publicUrl}
                                                         alt={`${project.name} image ${index + 1}`}
+                                                        width={200}
+                                                        height={200}
                                                         className="w-20 h-20 object-cover rounded"
                                                     />
                                                 ))}

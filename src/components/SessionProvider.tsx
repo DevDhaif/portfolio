@@ -34,7 +34,6 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         } = supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session)
             if (!session) {
-                // Show expired session message and redirect
                 const message = 'Your session has expired. Please log in again.'
                 if (typeof window !== 'undefined') {
                     window.sessionStorage.setItem('sessionExpiredMessage', message)
@@ -44,7 +43,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         })
 
         return () => subscription.unsubscribe()
-    }, [])
+    }, [router, supabase.auth]) // Added dependencies
 
     return (
         <SessionContext.Provider value={{ session, loading }}>

@@ -1,7 +1,6 @@
 // components/ImageUpload.tsx
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 
@@ -36,9 +35,11 @@ export default function ImageUpload({
                 {value.map((file, index) => (
                     <div key={index} className="relative">
                         <div className="h-32 w-32 border rounded-md">
-                            <img
+                            <Image
                                 src={URL.createObjectURL(file)}
                                 alt={`Selected image ${index + 1}`}
+                                width={200}
+                                height={200}
                                 className="h-full w-full object-cover rounded-md"
                             />
                         </div>
