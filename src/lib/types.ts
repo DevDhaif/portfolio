@@ -1,6 +1,8 @@
 export interface ProjectImage {
+    id: string;
     url: string;
     alt: string;
+    projectId: string;
 }
 
 export interface Project {
@@ -10,11 +12,13 @@ export interface Project {
     longDescription?: string;
     mainImage: string;
     images?: ProjectImage[];
-    video?: string;
+    video?: string,
     skills: string[];
     githubUrl?: string;
     liveUrl?: string;
-    highlights?: string[];
+    highlights: string[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 
