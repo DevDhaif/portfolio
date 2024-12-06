@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button"
 import ImageSlider from "@/components/ImageSlider"
 import Link from "next/link"
 
-export default function ProjectPage({ params }: { params: Promise<{ projectId: string }> }) {
+type ProjectPageProps = {
+    params: Promise<{ projectId: string }>
+}
+
+
+export default function ProjectPage({ params }: ProjectPageProps) {
     const resolvedParams = use(params)
     const project = projectsData.find(p => p.id === resolvedParams.projectId)
 

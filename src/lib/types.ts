@@ -37,3 +37,22 @@ export interface SkillCategory {
     items: SkillItem[];
     icon: JSX.Element;
 }
+
+export interface StaticProjectImage {
+    url: string;
+    alt: string;
+}
+
+export interface StaticProject {
+    id: string;
+    name: string;
+    description: string;
+    longDescription?: string;
+    mainImage: string;
+    images?: StaticProjectImage[];
+    video?: string;
+    skills: string[];
+    githubUrl?: string;
+    liveUrl?: string;
+    highlights: string[];
+}
