@@ -21,22 +21,7 @@ export interface Project {
     updatedAt: string;
 }
 
-export interface StaticProject {
-    id: string;
-    name: string;
-    description: string;
-    longDescription?: string;
-    mainImage: string;
-    images?: {
-        url: string;
-        alt: string;
-    }[];
-    video?: string;
-    skills?: string[];
-    githubUrl?: string;
-    liveUrl?: string;
-    highlights?: string[];
-}
+
 
 
 export type SkillLevel = 'essential' | 'advanced' | 'additional';

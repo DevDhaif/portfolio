@@ -1,7 +1,7 @@
 // src/lib/project-data.tsx
-import { StaticProject } from './types';
+import { Project } from './types';
 
-export const projectsData: StaticProject[] = [
+export const projectsData: Project[] = [
     {
         "id": "neelaincom",
         "name": "NeelainCom",
@@ -310,8 +310,10 @@ export const projectsData: StaticProject[] = [
         "mainImage": "/images/food-menu/1.webp",
         "images": [
             {
+                id: '1',
                 "url": "/images/food-menu/1.webp",
-                "alt": "food-menu 1"
+                "alt": "food-menu 1",
+                projectId: 'ds',
             },
             {
                 "url": "/images/food-menu/2.webp",
