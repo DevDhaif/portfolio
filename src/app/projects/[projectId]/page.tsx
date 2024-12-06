@@ -23,7 +23,7 @@ export default function ProjectPage({ params }: { params: Promise<{ projectId: s
 
                 {/* Skills/Tags */}
                 <div className="flex flex-wrap gap-2">
-                    {project.skills.map((skill) => (
+                    {project.skills?.map((skill) => (
                         <span key={skill} className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium">
                             {skill}
                         </span>
