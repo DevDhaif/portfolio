@@ -8,13 +8,19 @@ interface ImageUploadProps {
     onChange: (files: File[]) => void
     value: File[]
     maxFiles?: number
-    bucket?: string  // Add this line
+    bucket?: string
+    multiple?: boolean
+    currentImage?: string
+    currentImages?: string[]
 }
-
 export default function ImageUpload({
     onChange,
     value = [],
-    maxFiles = 1
+    maxFiles = 1,
+    bucket = 'projects-images',
+    multiple = false,
+    currentImage,
+    currentImages = []
 }: ImageUploadProps) {
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.target.files || [])
@@ -32,45 +38,58 @@ export default function ImageUpload({
     return (
         <div>
             <div className="mb-4 flex flex-wrap gap-4">
+                {/* Show current images if no new ones selected */}
+                {value.length === 0 && currentImage && (
+                    <div className="relative">
+                        <img
+                            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${currentImage}`}
+                            alt="Current image"
+                            className="h-32 w-32 object-cover rounded-md"
+                        />
+                    </div>
+                )}
+                {value.length === 0 && currentImages && currentImages.map((img, index) => (
+                    <div key={img} className="relative">
+                        <img
+                            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${img}`}
+                            alt={`Current image ${index + 1}`}
+                            className="h-32 w-32 object-cover rounded-md"
+                        />
+                    </div>
+                ))}
+
+                {/* Show new selected images */}
                 {value.map((file, index) => (
                     <div key={index} className="relative">
-                        <div className="h-32 w-32 border rounded-md">
-                            <Image
-                                src={URL.createObjectURL(file)}
-                                alt={`Selected image ${index + 1}`}
-                                width={200}
-                                height={200}
-                                className="h-full w-full object-cover rounded-md"
-                            />
-                        </div>
+                        <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Selected image ${index + 1}`}
+                            className="h-32 w-32 object-cover rounded-md"
+                        />
                         <button
                             type="button"
                             onClick={() => handleRemove(index)}
                             className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-white"
                         >
-                            <X size={16} />
+                            ×
                         </button>
                     </div>
                 ))}
             </div>
 
             {value.length < maxFiles && (
-                <div>
-                    <label className="cursor-pointer block">
-                        <span className="sr-only">Choose image</span>
-                        <input
-                            type="file"
-                            className="block w-full text-sm text-slate-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100"
-                            accept="image/*"
-                            onChange={handleFileSelect}
-                        />
-                    </label>
-                </div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    multiple={multiple}
+                    onChange={handleFileSelect}
+                    className="block w-full text-sm text-slate-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100"
+                />
             )}
         </div>
     )
