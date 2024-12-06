@@ -310,10 +310,8 @@ export const projectsData: StaticProject[] = [
         "mainImage": "/images/food-menu/1.webp",
         "images": [
             {
-                id: '1',
                 "url": "/images/food-menu/1.webp",
                 "alt": "food-menu 1",
-                projectId: 'ds',
             },
             {
                 "url": "/images/food-menu/2.webp",
