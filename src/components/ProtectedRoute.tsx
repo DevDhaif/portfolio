@@ -10,7 +10,9 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const router = useRouter()
 
     useEffect(() => {
-        if (!loading && !session) {
+        // Only redirect to login if we're in an admin route
+        const isAdminRoute = window.location.pathname.startsWith('/admin')
+        if (!loading && !session && isAdminRoute) {
             router.push('/login')
         }
     }, [session, loading, router])
@@ -23,7 +25,9 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
         )
     }
 
-    if (!session) {
+    // Only block rendering for admin routes
+    const isAdminRoute = window.location.pathname.startsWith('/admin')
+    if (!session && isAdminRoute) {
         return null
     }
 
