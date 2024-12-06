@@ -1,7 +1,7 @@
 // src/lib/project-data.tsx
-import { Project } from './types';
+import { StaticProject } from './types';
 
-export const projectsData: Project[] = [
+export const projectsData: StaticProject[] = [
     {
         "id": "neelaincom",
         "name": "NeelainCom",
