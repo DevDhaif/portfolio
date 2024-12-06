@@ -4,6 +4,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { login, signup } from '@/app/auth/actions'
+import { SessionProvider } from '@/components/SessionProvider'
 
 function LoginMessages() {
     const searchParams = useSearchParams()
@@ -32,43 +33,44 @@ export default function LoginPage() {
             <Suspense>
                 <LoginMessages />
             </Suspense>
-
-            <form className="space-y-4">
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-                    />
-                </div>
-                <div className="flex gap-4">
-                    <button
-                        formAction={login}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    >
-                        Log in
-                    </button>
-                    <button
-                        formAction={signup}
-                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                    >
-                        Sign up
-                    </button>
-                </div>
-            </form>
+            <SessionProvider>
+                <form className="space-y-4">
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                        />
+                    </div>
+                    <div className="flex gap-4">
+                        <button
+                            formAction={login}
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        >
+                            Log in
+                        </button>
+                        <button
+                            formAction={signup}
+                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                        >
+                            Sign up
+                        </button>
+                    </div>
+                </form>
+            </SessionProvider>
         </div>
     )
 }

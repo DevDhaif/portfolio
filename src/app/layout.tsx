@@ -46,12 +46,12 @@ export default function RootLayout({
                             <NextSSRPlugin
                                 routerConfig={extractRouterConfig(ourFileRouter)}
                             />
-                            <SessionProvider>
+                            {/* <SessionProvider> */}
 
-                                <GlobalProvider>
-                                    {children}
-                                </GlobalProvider>
-                            </SessionProvider>
+                            <GlobalProvider>
+                                {children}
+                            </GlobalProvider>
+                            {/* </SessionProvider> */}
 
                         </div>
                     </main>
