@@ -1,17 +1,16 @@
- 
+
 "use client"
 
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { Project } from "@/lib/types";
+import type { Project, StaticProject } from "@/lib/types";
 import Link from 'next/link'
 
-interface ProjectCardProps extends Project {
+interface ProjectCardProps extends StaticProject {
     index: number;
 }
-
 export function ProjectCard({ id, name, description, skills, githubUrl, liveUrl, mainImage, video, images = [], index }: ProjectCardProps) {
     const [isHovered, setIsHovered] = useState(false);
 
