@@ -1,11 +1,79 @@
- 
+// components/home/projects.tsx
 "use client"
 
 import { motion } from "framer-motion";
 import { ProjectCard } from "./project-card";
-import { projectsData } from "@/lib/projects-data";
+import { createClient } from '@/utils/supabase/client'
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Project } from "@/lib/types";
+
 export function Projects() {
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadProjects() {
+            const supabase = createClient()
+
+            const { data: projects } = await supabase
+                .from('projects')
+                .select(`
+                    *,
+                    project_images (*)
+                `)
+                .order('created_at', { ascending: false })
+
+            if (projects) {
+                const projectsWithUrls = projects.map(project => {
+                    // Get main image URL
+                    const mainImageUrl = supabase.storage
+                        .from('projects-images')
+                        .getPublicUrl(project.main_image).data.publicUrl
+
+                    // Get project images URLs
+                    const images = project.project_images?.map((img: any) => ({
+                        id: img.id,
+                        url: supabase.storage
+                            .from('projects-images')
+                            .getPublicUrl(img.url).data.publicUrl,
+                        alt: img.alt,
+                        projectId: img.project_id
+                    }))
+
+                    // Map database fields to your Project interface
+                    return {
+                        id: project.id,
+                        name: project.name,
+                        description: project.description,
+                        longDescription: project.long_description,
+                        mainImage: mainImageUrl,
+                        images: images,
+                        skills: project.skills,
+                        githubUrl: project.github_url,
+                        liveUrl: project.live_url,
+                        highlights: project.highlights,
+                        createdAt: project.created_at,
+                        updatedAt: project.updated_at
+                    }
+                })
+
+                setProjects(projectsWithUrls)
+            }
+            setLoading(false)
+        }
+
+        loadProjects()
+    }, [])
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+            </div>
+        )
+    }
+
     return (
         <section id="projects" className="container py-24 sm:py-32">
             <motion.div
@@ -24,8 +92,12 @@ export function Projects() {
             </motion.div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {projectsData.map((project, index) => (
-                    <ProjectCard key={project.id} {...project} index={index} />
+                {projects.map((project, index) => (
+                    <ProjectCard
+                        key={project.id}
+                        {...project}
+                        index={index}
+                    />
                 ))}
             </div>
 

@@ -9,7 +9,7 @@ import type { Project, StaticProject } from "@/lib/types";
 import Link from 'next/link'
 import Image from 'next/image';
 
-interface ProjectCardProps extends StaticProject {
+interface ProjectCardProps extends Project {
     index: number;
 }
 export function ProjectCard({ id, name, description, skills, githubUrl, liveUrl, mainImage, video, images = [], index }: ProjectCardProps) {
@@ -23,7 +23,7 @@ export function ProjectCard({ id, name, description, skills, githubUrl, liveUrl,
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
         >
-            <Card className="group relative overflow-hidden border transition-colors hover:border-foreground/50">
+            <Card className="group relative overflow-hidden border h-full flex flex-col justify-between transition-colors hover:border-foreground/50">
                 <div className="relative h-52 w-full overflow-hidden">
                     <Image
                         src={mainImage || "/api/placeholder/800/600"}

@@ -132,7 +132,8 @@ export default function NewProjectPage() {
                     <ImageUpload
                         value={projectImages}
                         onChange={setProjectImages}
-                        maxFiles={4}
+                        maxFiles={8}
+                        multiple={true}
                         bucket="projects-images"
                     />
                 </div>
