@@ -23,11 +23,11 @@ export default async function AdminLayout({
             <ProtectedRoute>
                 <div className="min-h-screen flex">
                     {/* Sidebar */}
-                    <div className="w-64 bg-gray-900 text-white">
+                    <div className="w-64 bg-gray-900 text-white ">
                         <div className="p-4">
                             <h1 className="text-xl font-bold">Admin Dashboard</h1>
                         </div>
-                        <nav className="mt-4">
+                        <nav className="mt-4 space-y-8">
                             <Link
                                 href="/admin"
                                 className="block px-4 py-2 hover:bg-gray-800"
@@ -41,10 +41,10 @@ export default async function AdminLayout({
                                 Projects
                             </Link>
                             <Link
-                                href="/admin/projects/new"
+                                href="/admin/certificates"
                                 className="block px-4 py-2 hover:bg-gray-800"
                             >
-                                Add Project
+                                Certificates
                             </Link>
                         </nav>
                     </div>

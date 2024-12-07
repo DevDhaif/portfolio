@@ -56,7 +56,21 @@ export interface StaticProject {
     liveUrl?: string;
     highlights: string[];
 }
-
+export interface Certificate {
+    id: string;
+    title: string;
+    description?: string;
+    skills: string[];
+    credentialId?: string; // Already correctly named
+    issueDate: string;
+    source: string;
+    sourceIcon?: string; // Matches the fetched field
+    urlLink?: string; // Matches the normalized `url_link`
+    certificateImageUrl?: string; // For the mapped `image` field
+    issue_date: Date,
+    createdAt: string;
+    updatedAt: string;
+}
 // interface StaticProjectCardProps extends StaticProject {
 //     index: number;
 // }
