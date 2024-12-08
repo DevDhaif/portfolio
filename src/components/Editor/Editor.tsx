@@ -67,7 +67,6 @@ export function Editor({ content, onChange }: EditorProps) {
                 .run()
         } else {
 
-            // @ts-ignore
             const { from, to } = editor?.state.selection
             const text = editor?.state.doc.textBetween(from, to, ' ')
 
