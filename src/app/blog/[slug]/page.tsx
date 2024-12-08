@@ -20,8 +20,13 @@ interface Post {
     views_count: number,
     likes_count: number
 }
-
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+interface PageProps {
+    params: {
+        slug: string;
+    };
+    searchParams: { [key: string]: string | string[] | undefined };
+}
+export default async function BlogPost({ params, searchParams }: PageProps) {
     const supabase = await createClient()
 
     const { data: post, error } = await supabase
