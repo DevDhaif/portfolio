@@ -1,52 +1,45 @@
 
-import { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { ContentRenderer } from '@/components/blog/ContentReader'
-import { CalendarIcon, EyeIcon, HeartIcon } from 'lucide-react'
+import { CalendarIcon, EyeIcon, HeartIcon } from 'lucide-react';
+import { use } from 'react';
 
 interface Post {
-    id: string
-    title: string
-    description: string
+    id: string;
+    title: string;
+    description: string;
     content: {
-        type: string
-        content: any[]
-    }
-    cover_image: string
-    tags: string[]
-    created_at: string
-    slug: string
-    views_count: number
+        type: string;
+        content: any[];
+    };
+    cover_image: string;
+    tags: string[];
+    created_at: string;
+    slug: string;
+    views_count: number,
     likes_count: number
 }
 
-type Props = {
-    params: { slug: string }
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    return {
-        title: `Blog - ${params.slug}`,
-    }
-}
-
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const supabase = await createClient()
-
+    const { slug } = use(params)
     const { data: post, error } = await supabase
         .from('posts')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .eq('published', true)
         .single()
+
+    console.log(post)
 
     if (error || !post) {
         notFound()
     }
 
     const typedPost = post as Post
+
 
     let coverImageUrl = typedPost.cover_image
     if (typedPost.cover_image && !typedPost.cover_image.startsWith('http')) {
