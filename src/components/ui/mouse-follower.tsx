@@ -1,4 +1,4 @@
-// src/components/ui/mouse-follower.tsx
+
 "use client"
 
 import React from "react"
@@ -13,32 +13,32 @@ type Timeout = ReturnType<typeof setTimeout>;
 
 
 export function MouseFollower() {
-    // Use motion values for better performance
+
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
     const [isHovered, setIsHovered] = React.useState(false)
     const [isClicking, setIsClicking] = React.useState(false)
     const [isVisible, setIsVisible] = React.useState(false)
 
-    // Smoother spring configuration
+
     const springConfig = {
         damping: 35,
         stiffness: 400,
         mass: 0.1
     }
 
-    // Create springs for smoother movement
+
     const cursorX = useSpring(mouseX, springConfig)
     const cursorY = useSpring(mouseY, springConfig)
 
-    // Scale spring for smoother transitions
+
     const scale = useSpring(1, {
         damping: 25,
         stiffness: 300,
         mass: 0.1
     })
 
-    // Update scale based on state
+
     React.useEffect(() => {
         scale.set(isClicking ? 0.9 : isHovered ? 1.5 : 1)
     }, [isClicking, isHovered, scale])
@@ -80,7 +80,7 @@ export function MouseFollower() {
         const handleMouseLeave = () => setIsVisible(false)
         const handleMouseEnter = () => setIsVisible(true)
 
-        // Throttled event listeners for better performance
+
 
 
         window.addEventListener("mousemove", throttledMouseMove, { passive: true })
@@ -101,7 +101,7 @@ export function MouseFollower() {
         }
     }, [isVisible, mouseX, mouseY])
 
-    // Transform opacity based on visibility
+
     const opacity = useTransform(
         scale,
         value => isVisible ? value * 1 : 0

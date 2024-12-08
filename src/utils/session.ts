@@ -1,4 +1,4 @@
-// utils/session.ts
+
 import { createClient } from '@/utils/supabase/client'
 
 export const refreshSession = async () => {
@@ -6,7 +6,7 @@ export const refreshSession = async () => {
     const { data: { session }, error } = await supabase.auth.getSession()
 
     if (!session && !error) {
-        // Session expired normally
+
         return { expired: true }
     }
 

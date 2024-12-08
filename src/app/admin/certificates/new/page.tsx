@@ -1,4 +1,4 @@
-// app/admin/certificates/new/page.tsx
+
 'use client'
 
 import { useState } from 'react'
@@ -17,7 +17,7 @@ export default function NewCertificatePage() {
             let sourceIconUrl = null;
             let certificateImageUrl = null;
 
-            // Upload source icon if provided
+
             if (sourceIcon.length > 0) {
                 const fileName = `${Date.now()}-${sourceIcon[0].name}`
                 const { error: uploadError } = await supabase.storage
@@ -34,7 +34,7 @@ export default function NewCertificatePage() {
                 formData.set('sourceIcon', publicUrl)
             }
 
-            // Upload certificate image if provided
+
             if (certificateImage.length > 0) {
                 const fileName = `${Date.now()}-${certificateImage[0].name}`
                 const { error: uploadError } = await supabase.storage
@@ -51,7 +51,7 @@ export default function NewCertificatePage() {
                 formData.set('certificateImage', publicUrl)
             }
 
-            // Call the server action
+
             const result = await createCertificate(formData)
 
             if (result?.error) {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// src/components/layout/footer.tsx
+
 export function Footer() {
     return (
         <div className="flex h-16 items-center justify-between">

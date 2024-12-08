@@ -1,4 +1,4 @@
-// components/SessionProvider.tsx
+
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
@@ -22,13 +22,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     const supabase = createClient()
 
     useEffect(() => {
-        // Get initial session
+
         supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
             setSession(initialSession)
             setLoading(false)
         })
 
-        // Set up session listener
+
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -43,7 +43,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         })
 
         return () => subscription.unsubscribe()
-    }, [router, supabase.auth]) // Added dependencies
+    }, [router, supabase.auth])
 
     return (
         <SessionContext.Provider value={{ session, loading }}>

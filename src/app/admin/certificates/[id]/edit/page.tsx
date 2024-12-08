@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function EditCertificatePage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params); // Properly unwrap params
+    const { id } = use(params);
     const router = useRouter();
 
     const [sourceIcon, setSourceIcon] = useState<File[]>([]);
@@ -50,7 +50,7 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
                         description: data.description || "",
                         skills: (data.skills || []).join(", "),
                         credentialId: data.credential_id || "",
-                        issueDate: data.issue_date?.split("T")[0] || "", // Format date for input
+                        issueDate: data.issue_date?.split("T")[0] || "",
                         source: data.source || "",
                         urlLink: data.url_link || "",
                         sourceIconUrl: data.source_icon || "",
@@ -76,7 +76,7 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
             let sourceIconUrl = certificateData.sourceIconUrl;
             let certificateImageUrl = certificateData.certificateImageUrl;
 
-            // Handle new source icon upload
+
             if (sourceIcon.length > 0) {
                 if (certificateData.sourceIconUrl) {
                     await supabase.storage.from("certificates-icons").remove([certificateData.sourceIconUrl]);
@@ -96,7 +96,7 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
                 sourceIconUrl = data?.publicUrl || "";
             }
 
-            // Handle new certificate image upload
+
             if (certificateImage.length > 0) {
                 if (certificateData.certificateImageUrl) {
                     await supabase.storage.from("certificates-images").remove([certificateData.certificateImageUrl]);
@@ -116,13 +116,13 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
                 certificateImageUrl = data?.publicUrl || "";
             }
 
-            // Validate `source` before updating
+
             const source = formData.get("source");
             if (!source || source.toString().trim() === "") {
                 throw new Error("Source is required and cannot be empty.");
             }
 
-            // Update certificate data
+
             const { error } = await supabase
                 .from("certificates")
                 .update({
@@ -135,7 +135,7 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
                         .map((s) => s.trim()),
                     credential_id: formData.get("credentialId"),
                     issue_date: formData.get("issueDate"),
-                    source: source.toString().trim(), // Ensure non-null value
+                    source: source.toString().trim(),
                     url_link: formData.get("urlLink"),
                     source_icon: sourceIconUrl,
                     image: certificateImageUrl,

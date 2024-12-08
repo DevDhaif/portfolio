@@ -1,4 +1,4 @@
-// utils/supabase/server.ts
+
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
@@ -19,7 +19,7 @@ export function createClient() {
             cookies: {
                 getAll() {
                     try {
-                        // Using type assertion instead of await
+
                         return (cookieStore as any).getAll().map((cookie: ResponseCookie): CookieValue => ({
                             name: cookie.name,
                             value: cookie.value
@@ -31,7 +31,7 @@ export function createClient() {
                 setAll(cookiesToSet: CookieValue[]) {
                     try {
                         cookiesToSet.forEach((cookie: CookieValue) => {
-                            // Using type assertion instead of await
+
                             (cookieStore as any).set({
                                 name: cookie.name,
                                 value: cookie.value,
@@ -39,9 +39,9 @@ export function createClient() {
                             })
                         })
                     } catch {
-                        // The `setAll` method was called from a Server Component.
-                        // This can be ignored if you have middleware refreshing
-                        // user sessions.
+
+
+
                     }
                 }
             }

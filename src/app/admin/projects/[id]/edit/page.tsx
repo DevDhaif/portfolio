@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params) // Properly unwrap the params promise
+    const { id } = use(params)
     const router = useRouter()
     const [mainImage, setMainImage] = useState<File[]>([])
     const [projectImages, setProjectImages] = useState<File[]>([])
@@ -34,7 +34,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 if (mounted) {
                     if (data) {
                         console.log(data)
-                        // Map database fields to your Project interface
+
                         const mappedProject: Project = {
                             id: data.id,
                             name: data.name,
@@ -80,23 +80,23 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 name: formData.get('name'),
                 description: formData.get('description'),
                 long_description: formData.get('longDescription'),
-                main_image: project?.mainImage, // Keep existing if no new image
+                main_image: project?.mainImage,
                 skills: formData.get('skills')?.toString().split(',').map(s => s.trim()) || [],
                 github_url: formData.get('githubUrl'),
                 live_url: formData.get('liveUrl'),
                 highlights: formData.get('highlights')?.toString().split('\n').filter(Boolean) || []
             }
 
-            // Handle main image update
+
             if (mainImage.length > 0) {
-                // Delete old main image if it exists
+
                 if (project?.mainImage) {
                     await supabase.storage
                         .from('projects-images')
                         .remove([project.mainImage])
                 }
 
-                // Upload new main image
+
                 const mainImageName = `${Date.now()}-${mainImage[0].name}`
                 const { error: mainImageError } = await supabase.storage
                     .from('projects-images')
@@ -106,9 +106,9 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                 updates.main_image = mainImageName
             }
 
-            // Handle project images update
+
             if (projectImages.length > 0) {
-                // Delete old project images if they exist
+
                 const oldImagePaths = project?.images?.map(img => img.url) || []
                 if (oldImagePaths.length > 0) {
                     await supabase.storage
@@ -121,7 +121,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                         .eq('project_id', id)
                 }
 
-                // Upload new project images
+
                 const projectImagesData = await Promise.all(
                     projectImages.map(async (file) => {
                         const fileName = `${Date.now()}-${file.name}`
@@ -144,7 +144,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                     .insert(projectImagesData)
             }
 
-            // Update project data
+
             const { error: updateError } = await supabase
                 .from('projects')
                 .update(updates)

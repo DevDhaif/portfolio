@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { createServerClient } from "@supabase/ssr"
 
 export async function middleware(request: NextRequest) {
-    // Only check auth for admin routes
+
     if (request.nextUrl.pathname.startsWith('/admin')) {
         let response = NextResponse.next({
             request: {
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
 
         const { data: { session } } = await supabase.auth.getSession()
 
-        // If no session and trying to access admin, redirect to login
+
         if (!session && request.nextUrl.pathname.startsWith('/admin')) {
             const redirectUrl = new URL('/login', request.url)
             return NextResponse.redirect(redirectUrl)
@@ -39,13 +39,13 @@ export async function middleware(request: NextRequest) {
         return response
     }
 
-    // Allow all other routes
+
     return NextResponse.next()
 }
 
 export const config = {
     matcher: [
-        // Only run middleware on admin routes and auth routes
+
         '/admin/:path*',
     ],
 }

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params) // Properly unwrap the params promise
+    const { id } = use(params)
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
 
@@ -23,16 +23,16 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     *,
                     project_images (*)
                 `)
-                .eq('id', id)  // Using unwrapped id
+                .eq('id', id)
                 .single()
 
             if (data) {
-                // Get main image URL
+
                 const mainImageUrl = supabase.storage
                     .from('projects-images')
                     .getPublicUrl(data.main_image).data.publicUrl
 
-                // Get project images URLs
+
                 const images = data.project_images?.map((img: any) => ({
                     id: img.id,
                     url: supabase.storage

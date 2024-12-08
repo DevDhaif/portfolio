@@ -1,4 +1,4 @@
-// src/lib/project-data.tsx
+
 import { StaticProject } from './types';
 
 export const projectsData: StaticProject[] = [
@@ -229,35 +229,35 @@ export const projectsData: StaticProject[] = [
         ],
         "githubUrl": "https://github.com/devdhaif/sadagaat-dashboard"
     },
-    // {
-    //     "id": "sadagaat-dashboard2",
-    //     "name": "Sadagaat Dashboard",
-    //     "description": "A comprehensive admin dashboard with multiple user roles and functionalities.",
-    //     "longDescription": "\n      Developed a fully functional dashboard for website administrators and various user roles,\n      focusing on reusable components and efficient state management.\n    ",
-    //     "mainImage": "/images/projects/sadagaat/1.webp",
-    //     "images": [
-    //         {
-    //             "url": "/images/projects/sadagaat/dashboard.webp",
-    //             "alt": "Main dashboard view"
-    //         },
-    //         {
-    //             "url": "/images/projects/sadagaat/users.webp",
-    //             "alt": "User management interface"
-    //         }
-    //     ],
-    //     "skills": [
-    //         "React.js",
-    //         "TypeScript",
-    //         "Material UI",
-    //         "Redux"
-    //     ],
-    //     "highlights": [
-    //         "Created reusable components for consistent UI",
-    //         "Implemented role-based access control",
-    //         "Built responsive admin interface",
-    //         "Integrated real-time data updates"
-    //     ]
-    // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {
         "id": "house-marketplace",
         "name": "House Marketplace",
@@ -339,34 +339,34 @@ export const projectsData: StaticProject[] = [
         ],
         "githubUrl": "https://github.com/devdhaif/next-food"
     },
-    // {
-    //     "id": "chat-app",
-    //     "name": "Real-time Chat App",
-    //     "description": "A WhatsApp-like chat application with real-time messaging.",
-    //     "mainImage": "/images/projects/chat/1.webp",
-    //     "images": [
-    //         {
-    //             "url": "/images/projects/chat/chat.webp",
-    //             "alt": "Chat interface"
-    //         },
-    //         {
-    //             "url": "/images/projects/chat/profile.webp",
-    //             "alt": "User profile"
-    //         }
-    //     ],
-    //     "skills": [
-    //         "Vue.js",
-    //         "Firebase",
-    //         "Tailwind CSS"
-    //     ],
-    //     "highlights": [
-    //         "Implemented real-time messaging",
-    //         "Created intuitive chat interface",
-    //         "Built user authentication system",
-    //         "Added message status indicators"
-    //     ],
-    //     "githubUrl": "https://github.com/devdhaif/chat-app"
-    // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {
         "id": "ecommerce-store",
         "name": "E-commerce Store",

@@ -25,6 +25,177 @@ body {
 }
 
 @layer base {
+    .prose {
+        @apply max-w-none;
+    }
+    
+    .prose pre {
+        @apply bg-gray-100 p-4 rounded-lg;
+    }
+    
+    .prose code {
+        @apply text-sm;
+    }
+    
+    .prose img {
+        @apply rounded-lg;
+    }
+    
+    .prose a {
+        @apply text-blue-600 hover:text-blue-800;
+    }
+    
+    .prose {
+        @apply max-w-none;
+    }
+    
+    .prose pre {
+        @apply bg-gray-800 text-white p-4 rounded-lg;
+    }
+    
+    .prose code {
+        @apply font-mono text-sm;
+    }
+    
+    .ProseMirror {
+        @apply outline-none;
+    }
+    
+    .ProseMirror p {
+        @apply mb-4;
+    }
+    
+    .ProseMirror h1 {
+        @apply text-3xl font-bold mb-4;
+    }
+    
+    .ProseMirror h2 {
+        @apply text-2xl font-bold mb-3;
+    }
+    
+    .ProseMirror h3 {
+        @apply text-xl font-bold mb-2;
+    }
+    
+    .ProseMirror ul {
+        @apply list-disc list-inside mb-4;
+    }
+    
+    .ProseMirror ol {
+        @apply list-decimal list-inside mb-4;
+    }
+    
+    .ProseMirror blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic my-4;
+    }
+    
+    .ProseMirror a {
+        @apply text-blue-500 hover:text-blue-600 underline;
+    }
+    .prose h2 {
+        @apply text-2xl font-bold mt-8 mb-4;
+    }
+    
+    .prose h3 {
+        @apply text-xl font-bold mt-6 mb-3;
+    }
+    
+    .prose p {
+        @apply mb-4;
+    }
+    
+    .prose ul {
+        @apply list-disc list-inside mb-4;
+    }
+    
+    .prose ol {
+        @apply list-decimal list-inside mb-4;
+    }
+    
+    .prose blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic;
+    }
+    .ProseMirror {
+        @apply outline-none;
+    }
+    
+    .ProseMirror p {
+        @apply mb-4;
+    }
+    
+    .ProseMirror strong {
+        @apply font-bold;
+    }
+    
+    .ProseMirror em {
+        @apply italic;
+    }
+    
+    .ProseMirror code {
+        @apply font-mono bg-gray-100 rounded px-1;
+    }
+    
+    .ProseMirror pre {
+        @apply bg-gray-800 text-white p-4 rounded-lg my-4;
+        font-family: 'Fira Code', monospace;
+    }
+    
+    .ProseMirror pre code {
+        @apply bg-transparent text-white px-0;
+        color: inherit;
+    }
+    
+    .ProseMirror img {
+        @apply max-w-full h-auto rounded-lg;
+    }
+    
+    .ProseMirror a {
+        @apply text-blue-500 hover:text-blue-600 underline;
+    }
+    
+    .ProseMirror blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic my-4;
+    }/* Add to your globals.css */
+.prose .hljs {
+    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+}
+
+.prose .hljs code {
+    @apply bg-transparent text-inherit p-0;
+}
+
+/* Syntax highlighting styles */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+    @apply text-pink-400;
+}
+
+.hljs-string {
+    @apply text-green-400;
+}
+
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-addition {
+    @apply text-blue-400;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+    @apply text-gray-400;
+}
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -87,5 +258,291 @@ body {
   body {
     /* @apply bg-background text-foreground; */
   }
+  .prose {
+    @apply max-w-none;
+}
+
+.prose pre {
+    @apply bg-gray-100 p-4 rounded-lg;
+}
+
+.prose code {
+    @apply text-sm;
+}
+
+.prose img {
+    @apply rounded-lg;
+}
+
+.prose a {
+    @apply text-blue-600 hover:text-blue-800;
+}
+
+.prose h2 {
+    @apply text-2xl font-bold mt-8 mb-4;
+}
+
+.prose h3 {
+    @apply text-xl font-bold mt-6 mb-3;
+}
+
+.prose p {
+    @apply mb-4;
+}
+
+.prose ul {
+    @apply list-disc list-inside mb-4;
+}
+
+.prose ol {
+    @apply list-decimal list-inside mb-4;
+}
+
+.prose blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic;
+}
+.prose {
+    @apply max-w-none;
+}
+
+.prose pre {
+    @apply bg-gray-800 text-white p-4 rounded-lg;
+}
+
+.prose code {
+    @apply font-mono text-sm;
+}
+
+.ProseMirror {
+    @apply outline-none;
+}
+
+.ProseMirror p {
+    @apply mb-4;
+}
+
+.ProseMirror h1 {
+    @apply text-3xl font-bold mb-4;
+}
+
+.ProseMirror h2 {
+    @apply text-2xl font-bold mb-3;
+}
+
+.ProseMirror h3 {
+    @apply text-xl font-bold mb-2;
+}
+
+.ProseMirror ul {
+    @apply list-disc list-inside mb-4;
+}
+
+.ProseMirror ol {
+    @apply list-decimal list-inside mb-4;
+}
+
+.ProseMirror blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-4;
+}
+
+.ProseMirror a {
+    @apply text-blue-500 hover:text-blue-600 underline;
+}
+.ProseMirror {
+    @apply outline-none;
+}
+
+.ProseMirror p {
+    @apply mb-4;
+}
+
+.ProseMirror strong {
+    @apply font-bold;
+}
+
+.ProseMirror em {
+    @apply italic;
+}
+
+.ProseMirror code {
+    @apply font-mono bg-gray-100 rounded px-1;
+}
+
+.ProseMirror pre {
+    @apply bg-gray-800 text-white p-4 rounded-lg my-4;
+    font-family: 'Fira Code', monospace;
+}
+
+.ProseMirror pre code {
+    @apply bg-transparent text-white px-0;
+    color: inherit;
+}
+
+.ProseMirror img {
+    @apply max-w-full h-auto rounded-lg;
+}
+
+.ProseMirror a {
+    @apply text-blue-500 hover:text-blue-600 underline;
+}
+
+.ProseMirror blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic my-4;
+}
+/* Add to your globals.css */
+.prose .hljs {
+    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+}
+
+.prose .hljs code {
+    @apply bg-transparent text-inherit p-0;
+}
+
+/* Syntax highlighting styles */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+    @apply text-pink-400;
+}
+
+.hljs-string {
+    @apply text-green-400;
+}
+
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-addition {
+    @apply text-blue-400;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+    @apply text-gray-400;
+}
+/* Add to your globals.css */
+.ProseMirror {
+    > * + * {
+      margin-top: 0.75em;
+    }
+  
+    pre {
+      background: #0D0D0D;
+      color: #FFF;
+      font-family: 'JetBrainsMono', monospace;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+  
+      code {
+        color: inherit;
+        padding: 0;
+        background: none;
+        font-size: 0.8rem;
+      }
+    }
+  
+    code {
+      color: inherit;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.3rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  }
+  
+  .hljs-comment,
+  .hljs-quote {
+    color: #616161;
+  }
+  
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-attribute,
+  .hljs-tag,
+  .hljs-regexp,
+  .hljs-link,
+  .hljs-name,
+  .hljs-selector-id,
+  .hljs-selector-class {
+    color: #f98181;
+  }
+  
+  .hljs-number,
+  .hljs-meta,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-literal,
+  .hljs-type,
+  .hljs-params {
+    color: #fbbc88;
+  }
+  
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet {
+    color: #b9f18d;
+  }
+  
+  .hljs-title,
+  .hljs-section {
+    color: #faf594;
+  }
+  
+  .hljs-keyword,
+  .hljs-selector-tag {
+    color: #70cff8;
+  }
+  .prose pre {
+    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+}
+
+.prose pre code {
+    @apply bg-transparent p-0;
+    color: inherit;
+    font-size: 0.875em;
+}
+
+/* For the backtick input detection */
+.ProseMirror {
+    > * + * {
+        margin-top: 0.75em;
+    }
+}
+.prose pre {
+    @apply bg-gray-900 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-4 my-6 overflow-x-auto;
+}
+
+.prose pre code {
+    @apply bg-transparent p-0 text-sm font-mono text-gray-200;
+    counter-reset: line;
+}
+
+.prose pre code .line {
+    @apply px-4 py-0.5 border-l-2 border-transparent;
+}
+
+.prose pre code .line::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply inline-block w-4 mr-4 text-gray-500 text-right;
+}
+
+.prose pre code .line:hover {
+    @apply border-primary bg-gray-800/50;
+}
+
+.prose code {
+    @apply bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono;
+}
 /* >>>>>>> 31c9046 (wip) */
 }

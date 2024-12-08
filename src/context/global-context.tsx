@@ -1,9 +1,9 @@
-// src/context/global-context.tsx
+
 "use client"
 
 import { createContext, useContext } from 'react';
 
-// Constants
+
 const SOCIAL_LINKS = {
     GITHUB: "https://github.com/devdhaif",
     LINKEDIN: "https://linkedin.com/in/devdhaif",
@@ -22,10 +22,10 @@ const PROJECT_LINKS = {
         github: "https://github.com/devdhaif/neelaincom",
         live: "https://neelaincom.com"
     },
-    // ... other projects
+
 } as const;
 
-// Create context with all your constants
+
 type GlobalContextType = {
     social: typeof SOCIAL_LINKS;
     author: typeof AUTHOR;
@@ -38,7 +38,7 @@ const GlobalContext = createContext<GlobalContextType>({
     projects: PROJECT_LINKS
 });
 
-// Provider component
+
 export function GlobalProvider({ children }: { children: React.ReactNode }) {
     const value = {
         social: SOCIAL_LINKS,
@@ -53,7 +53,7 @@ export function GlobalProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
-// Custom hook to use the context
+
 export function useGlobal() {
     const context = useContext(GlobalContext);
     if (!context) {

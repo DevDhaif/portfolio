@@ -1,4 +1,4 @@
-// components/home/projects.tsx
+
 "use client"
 
 import { motion } from "framer-motion";
@@ -26,12 +26,12 @@ export function Projects() {
 
             if (projects) {
                 const projectsWithUrls = projects.map(project => {
-                    // Get main image URL
+
                     const mainImageUrl = supabase.storage
                         .from('projects-images')
                         .getPublicUrl(project.main_image).data.publicUrl
 
-                    // Get project images URLs
+
                     const images = project.project_images?.map((img: any) => ({
                         id: img.id,
                         url: supabase.storage
@@ -41,7 +41,7 @@ export function Projects() {
                         projectId: img.project_id
                     }))
 
-                    // Map database fields to your Project interface
+
                     return {
                         id: project.id,
                         name: project.name,

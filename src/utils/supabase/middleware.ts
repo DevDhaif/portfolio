@@ -26,7 +26,7 @@ export async function updateSession(request: NextRequest) {
                 setAll(cookies) {
                     try {
                         cookies.forEach((cookie) => {
-                            // Ensure we're only setting cookies on the response
+
                             response = NextResponse.next({
                                 request: {
                                     headers: request.headers,
@@ -36,7 +36,7 @@ export async function updateSession(request: NextRequest) {
                                 name: cookie.name,
                                 value: cookie.value,
                                 ...cookie.options,
-                                // Fix serialization issues with maxAge
+
                                 ...(cookie.options?.maxAge && {
                                     maxAge: cookie.options.maxAge
                                 }),

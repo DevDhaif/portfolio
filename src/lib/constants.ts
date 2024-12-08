@@ -12,15 +12,15 @@ export const AUTHOR = {
     phone: "+966536547818",
 } as const;
 
-// Project links
+
 export const PROJECT_LINKS = {
     neelaincom: {
         github: "https://github.com/devdhaif/neelaincom",
-        live: "https://neelaincom.com" // if available
+        live: "https://neelaincom.com"
     },
     sadagaat: {
         github: "https://github.com/devdhaif/sadagaat-dashboard",
-        live: "https://dashboard.sadagaat.org" // if available
+        live: "https://dashboard.sadagaat.org"
     },
-    // Add other projects...
+
 } as const;

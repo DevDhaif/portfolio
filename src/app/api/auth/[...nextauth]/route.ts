@@ -1,6 +1,6 @@
-// import { auth } from "@/lib/auth";
 
-// export { auth as GET, auth as POST };
+
+
 
 export async function GET(req: Request) {
     return new Response("This route currently does nothing.", { status: 200 });

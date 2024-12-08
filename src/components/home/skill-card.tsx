@@ -1,4 +1,4 @@
-// src/components/home/skill-card.tsx
+
 "use client"
 
 import { motion } from "framer-motion";

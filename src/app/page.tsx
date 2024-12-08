@@ -13,6 +13,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { SectionTransition } from "@/components/ui/section-transition"
 import { Certificates } from "@/components/Certificates"
+import { Posts } from "@/components/home/posts"
 
 export default function Home() {
     const containerRef = useRef(null)
@@ -55,6 +56,9 @@ export default function Home() {
 
                     <SectionTransition>
                         <Experience />
+                    </SectionTransition>
+                    <SectionTransition>
+                        <Posts />
                     </SectionTransition>
                     <SectionTransition>
                         <Certificates />

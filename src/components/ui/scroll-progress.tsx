@@ -1,4 +1,4 @@
-// src/components/ui/scroll-progress.tsx
+
 "use client"
 
 import { motion, useScroll, useSpring } from "framer-motion"

@@ -1,4 +1,4 @@
-// app/admin/layout.tsx
+
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
@@ -45,6 +45,12 @@ export default async function AdminLayout({
                                 className="block px-4 py-2 hover:bg-gray-800"
                             >
                                 Certificates
+                            </Link>
+                            <Link
+                                href="/admin/blog"
+                                className="block px-4 py-2 hover:bg-gray-800"
+                            >
+                                Blog Posts
                             </Link>
                         </nav>
                     </div>

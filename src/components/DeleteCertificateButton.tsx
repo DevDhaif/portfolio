@@ -14,7 +14,7 @@ export function DeleteCertificateButton({ certificateId }: { certificateId: stri
 
                 if (error) throw error
 
-                // Optionally, reload the page or trigger a revalidation
+
                 window.location.reload()
             } catch (error) {
                 console.error('Error deleting certificate:', error)

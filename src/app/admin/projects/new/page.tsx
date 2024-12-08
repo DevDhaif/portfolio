@@ -1,4 +1,4 @@
-// app/admin/projects/new/page.tsx
+
 'use client'
 
 import { useState } from 'react'
@@ -33,7 +33,7 @@ export default function NewProjectPage() {
         try {
             const supabase = createClient()
 
-            // 1. Upload main image
+
             const mainImageName = `${Date.now()}-${mainImage[0].name}`
             const { error: mainImageError } = await supabase.storage
                 .from('projects-images')
@@ -41,10 +41,10 @@ export default function NewProjectPage() {
 
             if (mainImageError) throw mainImageError
 
-            // Add the main image to formData
+
             formData.set('mainImage', mainImageName)
 
-            // 3. Upload project images and collect URLs
+
             const projectImageUrls = []
             if (projectImages.length > 0) {
                 for (const file of projectImages) {
@@ -58,10 +58,10 @@ export default function NewProjectPage() {
                 }
             }
 
-            // Add project images to formData
+
             formData.set('projectImages', JSON.stringify(projectImageUrls))
 
-            // Call the server action with the prepared formData
+
             await createProject(formData)
 
         } catch (error) {

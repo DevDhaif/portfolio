@@ -1,6 +1,6 @@
 import { SkillCategory } from "./types";
 
-// src/lib/skills-data.tsx
+
 export const skillsData: SkillCategory[] = [
     {
         title: "Frontend Development",

@@ -1,4 +1,4 @@
-// src/components/ui/background-elements.tsx
+
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"

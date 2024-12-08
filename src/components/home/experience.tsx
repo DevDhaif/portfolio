@@ -14,7 +14,7 @@ const experiences = [
         period: "2020 - 2022",
         description: "Developed full-stack applications using React, Next js , Vue js , Tailwindcss Laravel, and MongoDB. Implemented real-time features and payment integrations.",
     },
-    // Add more experiences...
+
 ]
 
 export function Experience() {

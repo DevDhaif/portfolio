@@ -1,7 +1,7 @@
-// app/admin/projects/actions.ts
+
 'use server'
 
-// import { projectsData } from '@/lib/projects-data'
+
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -27,7 +27,7 @@ export async function createProject(formData: FormData) {
 
         if (projectError) throw projectError
 
-        // Handle project images if any
+
         const projectImageUrls = JSON.parse(formData.get('projectImages') as string || '[]')
         if (projectImageUrls.length > 0) {
             const { error: imagesError } = await supabase
@@ -56,7 +56,7 @@ export async function deleteProject(projectId: string) {
     const supabase = await createClient()
 
     try {
-        // First delete all images from storage
+
         const { data: project } = await supabase
             .from('projects')
             .select('main_image, project_images(url)')
@@ -64,12 +64,12 @@ export async function deleteProject(projectId: string) {
             .single()
 
         if (project) {
-            // Delete main image
+
             await supabase.storage
                 .from('projects-images')
                 .remove([project.main_image])
 
-            // Delete project images
+
             const imagePaths = project.project_images?.map((img: any) => img.url) || []
             if (imagePaths.length > 0) {
                 await supabase.storage
@@ -77,7 +77,7 @@ export async function deleteProject(projectId: string) {
                     .remove(imagePaths)
             }
 
-            // Delete project record
+
             const { error } = await supabase
                 .from('projects')
                 .delete()
@@ -85,7 +85,7 @@ export async function deleteProject(projectId: string) {
 
             if (error) throw error
 
-            // Revalidate the projects page
+
             revalidatePath('/admin/projects')
         }
     } catch (error) {

@@ -1,4 +1,4 @@
-// src/components/layout/navbar.tsx
+
 "use client"
 
 import { motion } from "framer-motion"

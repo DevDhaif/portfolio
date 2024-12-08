@@ -1,4 +1,4 @@
-// src/components/ui/section-transition.tsx
+
 "use client"
 
 import { motion } from "framer-motion"

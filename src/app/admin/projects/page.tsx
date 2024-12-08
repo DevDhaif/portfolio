@@ -1,4 +1,4 @@
-// app/admin/projects/page.tsx
+
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/server'
 import Image from 'next/image'
@@ -22,12 +22,12 @@ export default async function ProjectsPage() {
     }
 
     const projectsWithUrls = projects?.map(project => {
-        // Get public URL for main image
+
         const { data: { publicUrl: mainImageUrl } } = supabase.storage
             .from('projects-images')
             .getPublicUrl(project.main_image)
 
-        // Get public URLs for project images
+
         const projectImages = project.project_images?.map((image: any) => {
             const { data: { publicUrl } } = supabase.storage
                 .from('projects-images')

@@ -1,4 +1,4 @@
-// src/components/home/hero.tsx
+
 "use client"
 
 import { motion } from "framer-motion"

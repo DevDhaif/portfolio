@@ -1,4 +1,4 @@
-// app/admin/page.tsx
+
 import { createClient } from '@/utils/supabase/server'
 
 export default async function AdminDashboard() {
@@ -13,6 +13,11 @@ export default async function AdminDashboard() {
         .select('*')
         .order('created_at', { ascending: false })
 
+    const { data: posts } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+
     return (
         <div>
             <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
@@ -24,6 +29,10 @@ export default async function AdminDashboard() {
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold mb-2">Total Certificates</h2>
                     <p className="text-3xl font-bold">{certificates?.length || 0}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow">
+                    <h2 className="text-lg font-semibold mb-2">Total Blog Posts</h2>
+                    <p className="text-3xl font-bold">{posts?.length || 0}</p>
                 </div>
                 {/* Add more dashboard widgets as needed */}
             </div>
