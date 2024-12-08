@@ -57,43 +57,37 @@ export function Editor({ content, onChange }: EditorProps) {
 
 
     const insertCodeBlock = () => {
+        if (!editor) return;
+        const selection = editor.state.selection;
 
-        if (editor?.isActive('codeBlock')) {
-            editor
-                .chain()
-                .focus()
-                .toggleCodeBlock()
-                .insertContent({ type: 'paragraph' })
-                .run()
-        } else {
-
-            const { from, to } = editor?.state.selection
-            const text = editor?.state.doc.textBetween(from, to, ' ')
-
-
-            const languageMatch = text?.match(/^```(\w+)\n/)
-            const language = languageMatch ? languageMatch[1] : 'plaintext'
-            const cleanText = text?.replace(/^```\w+\n/, '')
-
-
-            if (!editor?.isActive('paragraph')) {
-                editor?.chain().focus().insertContent({ type: 'paragraph' }).run()
-            }
-
-
-            editor?.chain()
-                .focus()
-                .insertContent({
-                    type: 'codeBlock',
-                    attrs: { language },
-                    content: cleanText ? [{ type: 'text', text: cleanText }] : []
-                })
-                .run()
-
-
-            editor?.chain().focus().insertContent({ type: 'paragraph' }).run()
+        if (!selection) {
+            console.error('Selection is undefined');
+            return;
         }
-    }
+
+        const { from, to } = selection;
+        const text = editor.state.doc.textBetween(from, to, ' ');
+
+        const languageMatch = text?.match(/^```(\w+)\n/);
+        const language = languageMatch ? languageMatch[1] : 'plaintext';
+        const cleanText = text?.replace(/^```\w+\n/, '');
+
+        if (!editor.isActive('paragraph')) {
+            editor.chain().focus().insertContent({ type: 'paragraph' }).run();
+        }
+
+        editor.chain()
+            .focus()
+            .insertContent({
+                type: 'codeBlock',
+                attrs: { language },
+                content: cleanText ? [{ type: 'text', text: cleanText }] : [],
+            })
+            .run();
+
+        editor.chain().focus().insertContent({ type: 'paragraph' }).run();
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
 
         if (e.key === '`' && e.ctrlKey) {
