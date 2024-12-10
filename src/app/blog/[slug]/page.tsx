@@ -9,9 +9,8 @@ import { ContentRenderer } from '@/components/blog/ContentReader'
 import { incrementViews, toggleLike } from '@/app/admin/blog/actions'
 import { EyeIcon, HeartIcon } from 'lucide-react'
 import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
-import { Metadata } from 'next'
 import { BlogPostJsonLd } from '@/components/JsonLd/JsonLd'
-
+import { generatePostMetadata } from './blog-post'
 interface Post {
     id: string
     title: string
@@ -28,45 +27,12 @@ interface Post {
     likes_count: number
 }
 
-export async function generateMetadata(
-    { params }: { params: { slug: string } }
-): Promise<Metadata> {
-    const supabase = await createClient()
+export const runtime = 'edge';
 
-    const { data: post } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('slug', params.slug)
-        .single()
-
-    if (!post) {
-        return {
-            title: 'Post Not Found',
-        }
-    }
-
-    return {
-        title: post.title,
-        description: post.description,
-        keywords: [...post.tags, 'blog', 'Dhaifallah Alfarawi', 'DevDhaif'],
-        openGraph: {
-            title: post.title,
-            description: post.description,
-            type: 'article',
-            publishedTime: post.created_at,
-            authors: ['Dhaifallah Alfarawi'],
-            tags: post.tags,
-            images: [
-                {
-                    url: post.cover_image,
-                    width: 1200,
-                    height: 630,
-                    alt: post.title,
-                },
-            ],
-        },
-    }
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+    return await generatePostMetadata({ params });
 }
+
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const [post, setPost] = useState<Post | null>(null)
