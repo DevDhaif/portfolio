@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { ProjectJsonLd } from '@/components/JsonLd/ProjectJsonLd'
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
@@ -80,84 +81,88 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     }
 
     return (
-        <div className="container py-10 mx-auto">
-            <motion.div
-                className="space-y-8 p-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <h1 className="text-4xl font-bold">{project.name}</h1>
-                <p className="text-xl text-muted-foreground">{project.longDescription}</p>
+        <>
+            <ProjectJsonLd project={project} />
+            <div className="container py-10 mx-auto">
+                <motion.div
+                    className="space-y-8 p-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h1 className="text-4xl font-bold">{project.name}</h1>
+                    <p className="text-xl text-muted-foreground">{project.longDescription}</p>
 
-                {/* Skills/Tags */}
-                <div className="flex flex-wrap gap-2">
-                    {project.skills.map((skill) => (
-                        <span
-                            key={skill}
-                            className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium"
-                        >
-                            {skill}
-                        </span>
-                    ))}
-                </div>
-
-                {/* Main Image */}
-                <div className="aspect-video relative overflow-hidden rounded-lg">
-                    <Image
-                        src={project.mainImage}
-                        alt={project.name}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-
-                {/* Gallery */}
-                {project.images && project.images.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {project.images.map((image) => (
-                            <div key={image.id} className="aspect-video relative overflow-hidden rounded-lg">
-                                <Image
-                                    src={image.url}
-                                    alt={image.alt}
-                                    fill
-                                    className="object-cover"
-                                />
-                            </div>
+                    {/* Skills/Tags */}
+                    <div className="flex flex-wrap gap-2">
+                        {project.skills.map((skill) => (
+                            <span
+                                key={skill}
+                                className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium"
+                            >
+                                {skill}
+                            </span>
                         ))}
                     </div>
-                )}
 
-                {/* Project Links */}
-                <div className="flex gap-4">
-                    {project.githubUrl && (
-                        <Button asChild>
-                            <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                View Code
-                            </Link>
-                        </Button>
-                    )}
-                    {project.liveUrl && (
-                        <Button asChild>
-                            <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                                Live Demo
-                            </Link>
-                        </Button>
-                    )}
-                </div>
-
-                {/* Highlights */}
-                {project.highlights && project.highlights.length > 0 && (
-                    <div>
-                        <h2 className="text-2xl font-bold mb-4">Highlights</h2>
-                        <ul className="list-disc list-inside space-y-2">
-                            {project.highlights.map((highlight, index) => (
-                                <li key={index}>{highlight}</li>
-                            ))}
-                        </ul>
+                    {/* Main Image */}
+                    <div className="aspect-video relative overflow-hidden rounded-lg">
+                        <Image
+                            src={project.mainImage}
+                            alt={project.name}
+                            fill
+                            className="object-cover"
+                        />
                     </div>
-                )}
-            </motion.div>
-        </div>
+
+                    {/* Gallery */}
+                    {project.images && project.images.length > 0 && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {project.images.map((image) => (
+                                <div key={image.id} className="aspect-video relative overflow-hidden rounded-lg">
+                                    <Image
+                                        src={image.url}
+                                        alt={image.alt}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Project Links */}
+                    <div className="flex gap-4">
+                        {project.githubUrl && (
+                            <Button asChild>
+                                <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                    View Code
+                                </Link>
+                            </Button>
+                        )}
+                        {project.liveUrl && (
+                            <Button asChild>
+                                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                                    Live Demo
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
+
+                    {/* Highlights */}
+                    {project.highlights && project.highlights.length > 0 && (
+                        <div>
+                            <h2 className="text-2xl font-bold mb-4">Highlights</h2>
+                            <ul className="list-disc list-inside space-y-2">
+                                {project.highlights.map((highlight, index) => (
+                                    <li key={index}>{highlight}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </motion.div>
+            </div>
+        </>
+
     )
 }

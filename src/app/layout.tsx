@@ -11,12 +11,46 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { RootSchema } from '@/components/JsonLd/RootSchema'
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-    title: "DevDhaif",
-    description: "Full Stack Developer Portfolio",
+    title: {
+        default: 'Dhaifallah Alfarawi | Full Stack Developer',
+        template: '%s | Dhaifallah Alfarawi'
+    },
+    description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
+    keywords: ['Dhaifallah', 'ضيف الله الفروي', 'Devdhaif', 'Full Stack Developer', 'React Developer', 'Next.js Developer'],
+    authors: [{ name: 'Dhaifallah Alfarawi' }],
+    creator: 'Dhaifallah Alfarawi',
+    openGraph: {
+        type: 'website',
+        locale: 'en_US',
+        url: 'https://devdhaif.vercel.app/',
+        siteName: 'Dhaifallah Alfarawi Portfolio',
+        title: 'Dhaifallah Alfarawi | Full Stack Developer',
+        description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
+        images: [
+            {
+                url: 'https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75',
+                width: 1200,
+                height: 630,
+                alt: 'Dhaifallah Alfarawi'
+            }
+        ]
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
 }
 
 export default function RootLayout({
@@ -26,6 +60,10 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <RootSchema />
+            </head>
+
             <body
                 className={cn(
                     "min-h-screen bg-background font-sans antialiased",
