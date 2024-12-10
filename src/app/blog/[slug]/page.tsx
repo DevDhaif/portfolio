@@ -10,7 +10,7 @@ import { incrementViews, toggleLike } from '@/app/admin/blog/actions'
 import { EyeIcon, HeartIcon } from 'lucide-react'
 import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
 import { BlogPostJsonLd } from '@/components/JsonLd/JsonLd'
-import { generatePostMetadata } from './blog-post'
+
 interface Post {
     id: string
     title: string
@@ -27,11 +27,6 @@ interface Post {
     likes_count: number
 }
 
-export const runtime = 'edge';
-
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    return await generatePostMetadata({ params });
-}
 
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
