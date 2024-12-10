@@ -3,6 +3,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export async function createPost(formData: FormData) {
@@ -51,7 +52,7 @@ export async function deletePost(postId: string) {
         }
 
         if (post) {
-             
+
             if (post.cover_image) {
                 const { error: storageError } = await supabase.storage
                     .from('blog-content')
@@ -62,20 +63,20 @@ export async function deletePost(postId: string) {
                 }
             }
 
-             
+
             try {
                 const content = JSON.parse(post.content)
-                 
-                 
+
+
             } catch (e) {
                 console.error('Error parsing content:', e)
             }
 
-             
+
             const { error: deleteError } = await supabase
                 .from('posts')
                 .delete()
-                .match({ id: postId })   
+                .match({ id: postId })
 
             if (deleteError) {
                 console.error('Error deleting post:', deleteError)
@@ -88,5 +89,70 @@ export async function deletePost(postId: string) {
     } catch (error) {
         console.error('Delete operation error:', error)
         throw new Error('Failed to delete post')
+    }
+}
+
+export async function incrementViews(postId: string) {
+    const cookieStore = await cookies()
+    const viewedPosts = cookieStore.get('viewed_posts')?.value || ''
+
+    if (!viewedPosts.includes(postId)) {
+        const supabase = await createClient()
+
+        const { error } = await supabase.rpc('increment_views', { post_id: postId })
+        if (error) console.error('Error incrementing views:', error)
+
+        const newViewedPosts = viewedPosts ? `${viewedPosts},${postId}` : postId;
+        cookieStore.set('viewed_posts', newViewedPosts, {
+            maxAge: 60 * 60
+        })
+
+        revalidatePath('/blog/[slug]')
+        return true
+    }
+    return false
+}
+
+export async function toggleLike(postId: string) {
+    try {
+        const cookieStore = await cookies()
+        const likedPosts = cookieStore.get('liked_posts')?.value || ''
+
+        if (!likedPosts.includes(postId)) {
+            const supabase = await createClient()
+
+            const { error: rpcError } = await supabase.rpc('increment_likes', {
+                post_id: postId
+            })
+
+            if (rpcError) {
+                console.error('RPC Error:', rpcError)
+                return { error: rpcError.message }
+            }
+
+            const { data: post, error: fetchError } = await supabase
+                .from('posts')
+                .select('likes_count')
+                .eq('id', postId)
+                .single()
+
+            if (fetchError) {
+                console.error('Fetch Error:', fetchError)
+                return { error: fetchError.message }
+            }
+
+            const newLikedPosts = likedPosts ? `${likedPosts},${postId}` : postId
+            cookieStore.set('liked_posts', newLikedPosts, {
+                maxAge: 60 * 60 * 24 * 365
+            })
+
+            revalidatePath('/blog/[slug]')
+            return { success: true, likes: post.likes_count }
+        }
+
+        return { error: 'Already liked' }
+    } catch (error) {
+        console.error('Toggle Like Error:', error)
+        return { error: 'Failed to toggle like' }
     }
 }
