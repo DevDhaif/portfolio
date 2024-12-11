@@ -47,6 +47,7 @@ export async function deletePost(postId: string) {
     try {
         const supabase = await createClient()
 
+        // Fetch the post
         const { data: post, error: fetchError } = await supabase
             .from('posts')
             .select('*')
@@ -58,9 +59,13 @@ export async function deletePost(postId: string) {
         if (post) {
             // Delete cover image if exists
             if (post.cover_image) {
-                await supabase.storage
+                const { error: coverImageError } = await supabase.storage
                     .from('blog-content')
                     .remove([post.cover_image])
+
+                if (coverImageError) {
+                    console.error('Error deleting cover image:', coverImageError)
+                }
             }
 
             // Delete content images
@@ -68,22 +73,37 @@ export async function deletePost(postId: string) {
                 const content = JSON.parse(post.content)
                 const imagesToDelete: string[] = []
 
+                // Recursive function to find all images in content
                 const findImages = (node: any) => {
-                    if (node.type === 'image' && !node.attrs.src.startsWith('http')) {
-                        imagesToDelete.push(node.attrs.src)
+                    if (node.type === 'image') {
+                        const src = node.attrs.src
+                        // Check if it's a filename (not a full URL)
+                        if (!src.startsWith('http') && src.startsWith('content-')) {
+                            imagesToDelete.push(src)
+                            console.log('Found image to delete:', src)
+                        }
                     }
-                    if (node.content) {
+                    if (node.content && Array.isArray(node.content)) {
                         node.content.forEach(findImages)
                     }
                 }
 
                 findImages(content)
 
+                console.log('Images to delete:', imagesToDelete)
+
                 if (imagesToDelete.length > 0) {
-                    await supabase.storage
+                    const { error: deleteImagesError } = await supabase.storage
                         .from('blog-content')
                         .remove(imagesToDelete)
+
+                    if (deleteImagesError) {
+                        console.error('Error deleting content images:', deleteImagesError)
+                    } else {
+                        console.log('Successfully deleted images:', imagesToDelete)
+                    }
                 }
+
             } catch (e) {
                 console.error('Error handling content images:', e)
             }
