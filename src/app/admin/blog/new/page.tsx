@@ -10,7 +10,7 @@ import { createPost } from '../actions'
 export default function NewPostPage() {
     const [coverImage, setCoverImage] = useState<File[]>([])
     const [content, setContent] = useState({})
-    const [tempFiles, setTempFiles] = useState<Map<string, File>>(new Map())
+    const [editorImages, setEditorImages] = useState<Map<string, File>>(new Map())
 
     function findImagesInContent(content: any): any[] {
         const images: any[] = []
@@ -55,9 +55,9 @@ export default function NewPostPage() {
     async function handleSubmit(formData: FormData) {
         try {
             const supabase = createClient()
+
+            // Handle cover image upload
             let coverImageUrl = null
-
-
             if (coverImage.length > 0) {
                 const fileName = `${Date.now()}-${coverImage[0].name}`
                 const { error: uploadError } = await supabase.storage
@@ -68,53 +68,70 @@ export default function NewPostPage() {
                 coverImageUrl = fileName
             }
 
+            // Process editor content and upload images
+            let processedContent = JSON.parse(JSON.stringify(content))
 
-            const images = findImagesInContent(content)
-            const uploadedImages = new Map()
+            const processImages = async (node: any): Promise<any> => {
+                if (node.type === 'image') {
+                    const blobUrl = node.attrs.src
+                    if (blobUrl.startsWith('blob:')) {
+                        const file = editorImages.get(blobUrl)
+                        if (file) {
+                            const fileName = `content-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '-')}`
+                            const { error: uploadError } = await supabase.storage
+                                .from('blog-content')
+                                .upload(fileName, file)
 
-            for (const image of images) {
-                if (image.attrs['data-temp-file']) {
-                    const tempUrl = image.attrs.src
-                    const file = tempFiles.get(tempUrl)
-                    if (file) {
-                        const fileName = `${Date.now()}-${file.name}`
-                        const { error: uploadError } = await supabase.storage
-                            .from('blog-content')
-                            .upload(fileName, file)
+                            if (uploadError) throw uploadError
 
-                        if (uploadError) throw uploadError
-                        uploadedImages.set(tempUrl, fileName)
+                            return {
+                                ...node,
+                                attrs: {
+                                    ...node.attrs,
+                                    src: fileName
+                                }
+                            }
+                        }
                     }
+                    return node
                 }
+
+                if (node.content) {
+                    const processedContent = await Promise.all(
+                        node.content.map(processImages)
+                    )
+                    return { ...node, content: processedContent }
+                }
+
+                return node
             }
 
+            processedContent = await processImages(processedContent)
 
-            const finalContent = replaceImageUrls(content, uploadedImages)
-
-
-            const tagsInput = formData.get('tags') as string
-            const tags = tagsInput
-                ? tagsInput.split(',')
-                    .map(tag => tag.trim())
-                    .filter(Boolean)
-                : []
-
-
+            // Prepare and submit form data
             const submitFormData = new FormData()
             submitFormData.set('title', formData.get('title') as string)
             submitFormData.set('description', formData.get('description') as string)
-            submitFormData.set('content', JSON.stringify(finalContent))
+            submitFormData.set('content', JSON.stringify(processedContent))
             submitFormData.set('coverImage', coverImageUrl || '')
-            submitFormData.set('tags', JSON.stringify(tags))
+            submitFormData.set('tags', JSON.stringify(
+                formData.get('tags')?.toString().split(',').map(t => t.trim()).filter(Boolean) || []
+            ))
 
+            const result = await createPost(submitFormData)
 
-            await createPost(submitFormData)
+            if (result?.error) {
+                throw new Error(result.error)
+            }
+
+            // If successful, redirect manually
+            if (result?.success) {
+                window.location.href = '/admin/blog'
+            }
 
         } catch (error) {
-            if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
-                console.error('Error:', error)
-                alert('Error creating post. Please try again.')
-            }
+            console.error('Error:', error)
+            alert('Error creating post. Please try again.')
         }
     }
 
@@ -165,7 +182,11 @@ export default function NewPostPage() {
                     <label className="block text-sm font-medium mb-2">
                         Content *
                     </label>
-                    <Editor content="" onChange={setContent} />
+                    <Editor
+                        content=""
+                        onChange={setContent}
+                        onTempFileChange={setEditorImages}
+                    />
                 </div>
 
                 <div>

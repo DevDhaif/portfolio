@@ -23,12 +23,14 @@ import { useState } from 'react'
 
 const lowlight = createLowlight(all)
 
+
 interface EditorProps {
     content: string;
     onChange: (content: any) => void;
+    onTempFileChange?: (tempFiles: Map<string, File>) => void; // Add this prop
 }
 
-export function Editor({ content, onChange }: EditorProps) {
+export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
     const [tempFiles, setTempFiles] = useState<Map<string, File>>(new Map())
 
     const editor = useEditor({
@@ -54,6 +56,10 @@ export function Editor({ content, onChange }: EditorProps) {
             onChange(editor.getJSON())
         }
     })
+    const handleTempFilesUpdate = (newTempFiles: Map<string, File>) => {
+        setTempFiles(newTempFiles);
+        onTempFileChange?.(newTempFiles);
+    }
 
 
     const insertCodeBlock = () => {
@@ -142,7 +148,6 @@ export function Editor({ content, onChange }: EditorProps) {
                 >
                     <Code className="h-4 w-4" />
                 </Button>
-
                 <Button
                     type="button"
                     variant="ghost"
@@ -155,11 +160,7 @@ export function Editor({ content, onChange }: EditorProps) {
                             const file = (e.target as HTMLInputElement).files?.[0]
                             if (file) {
                                 const tempUrl = URL.createObjectURL(file)
-                                setTempFiles(prev => {
-                                    const newMap = new Map(prev)
-                                    newMap.set(tempUrl, file)
-                                    return newMap
-                                })
+                                handleTempFilesUpdate(new Map(tempFiles).set(tempUrl, file))
                                 editor.chain().focus().insertContent({
                                     type: 'image',
                                     attrs: {
@@ -175,6 +176,7 @@ export function Editor({ content, onChange }: EditorProps) {
                 >
                     <ImageIcon className="h-4 w-4" />
                 </Button>
+
                 <Button
                     type="button"
                     variant="ghost"

@@ -10,15 +10,15 @@ export async function createPost(formData: FormData) {
     try {
         const supabase = await createClient()
 
-
+        const content = JSON.parse(formData.get('content') as string)
         const tags = JSON.parse(formData.get('tags') as string)
 
-        const { error: insertError } = await supabase
+        const { data, error: insertError } = await supabase
             .from('posts')
             .insert([{
                 title: formData.get('title'),
                 description: formData.get('description'),
-                content: JSON.parse(formData.get('content') as string),
+                content,
                 cover_image: formData.get('coverImage'),
                 tags,
                 slug: formData.get('title')?.toString().toLowerCase()
@@ -26,14 +26,21 @@ export async function createPost(formData: FormData) {
                     .replace(/[^\w\-]+/g, ''),
                 published: true
             }])
+            .select()
+            .single()
 
-        if (insertError) throw insertError
+        if (insertError) {
+            console.error('Insert error:', insertError)
+            return { error: 'Failed to create post', details: insertError }
+        }
 
         revalidatePath('/blog')
-        redirect('/admin/blog')
+        // Instead of redirect, return success
+        return { success: true }
+
     } catch (error) {
-        console.error('Error:', error)
-        return { error: 'Failed to create post' }
+        console.error('Error in createPost:', error)
+        return { error: 'Failed to create post', details: error }
     }
 }
 export async function deletePost(postId: string) {
@@ -46,42 +53,48 @@ export async function deletePost(postId: string) {
             .eq('id', postId)
             .single()
 
-        if (fetchError) {
-            console.error('Error fetching post:', fetchError)
-            throw new Error('Failed to find post')
-        }
+        if (fetchError) throw fetchError
 
         if (post) {
-
+            // Delete cover image if exists
             if (post.cover_image) {
-                const { error: storageError } = await supabase.storage
+                await supabase.storage
                     .from('blog-content')
                     .remove([post.cover_image])
-
-                if (storageError) {
-                    console.error('Error deleting cover image:', storageError)
-                }
             }
 
-
+            // Delete content images
             try {
                 const content = JSON.parse(post.content)
+                const imagesToDelete: string[] = []
 
+                const findImages = (node: any) => {
+                    if (node.type === 'image' && !node.attrs.src.startsWith('http')) {
+                        imagesToDelete.push(node.attrs.src)
+                    }
+                    if (node.content) {
+                        node.content.forEach(findImages)
+                    }
+                }
 
+                findImages(content)
+
+                if (imagesToDelete.length > 0) {
+                    await supabase.storage
+                        .from('blog-content')
+                        .remove(imagesToDelete)
+                }
             } catch (e) {
-                console.error('Error parsing content:', e)
+                console.error('Error handling content images:', e)
             }
 
-
+            // Delete the post
             const { error: deleteError } = await supabase
                 .from('posts')
                 .delete()
                 .match({ id: postId })
 
-            if (deleteError) {
-                console.error('Error deleting post:', deleteError)
-                throw new Error('Failed to delete post data')
-            }
+            if (deleteError) throw deleteError
 
             revalidatePath('/admin/blog')
             revalidatePath('/blog')
