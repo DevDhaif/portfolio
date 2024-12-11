@@ -57,65 +57,98 @@ export async function deletePost(postId: string) {
         if (fetchError) throw fetchError
 
         if (post) {
+            console.log('Found post:', post)
+            console.log('Raw content:', post.content)
+
             // Delete cover image if exists
             if (post.cover_image) {
+                console.log('Deleting cover image:', post.cover_image)
                 const { error: coverImageError } = await supabase.storage
                     .from('blog-content')
                     .remove([post.cover_image])
 
                 if (coverImageError) {
                     console.error('Error deleting cover image:', coverImageError)
+                } else {
+                    console.log('Successfully deleted cover image')
                 }
             }
 
             // Delete content images
             try {
-                const content = JSON.parse(post.content)
+                // Make sure content is parsed properly
+                const content = typeof post.content === 'string'
+                    ? JSON.parse(post.content)
+                    : post.content
+
+                console.log('Parsed content:', content)
+
                 const imagesToDelete: string[] = []
 
-                // Recursive function to find all images in content
-                const findImages = (node: any) => {
+                // Modified findImages function
+                function findImages(node: any) {
+                    console.log('Processing node:', node)
+
+                    // Check if it's an image node
                     if (node.type === 'image') {
                         const src = node.attrs.src
-                        // Check if it's a filename (not a full URL)
-                        if (!src.startsWith('http') && src.startsWith('content-')) {
+                        console.log('Found image src:', src)
+
+                        // If it's a filename from our storage
+                        if (typeof src === 'string' && !src.startsWith('http')) {
                             imagesToDelete.push(src)
-                            console.log('Found image to delete:', src)
+                            console.log('Added to delete list:', src)
                         }
                     }
+
+                    // Process child nodes
                     if (node.content && Array.isArray(node.content)) {
                         node.content.forEach(findImages)
                     }
                 }
 
+                // Start the recursive search
                 findImages(content)
 
-                console.log('Images to delete:', imagesToDelete)
+                console.log('Final list of images to delete:', imagesToDelete)
 
+                // Delete the images if we found any
                 if (imagesToDelete.length > 0) {
-                    const { error: deleteImagesError } = await supabase.storage
+                    console.log('Attempting to delete images:', imagesToDelete)
+                    const { data, error: deleteImagesError } = await supabase.storage
                         .from('blog-content')
                         .remove(imagesToDelete)
 
                     if (deleteImagesError) {
                         console.error('Error deleting content images:', deleteImagesError)
                     } else {
-                        console.log('Successfully deleted images:', imagesToDelete)
+                        console.log('Successfully deleted images. Result:', data)
                     }
+                } else {
+                    console.log('No content images to delete')
                 }
 
             } catch (e) {
                 console.error('Error handling content images:', e)
+                console.error('Error details:', {
+                    message: e.message,
+                    stack: e.stack
+                })
             }
 
             // Delete the post
+            console.log('Deleting post from database')
             const { error: deleteError } = await supabase
                 .from('posts')
                 .delete()
                 .match({ id: postId })
 
-            if (deleteError) throw deleteError
+            if (deleteError) {
+                console.error('Error deleting post:', deleteError)
+                throw deleteError
+            }
 
+            console.log('Post deleted successfully')
             revalidatePath('/admin/blog')
             revalidatePath('/blog')
         }
@@ -124,7 +157,6 @@ export async function deletePost(postId: string) {
         throw new Error('Failed to delete post')
     }
 }
-
 export async function incrementViews(postId: string) {
     const cookieStore = await cookies()
     const viewedPosts = cookieStore.get('viewed_posts')?.value || ''
