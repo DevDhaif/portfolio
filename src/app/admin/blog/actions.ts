@@ -130,10 +130,6 @@ export async function deletePost(postId: string) {
 
             } catch (e) {
                 console.error('Error handling content images:', e)
-                console.error('Error details:', {
-                    message: e.message,
-                    stack: e.stack
-                })
             }
 
             // Delete the post
