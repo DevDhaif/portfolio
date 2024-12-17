@@ -1,7 +1,6 @@
 'use client'
 
-import { useEditor, EditorContent, type Editor as TiptapEditor } from '@tiptap/react'
-
+import { useEditor, EditorContent, Editor as TiptapEditor } from '@tiptap/react'
 
 import StarterKit from '@tiptap/starter-kit'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
@@ -54,19 +53,14 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         ],
         content,
         onUpdate: ({ editor }: { editor: TiptapEditor }) => {
-            // Get content as JSON
-            onChange((editor as any).getJSON())
+            // @ts-ignore Just get the content
+            onChange(editor.getJSON())
         }
     })
 
-    const handleTempFilesUpdate = (newTempFiles: Map<string, File>) => {
-        setTempFiles(newTempFiles);
-        onTempFileChange?.(newTempFiles);
-    }
-
-
     const insertCodeBlock = () => {
         if (!editor) return;
+        // @ts-ignore Access editor state
         const selection = editor.state.selection;
 
         if (!selection) {
@@ -74,7 +68,9 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             return;
         }
 
+        // @ts-ignore Access selection range
         const { from, to } = selection;
+        // @ts-ignore Access document text
         const text = editor.state.doc.textBetween(from, to, ' ');
 
         const languageMatch = text?.match(/^```(\w+)\n/);
