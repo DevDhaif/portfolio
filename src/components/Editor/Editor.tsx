@@ -55,8 +55,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         content,
         onUpdate: ({ editor }: { editor: TiptapEditor }) => {
             // Get content as JSON
-            const json = editor.state.doc.toJSON()
-            onChange(json)
+            onChange((editor as any).getJSON())
         }
     })
 
