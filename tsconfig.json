@@ -31,13 +31,7 @@
         "typeRoots": [
             "./node_modules/@types",
             "./src/types",
-            "./types",
-            "three",
-            "@types/three"
-        ],
-        "types": [
-            "three",
-            "@types/three"
+            "./types"
         ],
     },
     "include": [
@@ -45,8 +39,7 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "src/types/*.d.ts",
-        "src/components/Particles.tsx"
+        "src/types/*.d.ts"
     ],
     "exclude": [
         "node_modules"
