@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState, useRef } from "react"
 import { Certificate } from "@/lib/types"
@@ -13,11 +13,6 @@ export function Certificates() {
     const [certificates, setCertificates] = useState<Certificate[]>([])
     const [loading, setLoading] = useState(true)
     const containerRef = useRef<HTMLElement>(null)
-
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"]
-    })
 
     const { y, opacity } = useScrollAnimation()
     useEffect(() => {
@@ -131,7 +126,7 @@ export function Certificates() {
                         }
                     }}
                 >
-                    {certificates.map((cert, index) => (
+                    {certificates.map((cert) => (
 
                         <motion.div
                             key={cert.id}

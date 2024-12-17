@@ -33,6 +33,8 @@ export function MouseFollower() {
         }
 
         checkDevice()
+        setIsClicking(false);
+
         window.addEventListener('resize', checkDevice)
         return () => window.removeEventListener('resize', checkDevice)
     }, [])

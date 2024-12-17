@@ -31,7 +31,7 @@ export default function NewCertificatePage() {
                     .getPublicUrl(fileName)
 
                 sourceIconUrl = publicUrl
-                formData.set('sourceIcon', publicUrl)
+                formData.set('sourceIcon', sourceIconUrl)
             }
 
 
@@ -48,7 +48,7 @@ export default function NewCertificatePage() {
                     .getPublicUrl(fileName)
 
                 certificateImageUrl = publicUrl
-                formData.set('certificateImage', publicUrl)
+                formData.set('certificateImage', certificateImageUrl)
             }
 
 

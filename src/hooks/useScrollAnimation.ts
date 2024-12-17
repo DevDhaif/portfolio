@@ -1,5 +1,5 @@
 // hooks/useScrollAnimation.ts
-import { useTransform, useScroll, type MotionValue } from "framer-motion"
+import { useTransform, useScroll } from "framer-motion"
 
 interface ScrollAnimationConfig {
     yOffset?: string // How far the element should move (e.g., "20%")

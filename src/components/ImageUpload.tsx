@@ -1,8 +1,6 @@
-
 'use client'
 
-import Image from 'next/image'
-import { X } from 'lucide-react'
+import Image from "next/image"
 
 interface ImageUploadProps {
     onChange: (files: File[]) => void
@@ -41,7 +39,7 @@ export default function ImageUpload({
                 {/* Show current images if no new ones selected */}
                 {value.length === 0 && currentImage && (
                     <div className="relative">
-                        <img
+                        <Image
                             src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${currentImage}`}
                             alt="Current image"
                             className="h-32 w-32 object-cover rounded-md"
@@ -50,7 +48,7 @@ export default function ImageUpload({
                 )}
                 {value.length === 0 && currentImages && currentImages.map((img, index) => (
                     <div key={img} className="relative">
-                        <img
+                        <Image
                             src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${img}`}
                             alt={`Current image ${index + 1}`}
                             className="h-32 w-32 object-cover rounded-md"
@@ -61,7 +59,7 @@ export default function ImageUpload({
                 {/* Show new selected images */}
                 {value.map((file, index) => (
                     <div key={index} className="relative">
-                        <img
+                        <Image
                             src={URL.createObjectURL(file)}
                             alt={`Selected image ${index + 1}`}
                             className="h-32 w-32 object-cover rounded-md"

@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { BriefcaseIcon, CalendarIcon, ExternalLinkIcon } from "lucide-react"
+import { BriefcaseIcon, CalendarIcon } from "lucide-react"
 import { useRef } from "react"
 
 const experiences = [

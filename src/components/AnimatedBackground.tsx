@@ -49,18 +49,20 @@ export function AnimatedBackground() {
     const random = (min: number, max: number): number =>
         Math.random() * (max - min) + min
 
-    const createParticle = (id: number, canvasSize: CanvasSize): Particle => ({
-        id,
-        x: random(0, canvasSize.width),
-        y: random(0, canvasSize.height),
-        radius: random(DEFAULT_CONFIG.particleMinRadius, DEFAULT_CONFIG.particleMaxRadius),
-        speedX: random(DEFAULT_CONFIG.particleMinSpeed, DEFAULT_CONFIG.particleMaxSpeed),
-        speedY: random(DEFAULT_CONFIG.particleMinSpeed, DEFAULT_CONFIG.particleMaxSpeed),
-        opacity: random(DEFAULT_CONFIG.particleMinOpacity, DEFAULT_CONFIG.particleMaxOpacity),
-    })
 
     // Initialize particles
     const initParticles = useCallback((canvasSize: CanvasSize) => {
+        const createParticle = (id: number, canvasSize: CanvasSize): Particle => ({
+            id,
+            x: random(0, canvasSize.width),
+            y: random(0, canvasSize.height),
+            radius: random(DEFAULT_CONFIG.particleMinRadius, DEFAULT_CONFIG.particleMaxRadius),
+            speedX: random(DEFAULT_CONFIG.particleMinSpeed, DEFAULT_CONFIG.particleMaxSpeed),
+            speedY: random(DEFAULT_CONFIG.particleMinSpeed, DEFAULT_CONFIG.particleMaxSpeed),
+            opacity: random(DEFAULT_CONFIG.particleMinOpacity, DEFAULT_CONFIG.particleMaxOpacity),
+        })
+
+
         particlesRef.current = Array.from(
             { length: DEFAULT_CONFIG.particleCount },
             (_, i) => createParticle(i, canvasSize)

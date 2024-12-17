@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { ContentRenderer } from '@/components/blog/ContentReader'
 import { incrementViews, toggleLike } from '@/app/admin/blog/actions'
 import { EyeIcon, HeartIcon } from 'lucide-react'
-import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
+import { hasLikedPost, hasViewedPost, markPostAsViewed } from '@/utils/cookies'
 import { BlogPostJsonLd } from '@/components/JsonLd/JsonLd'
 
 interface Post {

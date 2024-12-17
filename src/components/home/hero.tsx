@@ -4,19 +4,15 @@ import { motion, useAnimation, useInView, useScroll, useTransform } from "framer
 import { Button } from "@/components/ui/button"
 import { useGlobal } from "@/context/global-context"
 import {
-    Code2,
-    Hammer,
     ArrowRight,
     MessageCircle,
-    ChevronDown,
     Github,
     Linkedin,
-    Code,
-    ExternalLink
+    Code
 } from "lucide-react"
 import { HeroJsonLd } from "@/components/JsonLd/HeroJsonLd"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 export function Hero() {
     const { author, social } = useGlobal()
@@ -28,14 +24,13 @@ export function Hero() {
         amount: 0.3  // Instead of threshold
     })
 
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"]
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
+    // const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
     useEffect(() => {
@@ -44,14 +39,13 @@ export function Hero() {
         }
     }, [controls, isInView])
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY })
-        }
+    // useEffect(() => {
+    //     const handleMouseMove = () => {
+    //     }
 
-        window.addEventListener('mousemove', handleMouseMove)
-        return () => window.removeEventListener('mousemove', handleMouseMove)
-    }, [])
+    //     window.addEventListener('mousemove', handleMouseMove)
+    //     return () => window.removeEventListener('mousemove', handleMouseMove)
+    // }, [])
 
     const techStack = [
         {
@@ -90,22 +84,6 @@ export function Hero() {
             description: "CSS Framework"
         }
     ]
-
-    const floatingAnimation = {
-        initial: { y: 0 },
-        animate: {
-            y: 0,
-            transition: {
-                y: {
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "easeInOut",
-                    values: [-5, 5, -5]
-                }
-            }
-        }
-    } as const
 
     return (
         <>

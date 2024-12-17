@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import type { Project } from "@/lib/types"
 import Link from 'next/link'
 import Image from 'next/image'
-import { ExternalLink, Github, ArrowUpRight, Code, Eye } from "lucide-react"
+import { ExternalLink, Github, Eye } from "lucide-react"
 
 interface ProjectCardProps extends Project {
     index: number
@@ -17,8 +17,6 @@ export function ProjectCard({
     githubUrl,
     liveUrl,
     mainImage,
-    video,
-    images = [],
     index
 }: ProjectCardProps) {
     const [isHovered, setIsHovered] = useState(false)

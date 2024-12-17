@@ -6,14 +6,11 @@ import { Experience } from "@/components/home/experience"
 import { Stats } from "@/components/home/stats"
 import { Contact } from "@/components/home/contact"
 import { ScrollProgress } from "@/components/ui/scroll-progress"
-import { BackgroundElements } from "@/components/ui/background-elements"
-import { MouseFollower } from "@/components/ui/mouse-follower"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { useRef } from "react"
 import { SectionTransition } from "@/components/ui/section-transition"
 import { Certificates } from "@/components/Certificates"
 import { Posts } from "@/components/home/posts"
-import { Canvas } from '@react-three/fiber'
 import dynamic from "next/dynamic"
 const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'), {
     ssr: false,

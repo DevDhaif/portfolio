@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useFormStatus, useFormState } from 'react-dom'
+import { useFormStatus } from 'react-dom'
 import { createClient } from '@/utils/supabase/client'
 import ImageUpload from '@/components/ImageUpload'
 import { createProject } from '../actions'

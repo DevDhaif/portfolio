@@ -1,14 +1,4 @@
-
-
-import { redirect } from "next/navigation";
-
-
 export default async function CreateBlogPage() {
-
-
-
-
-
 
     return (
         <div className="container mx-auto py-8">
