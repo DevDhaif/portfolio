@@ -4,13 +4,28 @@ import React from "react"
 import { motion, useSpring, useMotionValue, useTransform } from "framer-motion"
 
 export function MouseFollower() {
+    const [isMounted, setIsMounted] = React.useState(false)
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
     const [isHovered, setIsHovered] = React.useState(false)
     const [isClicking, setIsClicking] = React.useState(false)
     const [isVisible, setIsVisible] = React.useState(false)
 
-    // Optimized spring config for smooth movement
+    // Check if we're on a large screen
+    React.useEffect(() => {
+        const checkDevice = () => {
+            const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches
+            setIsMounted(isLargeScreen)
+        }
+
+        checkDevice()
+        window.addEventListener('resize', checkDevice)
+        return () => window.removeEventListener('resize', checkDevice)
+    }, [])
+
+    // Don't render anything if not on a large screen
+    if (!isMounted) return null
+
     const springConfig = {
         damping: 35,
         stiffness: 400,
@@ -20,7 +35,6 @@ export function MouseFollower() {
     const cursorX = useSpring(mouseX, springConfig)
     const cursorY = useSpring(mouseY, springConfig)
 
-    // Slightly softer spring for scale animations
     const scale = useSpring(1, {
         damping: 25,
         stiffness: 300,
@@ -94,7 +108,7 @@ export function MouseFollower() {
 
     return (
         <motion.div
-            className="fixed pointer-events-none z-[9999] will-change-transform"
+            className="fixed pointer-events-none z-[9999] will-change-transform hidden lg:block"
             style={{
                 x: cursorX,
                 y: cursorY,
