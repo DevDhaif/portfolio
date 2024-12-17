@@ -1,6 +1,7 @@
 'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, type Editor as TiptapEditor } from '@tiptap/react'
+
 
 import StarterKit from '@tiptap/starter-kit'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
@@ -52,9 +53,10 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             }),
         ],
         content,
-        onUpdate: ({ editor }) => {
-            // @ts-ignore
-            onChange(editor.getJSON())
+        onUpdate: ({ editor }: { editor: TiptapEditor }) => {
+            // Get content as JSON
+            const json = editor.state.doc.toJSON()
+            onChange(json)
         }
     })
 
