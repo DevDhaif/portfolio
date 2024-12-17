@@ -18,8 +18,8 @@ export function Certificates() {
         offset: ["start end", "end start"]
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "5%"])
+    const opacity = useTransform(scrollYProgress, [1, 1, 1, 1], [1, 1, 1, 1])
 
     useEffect(() => {
         async function loadCertificates() {

@@ -4,6 +4,7 @@ import React from "react"
 import { motion, useSpring, useMotionValue, useTransform } from "framer-motion"
 
 export function MouseFollower() {
+    // All hooks need to be at the top, before any conditionals
     const [isMounted, setIsMounted] = React.useState(false)
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
@@ -11,7 +12,25 @@ export function MouseFollower() {
     const [isClicking, setIsClicking] = React.useState(false)
     const [isVisible, setIsVisible] = React.useState(false)
 
-    // Check if we're on a large screen
+    const springConfig = {
+        damping: 35,
+        stiffness: 400,
+        mass: 0.1
+    }
+
+    const cursorX = useSpring(mouseX, springConfig)
+    const cursorY = useSpring(mouseY, springConfig)
+    const scale = useSpring(1, {
+        damping: 25,
+        stiffness: 300,
+        mass: 0.1
+    })
+
+    const opacity = useTransform(
+        scale,
+        value => isVisible ? value * 1 : 0
+    )
+
     React.useEffect(() => {
         const checkDevice = () => {
             const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches
@@ -23,29 +42,13 @@ export function MouseFollower() {
         return () => window.removeEventListener('resize', checkDevice)
     }, [])
 
-    // Don't render anything if not on a large screen
-    if (!isMounted) return null
-
-    const springConfig = {
-        damping: 35,
-        stiffness: 400,
-        mass: 0.1
-    }
-
-    const cursorX = useSpring(mouseX, springConfig)
-    const cursorY = useSpring(mouseY, springConfig)
-
-    const scale = useSpring(1, {
-        damping: 25,
-        stiffness: 300,
-        mass: 0.1
-    })
-
     React.useEffect(() => {
         scale.set(isClicking ? 0.9 : isHovered ? 1.5 : 1)
     }, [isClicking, isHovered, scale])
 
     React.useEffect(() => {
+        if (!isMounted) return
+
         let timeout: ReturnType<typeof setTimeout>
 
         const handleMouseMove = (e: MouseEvent) => {
@@ -99,12 +102,9 @@ export function MouseFollower() {
             window.removeEventListener("mouseleave", handleMouseLeave)
             window.removeEventListener("mouseenter", handleMouseEnter)
         }
-    }, [isVisible, mouseX, mouseY])
+    }, [isMounted, isVisible, mouseX, mouseY])
 
-    const opacity = useTransform(
-        scale,
-        value => isVisible ? value * 1 : 0
-    )
+    if (!isMounted) return null
 
     return (
         <motion.div
