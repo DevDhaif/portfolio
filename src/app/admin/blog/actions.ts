@@ -4,7 +4,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 export async function createPost(formData: FormData) {
     try {
@@ -13,7 +12,7 @@ export async function createPost(formData: FormData) {
         const content = JSON.parse(formData.get('content') as string)
         const tags = JSON.parse(formData.get('tags') as string)
 
-        const { data, error: insertError } = await supabase
+        const {  error: insertError } = await supabase
             .from('posts')
             .insert([{
                 title: formData.get('title'),

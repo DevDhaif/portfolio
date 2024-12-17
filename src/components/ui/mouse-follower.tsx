@@ -46,7 +46,7 @@ export function MouseFollower() {
             if (timeout) return
             timeout = setTimeout(() => {
                 handleMouseMove(e)
-                //@ts-ignore
+                //@ts-expect-error : I do not need it for now 
                 timeout = undefined
             }, 10)
         }

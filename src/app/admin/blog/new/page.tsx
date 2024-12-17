@@ -12,45 +12,6 @@ export default function NewPostPage() {
     const [content, setContent] = useState({})
     const [editorImages, setEditorImages] = useState<Map<string, File>>(new Map())
 
-    function findImagesInContent(content: any): any[] {
-        const images: any[] = []
-
-        function traverse(node: any) {
-            if (node.type === 'image') {
-                images.push(node)
-            }
-            if (node.content) {
-                node.content.forEach(traverse)
-            }
-        }
-
-        traverse(content)
-        return images
-    }
-
-    function replaceImageUrls(content: any, urlMap: Map<string, string>): any {
-        function traverse(node: any): any {
-            if (node.type === 'image' && urlMap.has(node.attrs.src)) {
-                return {
-                    ...node,
-                    attrs: {
-                        ...node.attrs,
-                        src: urlMap.get(node.attrs.src),
-                        'data-temp-file': undefined,
-                    },
-                }
-            }
-            if (node.content) {
-                return {
-                    ...node,
-                    content: node.content.map(traverse),
-                }
-            }
-            return node
-        }
-
-        return traverse(content)
-    }
 
     async function handleSubmit(formData: FormData) {
         try {
@@ -109,14 +70,14 @@ export default function NewPostPage() {
             processedContent = await processImages(processedContent)
 
             // Prepare and submit form data
-            const submitFormData = new FormData()
-            submitFormData.set('title', formData.get('title') as string)
-            submitFormData.set('description', formData.get('description') as string)
-            submitFormData.set('content', JSON.stringify(processedContent))
-            submitFormData.set('coverImage', coverImageUrl || '')
+            const submitFormData = new FormData();
+            submitFormData.set('title', formData.get('title') as string);
+            submitFormData.set('description', formData.get('description') as string);
+            submitFormData.set('content', JSON.stringify(processedContent));
+            submitFormData.set('coverImage', coverImageUrl || '');
             submitFormData.set('tags', JSON.stringify(
                 formData.get('tags')?.toString().split(',').map(t => t.trim()).filter(Boolean) || []
-            ))
+            ));
 
             const result = await createPost(submitFormData)
 

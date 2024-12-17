@@ -183,7 +183,7 @@ export function Hero() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
                                 >
-                                    Hi, I'm
+                                    Hi, I&apos;m
                                 </motion.span>
                                 <motion.span
                                     className="block bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent pb-4"

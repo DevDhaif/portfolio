@@ -1,18 +1,21 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import type { Points as ThreePoints } from 'three'
 
 const Particles = ({ count = 5000 }) => {
     const points = useRef<ThreePoints>(null)
 
-    const positions = new Float32Array(count * 3)
-    for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 50
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 50
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 50
-    }
+    const positions = useMemo(() => {
+        const positions = new Float32Array(count * 3)
+        for (let i = 0; i < count; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 50
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 50
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 50
+        }
+        return positions
+    }, [count])
 
     useFrame(({ clock }) => {
         if (points.current) {
