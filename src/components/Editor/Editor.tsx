@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, Editor as TiptapEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { all, createLowlight } from 'lowlight'
@@ -27,7 +27,7 @@ const lowlight = createLowlight(all)
 interface EditorProps {
     content: string;
     onChange: (content: any) => void;
-    onTempFileChange?: (tempFiles: Map<string, File>) => void; // Add this prop
+    onTempFileChange?: (tempFiles: Map<string, File>) => void;
 }
 
 export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
@@ -52,7 +52,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             }),
         ],
         content,
-        onUpdate: ({ editor }) => {
+        onUpdate: ({ editor }: { editor: TiptapEditor }) => {
             onChange(editor.getJSON())
         }
     })
