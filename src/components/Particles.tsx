@@ -1,20 +1,21 @@
 'use client'
-
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { Points as ThreePoints } from 'three'
+import { Points } from '@react-three/drei'
+import { Points as ThreePoints } from 'three'
 
 const Particles = ({ count = 5000 }) => {
+    // Properly type the ref
     const points = useRef<ThreePoints>(null)
 
     const positions = useMemo(() => {
-        const positions = new Float32Array(count * 3)
+        const pos = new Float32Array(count * 3)
         for (let i = 0; i < count; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 50
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 50
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 50
+            pos[i * 3] = (Math.random() - 0.5) * 50
+            pos[i * 3 + 1] = (Math.random() - 0.5) * 50
+            pos[i * 3 + 2] = (Math.random() - 0.5) * 50
         }
-        return positions
+        return pos
     }, [count])
 
     useFrame(({ clock }) => {
@@ -25,7 +26,7 @@ const Particles = ({ count = 5000 }) => {
     })
 
     return (
-        <points ref={points}>
+        <Points ref={points}>
             <bufferGeometry>
                 <bufferAttribute
                     attach="attributes-position"
@@ -41,7 +42,7 @@ const Particles = ({ count = 5000 }) => {
                 transparent
                 opacity={0.8}
             />
-        </points>
+        </Points>
     )
 }
 
