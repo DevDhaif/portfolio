@@ -7,6 +7,7 @@ import { Certificate } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
 import { Loader2, Award, Calendar, ExternalLink, Medal } from "lucide-react"
+import { useScrollAnimation } from "@/hooks/useScrollAnimation"
 
 export function Certificates() {
     const [certificates, setCertificates] = useState<Certificate[]>([])
@@ -18,9 +19,7 @@ export function Certificates() {
         offset: ["start end", "end start"]
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "5%"])
-    const opacity = useTransform(scrollYProgress, [1, 1, 1, 1], [1, 1, 1, 1])
-
+    const { y, opacity } = useScrollAnimation()
     useEffect(() => {
         async function loadCertificates() {
             const supabase = createClient()
@@ -97,7 +96,7 @@ export function Certificates() {
                             repeat: Infinity,
                             ease: "easeInOut",
                         }}
-                        // className="absolute inset-0 blur-3xl bg-blue-500/20 rounded-full"
+                    // className="absolute inset-0 blur-3xl bg-blue-500/20 rounded-full"
                     />
 
                     <motion.div
@@ -120,7 +119,7 @@ export function Certificates() {
                 </motion.div>
 
                 <motion.div
-                    className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+                    className="grid grid-cols-1 gap-8 place-items-center items-stretch sm:grid-cols-2 lg:grid-cols-3"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -133,6 +132,7 @@ export function Certificates() {
                     }}
                 >
                     {certificates.map((cert, index) => (
+
                         <motion.div
                             key={cert.id}
                             variants={{
@@ -149,9 +149,9 @@ export function Certificates() {
                             }}
                             className="group relative"
                         >
-                            <div className="absolute inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl blur" />
+                            <div className="absolute inset-0.5 h-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl blur" />
 
-                            <div className="relative flex flex-col bg-blue-950/40 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group-hover:border-blue-500/40 transition-colors">
+                            <div className="relative flex flex-col justify-between h-full bg-blue-950/40 backdrop-blur-sm border border-blue-500/20 rounded-xl overflow-hidden group-hover:border-blue-500/40 transition-colors">
                                 {/* Certificate Image with Overlay */}
                                 <div className="relative h-48 overflow-hidden">
                                     {cert.certificateImageUrl && (

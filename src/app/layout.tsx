@@ -12,7 +12,7 @@ import { ourFileRouter } from "@/app/api/uploadthing/core"
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { RootSchema } from '@/components/JsonLd/RootSchema'
-
+import { Pattern } from '@/components/Pattern'
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -66,10 +66,11 @@ export default function RootLayout({
 
             <body
                 className={cn(
-                    "min-h-screen font-sans antialiased selection:bg-white/10 selection:text-white relative",
+                    "min-h-screen  font-sans antialiased selection:bg-white/10 selection:text-white relative",
                     inter.className
                 )}
             >
+                <Pattern />
                 {/* Primary Background Layer */}
                 <div className="fixed inset-0 -z-50">
                     <div className="absolute inset-0 bg-gradient-to-b from-[#000030] via-[#00002f] to-[#000017]" />

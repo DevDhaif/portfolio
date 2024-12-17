@@ -30,8 +30,8 @@ interface CanvasConfig {
 }
 
 const DEFAULT_CONFIG: CanvasConfig = {
-    particleCount: 120,
-    connectionDistance: 100,
+    particleCount: 80,
+    connectionDistance: 80,
     particleMinRadius: 1,
     particleMaxRadius: 3,
     particleMinSpeed: -0.5,
