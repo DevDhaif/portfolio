@@ -6,10 +6,10 @@ import { Navbar } from "@/components/layout/navbar"
 import { Footer } from "@/components/layout/footer"
 import { MouseFollower } from "@/components/ui/mouse-follower"
 import { GlobalProvider } from "@/context/global-context"
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
-import { Analytics } from '@vercel/analytics/next';
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin"
+import { extractRouterConfig } from "uploadthing/server"
+import { ourFileRouter } from "@/app/api/uploadthing/core"
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { RootSchema } from '@/components/JsonLd/RootSchema'
 
@@ -59,50 +59,85 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning className="dark">
             <head>
                 <RootSchema />
             </head>
 
             <body
                 className={cn(
-                    "min-h-screen bg-background font-sans antialiased",
+                    "min-h-screen font-sans antialiased selection:bg-white/10 selection:text-white relative",
                     inter.className
                 )}
             >
+                {/* Primary Background Layer */}
+                <div className="fixed inset-0 -z-50">
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#000030] via-[#00002f] to-[#000017]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.08),rgba(0,0,0,0))]" />
+                </div>
+
+                {/* Ambient Background Effects */}
+                <div className="fixed inset-0 -z-40">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(120,119,198,0.05),transparent_50%)]" />
+                    <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(30,30,60,0.05),transparent_50%)]" />
+                </div>
+
+                {/* Content Noise Overlay */}
+                <div className="fixed inset-0 -z-30 opacity-[0.015] pointer-events-none bg-noise" />
+
                 <MouseFollower />
+
                 <div className="relative flex min-h-screen flex-col">
-                    {/* Sticky header wrapper */}
-                    <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                    {/* Sticky Header */}
+                    <div className="sticky top-0 z-50 w-full border-b border-white/5">
+                        <div className="absolute inset-0 bg-[#000010]/70 backdrop-blur-xl" />
+                        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
                             <Navbar />
                         </div>
                     </div>
 
-                    {/* Main content */}
-                    <main className="flex-1">
+                    {/* Main Content */}
+                    <main className="flex-1 relative">
+                        {/* Content Wrapper */}
                         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
                             <NextSSRPlugin
                                 routerConfig={extractRouterConfig(ourFileRouter)}
                             />
-                            {/* <SessionProvider> */}
-
                             <GlobalProvider>
                                 {children}
                                 <Analytics />
                                 <SpeedInsights />
                             </GlobalProvider>
-                            {/* </SessionProvider> */}
+                        </div>
 
+                        {/* Decorative Top Gradient */}
+                        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+                            <div
+                                className="relative left-[calc(50%-20rem)] aspect-[1155/678] w-[40rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#000030] to-transparent opacity-30 sm:left-[calc(50%-30rem)] sm:w-[80rem]"
+                                style={{
+                                    clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'
+                                }}
+                            />
                         </div>
                     </main>
 
                     {/* Footer */}
-                    <div className="w-full border-t bg-background">
-                        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="relative w-full border-t border-white/5">
+                        <div className="absolute inset-0 bg-[#000030]/80 backdrop-blur-sm" />
+                        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
                             <Footer />
                         </div>
                     </div>
+                </div>
+
+                {/* Decorative Bottom Gradient */}
+                <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl">
+                    <div
+                        className="relative left-[calc(50%+20rem)] aspect-[1155/678] w-[40rem] translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#000030] to-transparent opacity-30 sm:left-[calc(50%+30rem)] sm:w-[80rem]"
+                        style={{
+                            clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'
+                        }}
+                    />
                 </div>
             </body>
         </html>

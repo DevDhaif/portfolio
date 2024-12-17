@@ -1,66 +1,55 @@
-
 "use client"
 
 import React from "react"
 import { motion, useSpring, useMotionValue, useTransform } from "framer-motion"
 
-interface MousePosition {
-    x: number;
-    y: number;
-}
-
-type Timeout = ReturnType<typeof setTimeout>;
-
-
 export function MouseFollower() {
-
     const mouseX = useMotionValue(0)
     const mouseY = useMotionValue(0)
     const [isHovered, setIsHovered] = React.useState(false)
     const [isClicking, setIsClicking] = React.useState(false)
     const [isVisible, setIsVisible] = React.useState(false)
 
-
+    // Optimized spring config for smooth movement
     const springConfig = {
         damping: 35,
         stiffness: 400,
         mass: 0.1
     }
 
-
     const cursorX = useSpring(mouseX, springConfig)
     const cursorY = useSpring(mouseY, springConfig)
 
-
+    // Slightly softer spring for scale animations
     const scale = useSpring(1, {
         damping: 25,
         stiffness: 300,
         mass: 0.1
     })
 
-
     React.useEffect(() => {
         scale.set(isClicking ? 0.9 : isHovered ? 1.5 : 1)
     }, [isClicking, isHovered, scale])
 
     React.useEffect(() => {
-        let timeout: ReturnType<typeof setTimeout> | undefined;
+        let timeout: ReturnType<typeof setTimeout>
 
         const handleMouseMove = (e: MouseEvent) => {
             if (!isVisible) {
-                setIsVisible(true);
+                setIsVisible(true)
             }
-            mouseX.set(e.clientX - 16);
-            mouseY.set(e.clientY - 16);
-        };
+            mouseX.set(e.clientX - 16)
+            mouseY.set(e.clientY - 16)
+        }
 
         const throttledMouseMove = (e: MouseEvent) => {
-            if (timeout) return;
+            if (timeout) return
             timeout = setTimeout(() => {
-                handleMouseMove(e);
-                timeout = undefined;
-            }, 10);
-        };
+                handleMouseMove(e)
+                //@ts-ignore
+                timeout = undefined
+            }, 10)
+        }
 
         const handleMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement
@@ -80,9 +69,6 @@ export function MouseFollower() {
         const handleMouseLeave = () => setIsVisible(false)
         const handleMouseEnter = () => setIsVisible(true)
 
-
-
-
         window.addEventListener("mousemove", throttledMouseMove, { passive: true })
         window.addEventListener("mouseover", handleMouseOver, { passive: true })
         window.addEventListener("mousedown", handleMouseDown, { passive: true })
@@ -101,7 +87,6 @@ export function MouseFollower() {
         }
     }, [isVisible, mouseX, mouseY])
 
-
     const opacity = useTransform(
         scale,
         value => isVisible ? value * 1 : 0
@@ -109,7 +94,7 @@ export function MouseFollower() {
 
     return (
         <motion.div
-            className="fixed pointer-events-none z-[9999] left-10 top-10"
+            className="fixed pointer-events-none z-[9999] will-change-transform"
             style={{
                 x: cursorX,
                 y: cursorY,
@@ -117,36 +102,49 @@ export function MouseFollower() {
                 opacity,
             }}
             animate={{ opacity: isVisible ? 1 : 0 }}
-            transition={{
-                opacity: { duration: 0.2 }
-            }}
+            transition={{ opacity: { duration: 0.2 } }}
         >
             <div className="relative w-8 h-8">
-                {/* Main cursor */}
-                <div className="absolute inset-0 rounded-full bg-primary/20 backdrop-blur-sm border border-primary/50" />
-                <div className="absolute inset-2 rounded-full bg-primary/30 backdrop-blur-sm" />
+                {/* Outer glow effect */}
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500/30 to-cyan-500/30 blur-sm" />
 
-                {/* Hover effect */}
+                {/* Main cursor */}
+                <div className="absolute inset-0">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/90 to-white/80 backdrop-blur-[2px] border border-white/20" />
+                    <div className="absolute inset-2 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 backdrop-blur-[1px]" />
+                </div>
+
+                {/* Hover effect with improved animation */}
                 {isHovered && (
                     <motion.div
                         className="absolute -inset-2"
-                        initial={{ opacity: 0, scale: 0 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0 }}
+                        exit={{ opacity: 0, scale: 1.2 }}
+                        transition={{ duration: 0.2 }}
                     >
-                        <div className="w-full h-full rounded-full border border-primary/50 border-dashed animate-spin-slow" />
+                        <div className="relative w-full h-full">
+                            {/* Spinning border */}
+                            <div className="absolute inset-0 rounded-full border border-white/40 border-dashed animate-spin-slow" />
+                            {/* Glowing ring */}
+                            <div className="absolute inset-0 rounded-full border border-blue-400/20 animate-pulse" />
+                        </div>
                     </motion.div>
                 )}
 
-                {/* Click ripple */}
+                {/* Enhanced click ripple */}
                 {isClicking && (
                     <motion.div
                         className="absolute -inset-4"
                         initial={{ opacity: 0.5, scale: 0.8 }}
                         animate={{ opacity: 0, scale: 2 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
                     >
-                        <div className="w-full h-full rounded-full border-2 border-primary" />
+                        <div className="w-full h-full">
+                            {/* Multiple ripple layers for depth */}
+                            <div className="absolute inset-0 rounded-full border-2 border-white/60 animate-ping" />
+                            <div className="absolute inset-0 rounded-full border border-blue-400/40 animate-pulse" />
+                        </div>
                     </motion.div>
                 )}
             </div>

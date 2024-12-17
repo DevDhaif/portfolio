@@ -1,94 +1,140 @@
-
-"use client"
-
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { Project, StaticProject } from "@/lib/types";
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import type { Project } from "@/lib/types"
 import Link from 'next/link'
-import Image from 'next/image';
+import Image from 'next/image'
+import { ExternalLink, Github, ArrowUpRight, Code, Eye } from "lucide-react"
 
 interface ProjectCardProps extends Project {
-    index: number;
+    index: number
 }
-export function ProjectCard({ id, name, description, skills, githubUrl, liveUrl, mainImage, video, images = [], index }: ProjectCardProps) {
-    const [isHovered, setIsHovered] = useState(false);
+
+export function ProjectCard({
+    id,
+    name,
+    description,
+    skills,
+    githubUrl,
+    liveUrl,
+    mainImage,
+    video,
+    images = [],
+    index
+}: ProjectCardProps) {
+    const [isHovered, setIsHovered] = useState(false)
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            onHoverStart={() => setIsHovered(true)}
-            onHoverEnd={() => setIsHovered(false)}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease: [0.23, 1, 0.32, 1]
+            }}
+            className="relative group h-full rounded-xl"
         >
-            <Card className="group relative overflow-hidden border h-full flex flex-col justify-between transition-colors hover:border-foreground/50">
-                <div className="relative h-52 w-full overflow-hidden">
-                    <Image
-                        src={mainImage || "/api/placeholder/800/600"}
-                        alt={name}
-                        width={800}
-                        height={600}
-                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
-                    />
-                    {/* Media indicators */}
+            <motion.div
+                whileHover={{ y: -8 }}
+                className="relative h-full flex flex-col bg-black/40 backdrop-blur-sm rounded-xl overflow-hidden border border-white/5"
+            >
+                {/* Animated border gradient */}
+                <div className="z-10 absolute inset-px rounded-xl overflow-hidden">
+                    <div className="z-10 absolute inset-0 bg-gradient-to-r from-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
-                <CardHeader>
-                    <CardTitle className="line-clamp-1">{name}</CardTitle>
-                    <CardDescription className="line-clamp-2">{description}</CardDescription>
-                </CardHeader>
+                {/* Image container */}
+                <div className="relative h-52 overflow-hidden flex-shrink-0">
+                    <motion.div
+                        animate={{ scale: isHovered ? 1.1 : 1 }}
+                        transition={{ duration: 0.4 }}
+                        className="h-full transform-gpu"
+                        onHoverStart={() => setIsHovered(true)}
+                        onHoverEnd={() => setIsHovered(false)}
+                    >
+                        <Image
+                            src={mainImage || "/api/placeholder/800/600"}
+                            alt={name}
+                            width={800}
+                            height={600}
+                            className="object-cover w-full h-full brightness-90 group-hover:brightness-100 transition-all duration-300"
+                            priority={index < 2}
+                        />
+                        <div className="z-10 absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60" />
+                    </motion.div>
+                </div>
 
-                <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                        {skills.map((tag) => (
-                            <span key={tag} className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium transition-colors hover:bg-primary hover:text-primary-foreground">
-                                {tag}
-                            </span>
-                        ))}
+                {/* Content */}
+                <div className="z-50 flex flex-col flex-grow p-6 space-y-4">
+                    <div>
+                        <h3 className="text-xl font-bold mb-2 text-white">
+                            {name}
+                        </h3>
+                        <p className="text-gray-300/80 line-clamp-2">
+                            {description}
+                        </p>
                     </div>
-                </CardContent>
 
-                <CardFooter className="gap-2">
-                    <Link href={`/projects/${id}`} className="block">
-                        <Button>
-                            See details
-                        </Button>
-                    </Link>
-                    {githubUrl && (
-                        <Button variant="outline" size="sm" asChild>
-                            <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1">
-                                <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    height="24"
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
-                                    width="24"
+                    {/* Skills */}
+                    <div className="flex-grow">
+                        <div className="flex flex-wrap gap-2">
+                            {skills.map((skill, idx) => (
+                                <motion.span
+                                    key={skill}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    className="px-2.5 py-1 text-xs font-medium rounded-md 
+                                    bg-white/5 text-gray-300 border border-white/10
+                                    hover:bg-white/10 transition-colors"
                                 >
-                                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                                    <path d="M9 18c-4.51 2-5-2-7-2" />
-                                </svg>
+                                    {skill}
+                                </motion.span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="grid grid-cols-3 gap-3 pt-4 border-t border-white/5">
+                        <Link
+                            href={`/projects/${id}`}
+                            className="max-w-fit col-span-1 flex items-center gap-2 text-sm p-2 rounded-lg 
+                            bg-white/10 text-white hover:bg-white/20 
+                            transition-all duration-200"
+                        >
+                            <Eye className="w-4 h-4" />
+                            Details
+                        </Link>
+
+                        {githubUrl && (
+                            <Link
+                                href={githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="max-w-fit col-span-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg
+                                bg-white/5 text-gray-300 text-sm hover:bg-white/10 
+                                transition-colors border border-white/10"
+                            >
+                                <Github className="w-4 h-4" />
                                 Code
-                            </a>
-                        </Button>
-                    )}
-
-
-                    {liveUrl && (
-                        <Button size="sm" asChild>
-                            <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1">
-                                {/* Live demo icon */}
-                                Live Demo
-                            </a>
-                        </Button>
-                    )}
-                </CardFooter>
-            </Card>
-        </motion.div >
-    );
+                            </Link>
+                        )}
+                        {liveUrl && (
+                            <Link
+                                href={liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="max-w-fit col-span-1 text-sm flex items-center justify-center gap-2 px-4 py-2 rounded-lg
+                                bg-white/5 text-gray-300 hover:bg-white/10 
+                                transition-colors border border-white/10"
+                            >
+                                <ExternalLink className="w-4 h-4" />
+                                Demo
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    )
 }
