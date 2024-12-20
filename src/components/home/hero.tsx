@@ -3,20 +3,11 @@
 import { motion, useAnimation, useInView, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useGlobal } from "@/context/global-context"
-import {
-    Code2,
-    Hammer,
-    ArrowRight,
-    MessageCircle,
-    ChevronDown,
-    Github,
-    Linkedin,
-    Code,
-    ExternalLink
-} from "lucide-react"
+import { ArrowRight, MessageCircle, Github, Linkedin, Code } from "lucide-react"
 import { HeroJsonLd } from "@/components/JsonLd/HeroJsonLd"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { AnimatedBackground } from "../AnimatedBGSmall"
 
 export function Hero() {
     const { author, social } = useGlobal()
@@ -25,7 +16,7 @@ export function Hero() {
     const ref = useRef(null)
     const isInView = useInView(ref, {
         once: true,
-        amount: 0.3  // Instead of threshold
+        amount: 0.3
     })
 
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -35,8 +26,10 @@ export function Hero() {
         offset: ["start start", "end start"]
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+    const opacity = useTransform(scrollYProgress,
+        [0, 0.9, 0.9, 1], [0.8, 1, 1, 1])
+    const y = useTransform(scrollYProgress,
+        [0, 0.8], ["0%", "0%"])
 
     useEffect(() => {
         if (isInView) {
@@ -91,21 +84,6 @@ export function Hero() {
         }
     ]
 
-    const floatingAnimation = {
-        initial: { y: 0 },
-        animate: {
-            y: 0,
-            transition: {
-                y: {
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "easeInOut",
-                    values: [-5, 5, -5]
-                }
-            }
-        }
-    } as const
 
     return (
         <>
@@ -115,46 +93,11 @@ export function Hero() {
                 className="relative min-h-[100vh] flex items-center justify-center overflow-hidden"
             >
                 {/* Animated background elements */}
-                <div className="absolute inset-0 -z-10">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
-                    <motion.div
-                        className="absolute inset-0"
-                        style={{
-                            backgroundImage: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 1px, transparent 1px)',
-                            backgroundSize: '40px 40px',
-                            opacity
-                        }}
-                    />
-
-                    {/* Floating particles */}
-                    <motion.div className="absolute inset-0 overflow-hidden">
-                        {Array.from({ length: 20 }).map((_, i) => (
-                            <motion.div
-                                key={i}
-                                className="absolute w-1 h-1 bg-blue-400/20 rounded-full"
-                                animate={{
-                                    x: ["0%", "100%"],
-                                    y: [Math.random() * 100 + "%", Math.random() * 100 + "%"],
-                                    opacity: [0.2, 0.5, 0.2],
-                                    scale: [1, 1.5, 1]
-                                }}
-                                transition={{
-                                    duration: Math.random() * 10 + 20,
-                                    repeat: Infinity,
-                                    delay: Math.random() * 5
-                                }}
-                                style={{
-                                    left: Math.random() * 100 + "%",
-                                    top: Math.random() * 100 + "%"
-                                }}
-                            />
-                        ))}
-                    </motion.div>
-                </div>
+                <AnimatedBackground />
 
                 <motion.div
                     className="relative container px-4 md:px-6 pt-24 pb-32"
-                // style={{ y, opacity }}
+                    style={{ y, opacity }}
                 >
                     <div className="flex flex-col items-center gap-16 text-center">
                         {/* Main heading group */}

@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import type { Project } from "@/lib/types"
 import Link from 'next/link'
 import Image from 'next/image'
-import { ExternalLink, Github, ArrowUpRight, Code, Eye } from "lucide-react"
+import { ExternalLink, Github, Eye } from "lucide-react"
 
 interface ProjectCardProps extends Project {
     index: number
@@ -17,8 +17,6 @@ export function ProjectCard({
     githubUrl,
     liveUrl,
     mainImage,
-    video,
-    images = [],
     index
 }: ProjectCardProps) {
     const [isHovered, setIsHovered] = useState(false)
@@ -26,12 +24,13 @@ export function ProjectCard({
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             transition={{
                 duration: 0.5,
                 delay: index * 0.1,
                 ease: [0.23, 1, 0.32, 1]
             }}
+            viewport={{ once: false }}
             className="relative group h-full rounded-xl"
         >
             <motion.div
@@ -82,11 +81,12 @@ export function ProjectCard({
                                 <motion.span
                                     key={skill}
                                     initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: false }}
                                     transition={{ delay: idx * 0.05 }}
                                     className="px-2.5 py-1 text-xs font-medium rounded-md 
-                                    bg-white/5 text-gray-300 border border-white/10
-                                    hover:bg-white/10 transition-colors"
+                            bg-white/5 text-gray-300 border border-white/10
+                            hover:bg-white/10 transition-colors"
                                 >
                                     {skill}
                                 </motion.span>
