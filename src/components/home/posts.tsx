@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Loader2, ChevronRight, Calendar, Tag } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { PostCard } from './PostCard'
 
 interface Post {
     id: string
@@ -102,7 +103,7 @@ export function Posts() {
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     variants={{
                         visible: {
                             transition: {
@@ -111,88 +112,25 @@ export function Posts() {
                         }
                     }}
                 >
-                    {posts.slice(0, visiblePosts).map((post) => (
-                        <motion.div
-                            key={post.id}
-                            variants={{
-                                hidden: { opacity: 0, y: 20 },
-                                visible: {
-                                    opacity: 1,
-                                    y: 0,
-                                    transition: {
-                                        type: "spring",
-                                        stiffness: 100,
-                                        damping: 15
-                                    }
-                                }
-                            }}
-                        >
-                            <Link href={`/blog/${post.slug}`} className="block">
-                                <div className="group relative bg-blue-950/40 backdrop-blur-sm rounded-xl border border-blue-500/20 overflow-hidden hover:border-blue-500/40 transition-colors">
-                                    {/* Image container */}
-                                    <div className="relative h-48">
-                                        {post.cover_image && (
-                                            <Image
-                                                src={post.cover_image}
-                                                alt={post.title}
-                                                fill
-                                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                            />
-                                        )}
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="p-6">
-                                        {/* Date */}
-                                        <div className="flex items-center gap-2 text-sm text-blue-300/70 mb-3">
-                                            <Calendar className="w-4 h-4" />
-                                            <time>{new Date(post.created_at).toLocaleDateString()}</time>
-                                        </div>
-
-                                        {/* Title and description */}
-                                        <h3 className="text-xl font-semibold mb-2 text-blue-100 group-hover:text-blue-200 transition-colors">
-                                            {post.title}
-                                        </h3>
-                                        <p className="text-blue-200/70 mb-4 line-clamp-2">
-                                            {post.description}
-                                        </p>
-
-                                        {/* Tags */}
-                                        <div className="flex flex-wrap gap-2">
-                                            {post.tags?.map((tag, index) => (
-                                                <span
-                                                    key={index}
-                                                    className="flex items-center gap-1 bg-blue-500/10 text-blue-200/80 px-2 py-1 rounded-full text-sm border border-blue-500/20"
-                                                >
-                                                    <Tag className="w-3 h-3" />
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Hover effect */}
-                                    <div className="absolute inset-0 border-2 border-blue-500/0 rounded-xl group-hover:border-blue-500/20 transition-colors" />
-                                </div>
-                            </Link>
-                        </motion.div>
+                    {posts.slice(0, visiblePosts).map((post, index) => (
+                        <PostCard key={post.id} {...post} index={index} />
                     ))}
                 </motion.div>
 
                 {/* Load more button */}
                 {visiblePosts < posts.length && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="flex justify-center mt-12"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        className="mt-12 text-center"
                     >
                         <button
-                            onClick={loadMore}
-                            className="group flex items-center gap-2 px-6 py-3 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-200 transition-all"
+                            onClick={() => setVisiblePosts(prev => prev + 6)}
+                            className="px-6 py-2 rounded-full bg-white/5 text-white hover:bg-white/10 
+                            transition-colors border border-white/10"
                         >
-                            Load more posts
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            Load More Posts
                         </button>
                     </motion.div>
                 )}

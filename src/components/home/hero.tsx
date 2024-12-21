@@ -8,6 +8,8 @@ import { HeroJsonLd } from "@/components/JsonLd/HeroJsonLd"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { AnimatedBackground } from "../AnimatedBGSmall"
+import { AnimatedGrid } from "../AnimatedGrid"
+import { AnimatedCard } from "../AnimatedCard"
 
 export function Hero() {
     const { author, social } = useGlobal()
@@ -211,88 +213,31 @@ export function Hero() {
                         </motion.div>
 
                         {/* Tech stack */}
-                        <motion.div
-                            className="flex flex-col items-center gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                        >
-                            {/* Tech stack header */}
-                            <div className="flex items-center gap-2 text-blue-100/90">
-                                <Code className="w-5 h-5" />
-                                <h3 className="text-lg font-semibold">Tech Stack</h3>
-                                <Code className="w-5 h-5" />
-                            </div>
-
-                            {/* Tech stack grid */}
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-3xl">
-                                {techStack.map((tech, i) => (
-                                    <motion.div
-                                        key={tech.name}
-                                        initial={{ opacity: 0, scale: 0.5 }}
-                                        whileInView={{
-                                            opacity: 1,
-                                            scale: 1,
-                                            transition: {
-                                                duration: 0.3,
-                                                delay: 0.1 * i
-                                            }
-                                        }}
-                                        whileHover={{ scale: 1.05 }}
-                                        className="relative group cursor-pointer"
-                                    >
-                                        {/* Gradient background */}
-                                        <div className={`
-            absolute inset-0 rounded-xl bg-gradient-to-br ${tech.gradient}
-            opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur
-        `} />
-
-                                        {/* Card content with floating animation */}
-                                        <motion.div
-                                            animate={{
-                                                y: [-2, 2, -2],
-                                            }}
-                                            transition={{
-                                                duration: 2,
-                                                repeat: Infinity,
-                                                repeatType: "reverse",
-                                                ease: "easeInOut",
-                                            }}
-                                            className={`
-                flex flex-col items-center gap-2 p-4 rounded-xl
-                bg-blue-900/10 backdrop-blur-sm
-                border border-blue-500/20
-                group-hover:border-blue-500/40
-                transition-all duration-300
-                ${tech.shadowColor} hover:shadow-lg
-            `}
+                        <AnimatedGrid columnClassName="grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                            {techStack.map((tech) => (
+                                <AnimatedCard
+                                    key={tech.name}
+                                    gradient={tech.gradient}
+                                    shadowColor={tech.shadowColor}
+                                >
+                                    <span className="text-2xl transform group-hover:scale-110 transition-transform duration-300">
+                                        {tech.icon}
+                                    </span>
+                                    <div className="space-y-1">
+                                        <span className="text-sm font-medium text-blue-100/90 group-hover:text-blue-100">
+                                            {tech.name}
+                                        </span>
+                                        <motion.p
+                                            initial={{ opacity: 0, height: 0 }}
+                                            whileHover={{ opacity: 1, height: "auto" }}
+                                            className="text-xs text-blue-200/60 overflow-hidden"
                                         >
-                                            <span className="text-2xl transform group-hover:scale-110 transition-transform duration-300">
-                                                {tech.icon}
-                                            </span>
-                                            <div className="space-y-1">
-                                                <span className="text-sm font-medium text-blue-100/90 group-hover:text-blue-100">
-                                                    {tech.name}
-                                                </span>
-                                                <motion.p
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    whileHover={{ opacity: 1, height: "auto" }}
-                                                    className="text-xs text-blue-200/60 overflow-hidden"
-                                                >
-                                                    {tech.description}
-                                                </motion.p>
-                                            </div>
-                                        </motion.div>
-
-                                        {/* Hover glow effect */}
-                                        <motion.div
-                                            className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 opacity-0 group-hover:opacity-30 blur-sm transition-opacity duration-300"
-                                            style={{ zIndex: -1 }}
-                                        />
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
+                                            {tech.description}
+                                        </motion.p>
+                                    </div>
+                                </AnimatedCard>
+                            ))}
+                        </AnimatedGrid>
 
                     </div>
                 </motion.div>

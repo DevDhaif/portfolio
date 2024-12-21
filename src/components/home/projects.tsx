@@ -13,6 +13,7 @@ import { SectionHeader } from "@/components/section-header"
 import { GridItemsWrapper } from "@/components/grid-items-wrapper"
 import { GridItem } from "@/components/grid-item"
 import { Loading } from "@/components/loading"
+import { AnimatedGrid } from "../AnimatedGrid"
 
 export function Projects() {
     const [projects, setProjects] = useState<Project[]>([])

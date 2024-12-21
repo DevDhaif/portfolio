@@ -1,6 +1,3 @@
-// components/home/skills.tsx
-"use client"
-
 import { motion, useScroll, useTransform } from "framer-motion"
 import { SkillCard } from "./skill-card"
 import { skillsData } from "@/lib/skills-data"
@@ -12,13 +9,33 @@ import { SectionHeader } from "@/components/section-header"
 
 export function Skills() {
     const containerRef = useRef<HTMLElement>(null)
+
+    // Improved scroll animation configuration
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end start"]
+        offset: ["start end", "end start"],
     })
 
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
+    // Adjusted opacity transform to keep content visible longer
+    const opacity = useTransform(
+        scrollYProgress,
+        [0, 0.1, 0.9, 1], // Wider range for visibility
+        [0, 1, 1, 0]
+    )
+
+    // Smoother and more subtle parallax effect
+    const y = useTransform(
+        scrollYProgress,
+        [0, 0.5, 1],
+        ["0%", "2.5%", "5%"] // More gradual movement
+    )
+
+    // Add scale transform for extra depth
+    const scale = useTransform(
+        scrollYProgress,
+        [0, 0.2, 0.8, 1],
+        [0.95, 1, 1, 0.95]
+    )
 
     return (
         <section
@@ -26,12 +43,16 @@ export function Skills() {
             className="py-32 relative overflow-hidden bg-transparent"
             id="skills"
         >
-            {/* Background elements */}
-            {/* <ParticleBackground /> */}
-
             <motion.div
                 className="container relative"
-                style={{ opacity, y }}
+                style={{
+                    opacity,
+                    y,
+                    scale,
+                }}
+                initial={{ opacity: 0, y: "2%" }}
+                animate={{ opacity: 1, y: "0%" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
             >
                 <SectionHeader
                     badge="Technical Expertise"
@@ -39,17 +60,28 @@ export function Skills() {
                     description="Core competencies and specialized skills across the full stack development spectrum."
                 />
 
-                {/* Skill Cards */}
                 <GridItemsWrapper>
                     {skillsData.map((skill, index) => (
-                        <GridItem key={skill.title} index={index}>
-                            <SkillCard
-                                title={skill.title}
-                                items={skill.items}
-                                icon={skill.icon}
-                                index={index}
-                            />
-                        </GridItem>
+                        <motion.div
+                            key={skill.title}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{
+                                duration: 0.5,
+                                delay: index * 0.1,
+                                ease: "easeOut"
+                            }}
+                        >
+                            <GridItem index={index}>
+                                <SkillCard
+                                    title={skill.title}
+                                    items={skill.items}
+                                    icon={skill.icon}
+                                    index={index}
+                                />
+                            </GridItem>
+                        </motion.div>
                     ))}
                 </GridItemsWrapper>
             </motion.div>
