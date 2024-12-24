@@ -2,598 +2,661 @@
 @tailwind components;
 @tailwind utilities;
 
-/* <<<<<<< HEAD
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-======= */
-body {
-  font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer base {
     .prose {
         @apply max-w-none;
     }
-    
+
     .prose pre {
-        @apply bg-gray-100 p-4 rounded-lg;
+        @apply bg-gray-900 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-4 my-6 overflow-x-auto;
     }
-    
-    .prose code {
-        @apply text-sm;
-    }
-    
+
     .prose img {
         @apply rounded-lg;
     }
-    
+
     .prose a {
         @apply text-blue-600 hover:text-blue-800;
     }
-    
-    .prose {
-        @apply max-w-none;
-    }
-    
-    .prose pre {
-        @apply bg-gray-800 text-white p-4 rounded-lg;
-    }
-    
+
     .prose code {
-        @apply font-mono text-sm;
+        @apply rounded px-1.5 py-0.5 text-sm font-mono;
     }
-    
+
     .ProseMirror {
         @apply outline-none;
     }
-    
+
     .ProseMirror p {
         @apply mb-4;
     }
-    
+
     .ProseMirror h1 {
         @apply text-3xl font-bold mb-4;
     }
-    
+
     .ProseMirror h2 {
         @apply text-2xl font-bold mb-3;
     }
-    
+
     .ProseMirror h3 {
         @apply text-xl font-bold mb-2;
     }
-    
+
     .ProseMirror ul {
         @apply list-disc list-inside mb-4;
     }
-    
+
     .ProseMirror ol {
         @apply list-decimal list-inside mb-4;
     }
-    
+
     .ProseMirror blockquote {
         @apply border-l-4 border-gray-300 pl-4 italic my-4;
     }
-    
+
     .ProseMirror a {
         @apply text-blue-500 hover:text-blue-600 underline;
     }
+
     .prose h2 {
         @apply text-2xl font-bold mt-8 mb-4;
     }
-    
+
     .prose h3 {
         @apply text-xl font-bold mt-6 mb-3;
     }
-    
+
     .prose p {
         @apply mb-4;
     }
-    
+
     .prose ul {
         @apply list-disc list-inside mb-4;
     }
-    
+
     .prose ol {
         @apply list-decimal list-inside mb-4;
     }
-    
+
     .prose blockquote {
         @apply border-l-4 border-gray-300 pl-4 italic;
     }
-    .ProseMirror {
-        @apply outline-none;
-    }
-    
+
+
     .ProseMirror p {
         @apply mb-4;
     }
-    
+
     .ProseMirror strong {
         @apply font-bold;
     }
-    
+
     .ProseMirror em {
         @apply italic;
     }
-    
+
     .ProseMirror code {
-        @apply font-mono bg-gray-100 rounded px-1;
+        @apply font-mono rounded px-1;
     }
-    
+
     .ProseMirror pre {
-        @apply bg-gray-800 text-white p-4 rounded-lg my-4;
+        @apply bg- p-4 rounded-lg my-4;
         font-family: 'Fira Code', monospace;
     }
-    
+
     .ProseMirror pre code {
         @apply bg-transparent text-white px-0;
         color: inherit;
     }
-    
+
     .ProseMirror img {
         @apply max-w-full h-auto rounded-lg;
     }
-    
+
     .ProseMirror a {
         @apply text-blue-500 hover:text-blue-600 underline;
     }
-    
+
     .ProseMirror blockquote {
         @apply border-l-4 border-gray-300 pl-4 italic my-4;
-    }/* Add to your globals.css */
-.prose .hljs {
-    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
-}
+    }
 
-.prose .hljs code {
-    @apply bg-transparent text-inherit p-0;
-}
+    /* Add to your globals.css */
+    .prose .hljs {
+        @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+    }
 
-/* Syntax highlighting styles */
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-title,
-.hljs-section,
-.hljs-doctag,
-.hljs-name,
-.hljs-strong {
-    @apply text-pink-400;
-}
+    .prose .hljs code {
+        @apply bg-transparent text-inherit p-0;
+    }
 
-.hljs-string {
-    @apply text-green-400;
-}
+    /* Syntax highlighting styles */
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-title,
+    .hljs-section,
+    .hljs-doctag,
+    .hljs-name,
+    .hljs-strong {
+        @apply text-pink-400;
+    }
 
-.hljs-attribute,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-template-tag,
-.hljs-template-variable,
-.hljs-addition {
-    @apply text-blue-400;
-}
+    .hljs-string {
+        @apply text-green-400;
+    }
 
-.hljs-comment,
-.hljs-quote,
-.hljs-deletion,
-.hljs-meta {
-    @apply text-gray-400;
-}
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+    .hljs-attribute,
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-template-tag,
+    .hljs-template-variable,
+    .hljs-addition {
+        @apply text-blue-400;
+    }
+
+    .hljs-comment,
+    .hljs-quote,
+    .hljs-deletion,
+    .hljs-meta {
+        @apply text-gray-400;
+    }
+
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 0 0% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 0 0% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 0 0% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 0 0% 9%;
+        --secondary: 0 0% 14.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 14.9%;
+        --muted-foreground: 0 0% 63.9%;
+        --accent: 0 0% 14.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 14.9%;
+        --input: 0 0% 14.9%;
+        --ring: 0 0% 83.1%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  .prose {
-    @apply max-w-none;
-}
-
-.prose pre {
-    @apply bg-gray-100 p-4 rounded-lg;
-}
-
-.prose code {
-    @apply text-sm;
-}
-
-.prose img {
-    @apply rounded-lg;
-}
-
-.prose a {
-    @apply text-blue-600 hover:text-blue-800;
-}
-
-.prose h2 {
-    @apply text-2xl font-bold mt-8 mb-4;
-}
-
-.prose h3 {
-    @apply text-xl font-bold mt-6 mb-3;
-}
-
-.prose p {
-    @apply mb-4;
-}
-
-.prose ul {
-    @apply list-disc list-inside mb-4;
-}
-
-.prose ol {
-    @apply list-decimal list-inside mb-4;
-}
-
-.prose blockquote {
-    @apply border-l-4 border-gray-300 pl-4 italic;
-}
-.prose {
-    @apply max-w-none;
-}
-
-.prose pre {
-    @apply bg-gray-800 text-white p-4 rounded-lg;
-}
-
-.prose code {
-    @apply font-mono text-sm;
-}
-
-.ProseMirror {
-    @apply outline-none;
-}
-
-.ProseMirror p {
-    @apply mb-4;
-}
-
-.ProseMirror h1 {
-    @apply text-3xl font-bold mb-4;
-}
-
-.ProseMirror h2 {
-    @apply text-2xl font-bold mb-3;
-}
-
-.ProseMirror h3 {
-    @apply text-xl font-bold mb-2;
-}
-
-.ProseMirror ul {
-    @apply list-disc list-inside mb-4;
-}
-
-.ProseMirror ol {
-    @apply list-decimal list-inside mb-4;
-}
-
-.ProseMirror blockquote {
-    @apply border-l-4 border-gray-300 pl-4 italic my-4;
-}
-
-.ProseMirror a {
-    @apply text-blue-500 hover:text-blue-600 underline;
-}
-.ProseMirror {
-    @apply outline-none;
-}
-
-.ProseMirror p {
-    @apply mb-4;
-}
-
-.ProseMirror strong {
-    @apply font-bold;
-}
-
-.ProseMirror em {
-    @apply italic;
-}
-
-.ProseMirror code {
-    @apply font-mono bg-gray-100 rounded px-1;
-}
-
-.ProseMirror pre {
-    @apply bg-gray-800 text-white p-4 rounded-lg my-4;
-    font-family: 'Fira Code', monospace;
-}
-
-.ProseMirror pre code {
-    @apply bg-transparent text-white px-0;
-    color: inherit;
-}
-
-.ProseMirror img {
-    @apply max-w-full h-auto rounded-lg;
-}
-
-.ProseMirror a {
-    @apply text-blue-500 hover:text-blue-600 underline;
-}
-
-.ProseMirror blockquote {
-    @apply border-l-4 border-gray-300 pl-4 italic my-4;
-}
-/* Add to your globals.css */
-.prose .hljs {
-    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
-}
-
-.prose .hljs code {
-    @apply bg-transparent text-inherit p-0;
-}
-
-/* Syntax highlighting styles */
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-title,
-.hljs-section,
-.hljs-doctag,
-.hljs-name,
-.hljs-strong {
-    @apply text-pink-400;
-}
-
-.hljs-string {
-    @apply text-green-400;
-}
-
-.hljs-attribute,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-template-tag,
-.hljs-template-variable,
-.hljs-addition {
-    @apply text-blue-400;
-}
-
-.hljs-comment,
-.hljs-quote,
-.hljs-deletion,
-.hljs-meta {
-    @apply text-gray-400;
-}
-/* Add to your globals.css */
-.ProseMirror {
-    > * + * {
-      margin-top: 0.75em;
+    * {
+        @apply border-border;
     }
-  
-    pre {
-      background: #0D0D0D;
-      color: #FFF;
-      font-family: 'JetBrainsMono', monospace;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-  
-      code {
+
+
+
+    .prose h2 {
+        @apply text-2xl font-bold mt-8 mb-4;
+    }
+
+    .prose h3 {
+        @apply text-xl font-bold mt-6 mb-3;
+    }
+
+    .prose p {
+        @apply mb-4;
+    }
+
+    .prose ul {
+        @apply list-disc list-inside mb-4;
+    }
+
+    .prose ol {
+        @apply list-decimal list-inside mb-4;
+    }
+
+    .prose blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic;
+    }
+
+    .ProseMirror p {
+        @apply mb-4;
+    }
+
+    .ProseMirror h1 {
+        @apply text-3xl font-bold mb-4;
+    }
+
+    .ProseMirror h2 {
+        @apply text-2xl font-bold mb-3;
+    }
+
+    .ProseMirror h3 {
+        @apply text-xl font-bold mb-2;
+    }
+
+    .ProseMirror ul {
+        @apply list-disc list-inside mb-4;
+    }
+
+    .ProseMirror ol {
+        @apply list-decimal list-inside mb-4;
+    }
+
+    .ProseMirror blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic my-4;
+    }
+
+    .ProseMirror a {
+        @apply text-blue-500 hover:text-blue-600 underline;
+    }
+
+    .ProseMirror p {
+        @apply mb-4;
+    }
+
+    .ProseMirror strong {
+        @apply font-bold;
+    }
+
+    .ProseMirror em {
+        @apply italic;
+    }
+
+    .ProseMirror code {
+        @apply font-mono bg-gray-100 rounded px-1;
+    }
+
+    .ProseMirror pre {
+        @apply bg-gray-800 text-white p-4 rounded-lg my-4;
+        font-family: 'Fira Code', monospace;
+    }
+
+    .ProseMirror pre code {
+        @apply bg-transparent text-white px-0;
         color: inherit;
-        padding: 0;
-        background: none;
-        font-size: 0.8rem;
-      }
     }
-  
-    code {
-      color: inherit;
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.3rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-  }
-  
-  .hljs-comment,
-  .hljs-quote {
-    color: #616161;
-  }
-  
-  .hljs-variable,
-  .hljs-template-variable,
-  .hljs-attribute,
-  .hljs-tag,
-  .hljs-regexp,
-  .hljs-link,
-  .hljs-name,
-  .hljs-selector-id,
-  .hljs-selector-class {
-    color: #f98181;
-  }
-  
-  .hljs-number,
-  .hljs-meta,
-  .hljs-built_in,
-  .hljs-builtin-name,
-  .hljs-literal,
-  .hljs-type,
-  .hljs-params {
-    color: #fbbc88;
-  }
-  
-  .hljs-string,
-  .hljs-symbol,
-  .hljs-bullet {
-    color: #b9f18d;
-  }
-  
-  .hljs-title,
-  .hljs-section {
-    color: #faf594;
-  }
-  
-  .hljs-keyword,
-  .hljs-selector-tag {
-    color: #70cff8;
-  }
-  .prose pre {
-    @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
-}
 
+    .ProseMirror img {
+        @apply max-w-full h-auto rounded-lg;
+    }
+
+    .ProseMirror a {
+        @apply text-blue-500 hover:text-blue-600 underline;
+    }
+
+    .ProseMirror blockquote {
+        @apply border-l-4 border-gray-300 pl-4 italic my-4;
+    }
+
+    /* Add to your globals.css */
+    .prose .hljs {
+        @apply bg-gray-900 text-white p-4 rounded-lg my-4 overflow-x-auto;
+    }
+
+    .prose .hljs code {
+        @apply bg-transparent text-inherit p-0;
+    }
+
+    /* Syntax highlighting styles */
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-title,
+    .hljs-section,
+    .hljs-doctag,
+    .hljs-name,
+    .hljs-strong {
+        @apply text-pink-400;
+    }
+
+    .hljs-string {
+        @apply text-green-400;
+    }
+
+    .hljs-attribute,
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-template-tag,
+    .hljs-template-variable,
+    .hljs-addition {
+        @apply text-blue-400;
+    }
+
+    .hljs-comment,
+    .hljs-quote,
+    .hljs-deletion,
+    .hljs-meta {
+        @apply text-gray-400;
+    }
+
+    /* Add to your globals.css */
+    .ProseMirror {
+        >*+* {
+            margin-top: 0.75em;
+        }
+
+        pre {
+            background: #0D0D0D;
+            color: #FFF;
+            font-family: 'JetBrainsMono', monospace;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+
+            code {
+                color: inherit;
+                padding: 0;
+                background: none;
+                font-size: 0.8rem;
+            }
+        }
+
+        code {
+            color: inherit;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+        color: #616161;
+    }
+
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-attribute,
+    .hljs-tag,
+    .hljs-regexp,
+    .hljs-link,
+    .hljs-name,
+    .hljs-selector-id,
+    .hljs-selector-class {
+        color: #f98181;
+    }
+
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type,
+    .hljs-params {
+        color: #fbbc88;
+    }
+
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+        color: #b9f18d;
+    }
+
+    .hljs-title,
+    .hljs-section {
+        color: #faf594;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+        color: #70cff8;
+    }
+
+    .prose pre code {
+        @apply bg-transparent p-0;
+        color: inherit;
+        font-size: 0.875em;
+    }
+
+    /* For the backtick input detection */
+    .ProseMirror {
+        >*+* {
+            margin-top: 0.75em;
+        }
+    }
+
+
+    .prose pre code {
+        @apply bg-transparent p-0 text-sm font-mono text-gray-200;
+        counter-reset: line;
+    }
+
+    .prose pre code .line {
+        @apply px-4 py-0.5 border-l-2 border-transparent;
+    }
+
+    .prose pre code .line::before {
+        counter-increment: line;
+        content: counter(line);
+
+        @keyframes noise {
+            0% {
+                transform: translate(0, 0)
+            }
+
+            10% {
+                transform: translate(-5%, -5%)
+            }
+
+            20% {
+                transform: translate(-10%, 5%)
+            }
+
+            30% {
+                transform: translate(5%, -10%)
+            }
+
+            40% {
+                transform: translate(-5%, 15%)
+            }
+
+            50% {
+                transform: translate(-10%, 5%)
+            }
+
+            60% {
+                transform: translate(15%, 0)
+            }
+
+            70% {
+                transform: translate(0, 10%)
+            }
+
+            80% {
+                transform: translate(-15%, 0)
+            }
+
+            90% {
+                transform: translate(10%, 5%)
+            }
+
+            100% {
+                transform: translate(5%, 0)
+            }
+        }
+
+        .bg-noise {
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            animation: noise 1s steps(2) infinite;
+        }
+
+        @apply inline-block w-4 mr-4 text-gray-500 text-right;
+    }
+
+    .prose pre code .line:hover {
+        @apply border-primary bg-gray-800/50;
+    }
+
+    @keyframes wave {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        50% {
+            transform: rotate(15deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+    }
+
+    .animate-wave {
+        animation: wave 1.5s infinite;
+    }
+
+    .bg-grid-white {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.02)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+    }
+
+    @keyframes spin-slow {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .animate-spin-slow {
+        animation: spin-slow 3s linear infinite;
+    }
+
+    @keyframes pulse-subtle {
+
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
+    }
+
+    .animate-pulse-subtle {
+        animation: pulse-subtle 2s ease-in-out infinite;
+    }
+
+    
+    [dir="rtl"] {
+        text-align: right;
+    }
+    
+    [dir="ltr"] {
+        text-align: left;
+    }
+    [dir="rtl"] [dir="ltr"],
+[dir="ltr"] [dir="rtl"] {
+    unicode-bidi: embed;
+}
 .prose pre code {
-    @apply bg-transparent p-0;
-    color: inherit;
-    font-size: 0.875em;
+    direction: ltr;
+    text-align: left;
+}
+/* RTL specific styles */
+.prose [dir="rtl"] {
+    text-align: right !important;
+    direction: rtl;
 }
 
-/* For the backtick input detection */
-.ProseMirror {
-    > * + * {
-        margin-top: 0.75em;
-    }
+/* Handle mixed content */
+.prose [dir="rtl"] code,
+.prose [dir="rtl"] .inline-code {
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: embed;
 }
+
+/* Force RTL for specific content */
+.prose .force-rtl {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Handle lists in RTL */
+.prose [dir="rtl"] ul,
+.prose [dir="rtl"] ol {
+    padding-right: 1.5rem;
+    padding-left: 0;
+}
+
+/* Ensure proper alignment for inline code in RTL contexts */
+.prose [dir="rtl"] p:has(code) {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+.prose p[dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+}
+
+.prose p[dir="ltr"] {
+    text-align: left;
+    direction: ltr;
+}
+
+/* Ensure proper spacing between paragraphs */
+.prose p {
+    margin: 0.5em 0;
+}
+
+/* Handle mixed content within paragraphs */
+.prose p[dir="rtl"] code,
+.prose p[dir="rtl"] .inline-code {
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: embed;
+}
+
+/* Preserve whitespace in pre blocks */
 .prose pre {
-    @apply bg-gray-900 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-4 my-6 overflow-x-auto;
+    white-space: pre;
+    direction: ltr;
+    text-align: left;
 }
-
-.prose pre code {
-    @apply bg-transparent p-0 text-sm font-mono text-gray-200;
-    counter-reset: line;
-}
-
-.prose pre code .line {
-    @apply px-4 py-0.5 border-l-2 border-transparent;
-}
-
-.prose pre code .line::before {
-    counter-increment: line;
-    content: counter(line);@keyframes noise {
-        0% { transform: translate(0,0) }
-        10% { transform: translate(-5%,-5%) }
-        20% { transform: translate(-10%,5%) }
-        30% { transform: translate(5%,-10%) }
-        40% { transform: translate(-5%,15%) }
-        50% { transform: translate(-10%,5%) }
-        60% { transform: translate(15%,0) }
-        70% { transform: translate(0,10%) }
-        80% { transform: translate(-15%,0) }
-        90% { transform: translate(10%,5%) }
-        100% { transform: translate(5%,0) }
-      }
-      
-      .bg-noise {
-        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        animation: noise 1s steps(2) infinite;
-      }
-    @apply inline-block w-4 mr-4 text-gray-500 text-right;
-}
-
-.prose pre code .line:hover {
-    @apply border-primary bg-gray-800/50;
-}
-
-.prose code {
-    @apply bg-gray-100 dark:bg-gray-800 rounded px-1.5 py-0.5 text-sm font-mono;
-}
-@keyframes wave {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(15deg); }
-    100% { transform: rotate(0deg); }
-  }
-  
-  .animate-wave {
-    animation: wave 1.5s infinite;
-  }
-  .bg-grid-white {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.02)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
-}
-@keyframes spin-slow {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  .animate-spin-slow {
-    animation: spin-slow 3s linear infinite;
-  }
-  
-  @keyframes pulse-subtle {
-    0%, 100% {
-      opacity: 0.5;
-    }
-    50% {
-      opacity: 0.8;
-    }
-  }
-  
-  .animate-pulse-subtle {
-    animation: pulse-subtle 2s ease-in-out infinite;
-  }
-/* >>>>>>> 31c9046 (wip) */
+    /* >>>>>>> 31c9046 (wip) */
 }
