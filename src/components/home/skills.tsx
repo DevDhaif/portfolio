@@ -77,6 +77,7 @@ export function Skills() {
                                 <SkillCard
                                     title={skill.title}
                                     items={skill.items}
+                                    subtitle={skill.subtitle}
                                     icon={skill.icon}
                                     index={index}
                                 />
