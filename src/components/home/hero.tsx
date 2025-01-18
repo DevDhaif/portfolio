@@ -50,43 +50,34 @@ export function Hero() {
 
     const techStack = [
         {
-            name: "React",
-            icon: "⚛️",
+            name: "React.js",
+            icon: "/icons/react.svg",
             gradient: "from-cyan-400 via-blue-400 to-blue-600",
             shadowColor: "shadow-cyan-500/20",
-            description: "Frontend Library"
+            description: "Component-Based UI"
         },
         {
             name: "Next.js",
-            icon: "▲",
-            gradient: "from-white via-gray-200 to-gray-400",
-            shadowColor: "shadow-white/20",
-            description: "React Framework"
+            icon: "/icons/next.svg",
+            gradient: "from-gray-700 via-gray-900 to-black",
+            shadowColor: "shadow-black/20",
+            description: "Full-Stack React"
         },
         {
-            name: "TypeScript",
-            icon: "TS",
-            gradient: "from-blue-400 via-blue-500 to-blue-700",
-            shadowColor: "shadow-blue-500/20",
-            description: "Type-Safe JavaScript"
+            name: "Tailwind CSS",
+            icon: "/icons/tailwind.svg",
+            gradient: "from-cyan-500 via-cyan-600 to-cyan-700",
+            shadowColor: "shadow-cyan-500/20",
+            description: "Utility-First CSS"
         },
         {
             name: "Laravel",
-            icon: "🔥",
-            gradient: "from-red-400 via-red-500 to-red-600",
+            icon: "/icons/laravel.svg",
+            gradient: "from-red-500 via-red-600 to-red-700",
             shadowColor: "shadow-red-500/20",
             description: "PHP Framework"
-        },
-        {
-            name: "Tailwind",
-            icon: "🎨",
-            gradient: "from-cyan-300 via-cyan-400 to-cyan-500",
-            shadowColor: "shadow-cyan-500/20",
-            description: "CSS Framework"
         }
     ]
-
-
     return (
         <>
             <HeroJsonLd author={author} />
@@ -94,7 +85,6 @@ export function Hero() {
                 ref={containerRef}
                 className="relative min-h-[100vh] flex items-center justify-center overflow-hidden"
             >
-                {/* Animated background elements */}
                 <AnimatedBackground />
 
                 <motion.div
@@ -102,13 +92,11 @@ export function Hero() {
                     style={{ y, opacity }}
                 >
                     <div className="flex flex-col items-center gap-16 text-center">
-                        {/* Main heading group */}
                         <motion.div
                             initial={{ opacity: 0.3, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="space-y-6"
                         >
-                            {/* Status badge */}
                             <motion.div
                                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-sm"
                                 whileHover={{ scale: 1.05 }}
@@ -120,7 +108,6 @@ export function Hero() {
                                 <span className="text-sm font-medium text-blue-100">Available for Projects</span>
                             </motion.div>
 
-                            {/* Name and title */}
                             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight">
                                 <motion.span
                                     className="block text-2xl md:text-3xl text-blue-200/80 mb-4"
@@ -131,7 +118,7 @@ export function Hero() {
                                     Hi, I&apos;m
                                 </motion.span>
                                 <motion.span
-                                    className="block bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent pb-4"
+                                    className="block bg-gradient-to-r  from-white via-blue-100 to-blue-200 bg-clip-text text-transparent pb-4"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
@@ -154,44 +141,45 @@ export function Hero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                Crafting exceptional digital experiences through clean code
-                                and innovative solutions.
+                                Specializing in modern web development with React, Next.js, and Laravel.
+                                Building exceptional digital experiences with clean, maintainable code.
                             </motion.p>
                         </motion.div>
 
-                        {/* Actions group */}
                         <motion.div
                             className="flex flex-col items-center gap-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
                         >
-                            {/* Primary actions */}
                             <div className="flex flex-wrap justify-center gap-4">
-                                <Button
-                                    size="lg"
-                                    className="relative group bg-blue-800 hover:bg-blue-600 text-white gap-2 px-8 py-6 text-lg rounded-full shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 overflow-hidden"
-                                >
-                                    <span className="relative z-10">View Projects</span>
-                                    <ArrowRight className="w-5 h-5 relative z-10" />
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500"
-                                        initial={{ x: "100%" }}
-                                        whileHover={{ x: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    className="relative group border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-blue-100 gap-2 px-8 py-6 text-lg rounded-full backdrop-blur-sm"
-                                >
-                                    <span className="relative z-10">Contact Me</span>
-                                    <MessageCircle className="w-5 h-5 relative z-10" />
-                                </Button>
+                                <Link href="#projects">
+                                    <Button
+                                        size="lg"
+                                        className="relative group bg-blue-800 hover:bg-blue-600 text-white gap-2 px-8 py-6 text-lg rounded-full shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all duration-300 overflow-hidden"
+                                    >
+                                        <span className="relative z-10">View Projects</span>
+                                        <ArrowRight className="w-5 h-5 relative z-10" />
+                                        <motion.div
+                                            className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500"
+                                            initial={{ x: "100%" }}
+                                            whileHover={{ x: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                    </Button>
+                                </Link>
+                                <Link href="#contact">
+                                    <Button
+                                        variant="outline"
+                                        size="lg"
+                                        className="relative group border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-blue-100 gap-2 px-8 py-6 text-lg rounded-full backdrop-blur-sm"
+                                    >
+                                        <span className="relative z-10">Contact Me</span>
+                                        <MessageCircle className="w-5 h-5 relative z-10" />
+                                    </Button>
+                                </Link>
                             </div>
 
-                            {/* Social links */}
                             <div className="flex gap-4">
                                 {[
                                     { href: social.GITHUB, icon: Github, label: "GitHub" },
@@ -212,8 +200,7 @@ export function Hero() {
                             </div>
                         </motion.div>
 
-                        {/* Tech stack */}
-                        <AnimatedGrid columnClassName="grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                        <AnimatedGrid columnClassName="grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
                             {techStack.map((tech) => (
                                 <AnimatedCard
                                     key={tech.name}
@@ -221,7 +208,11 @@ export function Hero() {
                                     shadowColor={tech.shadowColor}
                                 >
                                     <span className="text-2xl transform group-hover:scale-110 transition-transform duration-300">
-                                        {tech.icon}
+                                        <img
+                                            src={tech.icon}
+                                            alt={tech.name}
+                                            className="w-6 h-6"
+                                        />
                                     </span>
                                     <div className="space-y-1">
                                         <span className="text-sm font-medium text-blue-100/90 group-hover:text-blue-100">
@@ -238,7 +229,6 @@ export function Hero() {
                                 </AnimatedCard>
                             ))}
                         </AnimatedGrid>
-
                     </div>
                 </motion.div>
             </section>

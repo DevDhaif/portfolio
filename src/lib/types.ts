@@ -29,15 +29,19 @@ export type SkillLevel = 'essential' | 'advanced' | 'additional';
 export interface SkillItem {
     name: string;
     level: SkillLevel;
-    icon: JSX.Element;
+    icon: string; // Only string for image paths
 }
 
 export interface SkillCategory {
     title: string;
+    subtitle: string;
     items: SkillItem[];
-    icon: JSX.Element;
+    icon: JSX.Element; // Category icons are always JSX.Element
 }
 
+export interface SkillCardProps extends SkillCategory {
+    index: number;
+}
 export interface StaticProjectImage {
     url: string;
     alt: string;

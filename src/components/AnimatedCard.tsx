@@ -37,7 +37,7 @@ export function AnimatedCard({
                     ease: "easeInOut",
                 }}
                 className={`
-                    flex flex-col items-center gap-2  rounded-xl
+                    flex  items-center gap-2 px-4 py-2  rounded-xl
                     bg-blue-900/10 backdrop-blur-sm
                     border border-blue-500/20
                     group-hover:border-blue-500/40

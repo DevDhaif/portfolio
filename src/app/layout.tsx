@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Exo_2, Orbitron, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/layout/navbar"
@@ -13,8 +13,24 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { RootSchema } from '@/components/JsonLd/RootSchema'
 import { Pattern } from '@/components/Pattern'
-const inter = Inter({ subsets: ["latin"] })
 
+const exo2 = Exo_2({
+    subsets: ["latin"],
+    variable: '--font-exo',
+    display: 'swap',
+})
+
+const orbitron = Orbitron({
+    subsets: ["latin"],
+    variable: '--font-orbitron',
+    display: 'swap',
+})
+
+const jetbrains = JetBrains_Mono({
+    subsets: ["latin"],
+    variable: '--font-jetbrains',
+    display: 'swap',
+})
 export const metadata: Metadata = {
     title: {
         default: 'Dhaifallah Alfarawi | Full Stack Developer',
@@ -66,8 +82,11 @@ export default function RootLayout({
 
             <body
                 className={cn(
-                    "min-h-screen  font-sans antialiased selection:bg-white/10 selection:text-white relative",
-                    inter.className
+                    "min-h-screen antialiased font-plus-jakarta selection:bg-white/10 selection:text-white relative",
+                    exo2.variable,
+                    orbitron.variable,
+                    jetbrains.variable,
+                    "font-default"
                 )}
             >
                 <Pattern />

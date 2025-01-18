@@ -6,30 +6,47 @@ import { useRef } from "react"
 
 const experiences = [
     {
-        title: "Senior Frontend Developer",
-        company: "Tech Company",
-        period: "2022 - Present",
-        description: "Leading the frontend development team, implementing modern web applications using Next.js and TypeScript.",
-        skills: ["Next.js", "React", "TypeScript", "TailwindCSS"],
+        title: "Front-End Web Developer",
+        company: "Meraki UI Lab",
+        period: "05/2020 - Present",
+        description: "Lead frontend developer creating responsive UI components and improving website performance with modern web technologies.",
+        skills: ["HTML", "CSS", "JavaScript", "Tailwind CSS", "Vue.js", "React.js"],
         achievements: [
-            "Led team of 5 developers",
-            "Improved performance by 40%",
-            "Implemented CI/CD pipeline"
+            "Enhanced front-end UX and increased website traffic by 20% in six months by optimizing page load speed and content clarity",
+            "Collaborated effectively within a 4-person team to deliver a user-friendly and responsive website",
+            "Designed and developed more than 150 reusable and responsive components",
+            "Expanded website accessibility by implementing RTL support for 100% of components"
         ]
     },
     {
-        title: "Full Stack Developer",
-        company: "Startup Inc",
-        period: "2020 - 2022",
-        description: "Developed full-stack applications using React, Next.js, Vue.js, TailwindCSS, Laravel, and MongoDB. Implemented real-time features and payment integrations.",
-        skills: ["React", "Vue.js", "Laravel", "MongoDB"],
+        title: "Software Developer",
+        company: "Freelance & Projects",
+        period: "2020 - Present",
+        description: "Full stack developer with focus on Laravel backend development and modern frontend technologies.",
+        skills: ["PHP", "Laravel", "MySQL", "Firebase", "Supabase", "RESTful APIs"],
         achievements: [
-            "Built 20+ features",
-            "Reduced loading time by 60%",
-            "Implemented payment system"
+            "Developed and maintained dynamic web applications with Laravel and MySQL",
+            "Designed and implemented efficient and scalable RESTful APIs",
+            "Optimized database architecture using both SQL and NoSQL solutions",
+            "Utilized version control effectively with Git and GitHub",
+            "Applied strong problem-solving skills and data structure knowledge to improve application efficiency"
         ]
     },
-]
+    {
+        title: "Front-End Developer",
+        company: "Various Projects",
+        period: "2018 - Present",
+        description: "Frontend specialist creating responsive and interactive web applications.",
+        skills: ["HTML5", "CSS3", "JavaScript", "React.js", "Vue.js", "Bootstrap", "Tailwind CSS", "Redux", "Vuex"],
+        achievements: [
+            "Created responsive and interactive web pages emphasizing user experience and accessibility",
+            "Styled applications using CSS frameworks ensuring consistency across devices",
+            "Implemented effective state management with Redux and Vuex",
+            "Utilized UI component libraries like Material UI and Vuetify",
+            "Optimized applications for performance, including lazy loading and code splitting"
+        ]
+    }
+];
 
 export function Experience() {
     const containerRef = useRef<HTMLElement>(null)

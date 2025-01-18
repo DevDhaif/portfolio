@@ -1,25 +1,5 @@
 import type { Config } from "tailwindcss";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default {
     darkMode: ["class"],
     content: [
@@ -29,6 +9,14 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                // Use Exo 2 as your main font
+                default: ['var(--font-exo)', 'system-ui', 'sans-serif'],
+                // Orbitron for futuristic titles/headings
+                title: ['var(--font-orbitron)', 'var(--font-exo)', 'system-ui', 'sans-serif'],
+                // JetBrains Mono for code
+                code: ['var(--font-jetbrains)', 'monospace'],
+            },
             colors: {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',

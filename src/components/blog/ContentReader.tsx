@@ -70,7 +70,64 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     const processContent = (node: any): any => {
         if (!node) return node;
 
+        if (node.type === 'listItem') {
+            // Don't process paragraph direction inside list items
+            const textContent = node.content
+                ?.flatMap((p: any) =>
+                    p.content?.map((c: any) => c.text || '').filter(Boolean) || []
+                )
+                .join(' ');
 
+            if (textContent.trim()) {
+                return {
+                    ...node,
+                    attrs: {
+                        ...node.attrs,
+                        dir: isRTL(textContent) ? 'rtl' : 'ltr',
+                        class: isRTL(textContent) ? 'text-right' : 'text-left'
+                    },
+                    // Return content without direction on paragraphs
+                    content: node.content?.map((p: any) => ({ ...p, attrs: {} }))
+                };
+            }
+        }
+        if (node.type === 'heading' && node.content) {
+            const textContent = node.content
+                .filter((child: any) => child.type === 'text')
+                .map((child: any) => child.text || '')
+                .join(' ');
+
+            const hasRTLChars = isRTL(textContent);
+            const hasOnlyEnglish = /^[A-Za-z0-9\s]+$/.test(textContent);
+
+            return {
+                ...node,
+                attrs: {
+                    ...node.attrs,
+                    dir: hasRTLChars && !hasOnlyEnglish ? 'rtl' : 'ltr',
+                    class: hasRTLChars && !hasOnlyEnglish ? 'text-right' : 'text-left'
+                }
+            };
+        }
+        if (node.type === 'bulletList' || node.type === 'orderedList') {
+            const allTextContent = node.content
+                ?.flatMap((listItem: any) =>
+                    listItem.content?.flatMap((p: any) =>
+                        p.content?.map((c: any) => c.text || '').filter(Boolean) || []
+                    ) || []
+                )
+                .join(' ');
+
+            return {
+                ...node,
+                attrs: {
+                    ...node.attrs,
+                    dir: isRTL(allTextContent) ? 'rtl' : 'ltr',
+                    class: isRTL(allTextContent) ? 'text-right' : 'text-left'
+                },
+                content: node.content?.map(processContent)
+            };
+        }
         // Then handle regular paragraphs and text direction
         if (node.type === 'paragraph' && node.content) {
             // Only get text content from text nodes

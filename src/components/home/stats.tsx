@@ -15,21 +15,21 @@ const stats = [
     },
     {
         label: "Projects Completed",
-        value: "50+",
+        value: "12+",
         icon: Archive,
         gradient: "from-indigo-500 to-blue-500",
         description: "Delivered on time and budget"
     },
     {
-        label: "Lines of Code",
-        value: "100k+",
+        label: "Hours of Code",
+        value: "2000+",
         icon: Code,
         gradient: "from-cyan-500 to-blue-500",
         description: "Clean, maintainable code"
     },
     {
         label: "Happy Clients",
-        value: "20+",
+        value: "10+",
         icon: Users,
         gradient: "from-blue-400 to-indigo-500",
         description: "Satisfied with results"
