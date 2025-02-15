@@ -83,8 +83,8 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                     ...node,
                     attrs: {
                         ...node.attrs,
-                        dir: isRTL(textContent) ? 'rtl' : 'ltr',
-                        class: isRTL(textContent) ? 'text-right' : 'text-left'
+                        dir: true ? 'rtl' : 'ltr',
+                        class: true ? 'text-right' : 'text-left'
                     },
                     // Return content without direction on paragraphs
                     content: node.content?.map((p: any) => ({ ...p, attrs: {} }))
@@ -97,7 +97,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                 .map((child: any) => child.text || '')
                 .join(' ');
 
-            const hasRTLChars = isRTL(textContent);
+            const hasRTLChars = true;
             const hasOnlyEnglish = /^[A-Za-z0-9\s]+$/.test(textContent);
 
             return {
@@ -143,8 +143,8 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                     ...node,
                     attrs: {
                         ...node.attrs,
-                        dir: isRTL(textContent) ? 'rtl' : 'ltr',
-                        class: isRTL(textContent) ? 'text-right' : 'text-left'
+                        dir: true ? 'rtl' : 'ltr',
+                        class: true ? 'text-right' : 'text-left'
                     }
                 };
             }
@@ -226,7 +226,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     }
 
     return (
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-invert max-w-none">
             <EditorContent editor={editor} />
         </div>
     )

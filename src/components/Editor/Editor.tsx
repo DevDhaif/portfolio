@@ -98,7 +98,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         content,
         editorProps: {
             attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg dark:prose-invert focus:outline-none'
+                class: 'prose prose-sm sm:prose lg:prose-lg prose-invert focus:outline-none'
             }
         },
         onUpdate: ({ editor }) => {

@@ -7,9 +7,7 @@ body {
 }
 
 @layer base {
-    .prose {
-        @apply max-w-none;
-    }
+
 
     .prose pre {
         @apply bg-gray-900 dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-4 my-6 overflow-x-auto;
@@ -23,9 +21,9 @@ body {
         @apply text-blue-600 hover:text-blue-800;
     }
 
-    .prose code {
+    /* .prose code {
         @apply rounded px-1.5 py-0.5 text-sm font-mono;
-    }
+    } */
 
     .ProseMirror {
         @apply outline-none;
@@ -222,9 +220,7 @@ body {
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
     }
-}
 
-@layer base {
     * {
         @apply border-border;
     }
@@ -583,16 +579,16 @@ body {
     }
 
     [dir="ltr"] {
-        text-align: left;
+        text-align: rtl;
     }
 
-    [dir="rtl"] [dir="ltr"],
+    [dir="rtl"] [dir="rtl"],
     [dir="ltr"] [dir="rtl"] {
         unicode-bidi: embed;
     }
 
     .prose pre code {
-        direction: ltr;
+        direction: rtl;
         text-align: left;
     }
 
@@ -605,7 +601,7 @@ body {
     /* Handle mixed content */
     .prose [dir="rtl"] code,
     .prose [dir="rtl"] .inline-code {
-        direction: ltr;
+        direction: rtl;
         display: inline-block;
         unicode-bidi: embed;
     }
@@ -639,8 +635,8 @@ body {
     }
 
     .prose p[dir="ltr"] {
-        text-align: left;
-        direction: ltr;
+        text-align: right;
+        direction: rtl;
     }
 
     /* Ensure proper spacing between paragraphs */
@@ -657,17 +653,20 @@ body {
     /* Handle mixed content within paragraphs */
     .prose p[dir="rtl"] code,
     .prose p[dir="rtl"] .inline-code {
+        direction: rtl;
+        display: inline-block;
+        unicode-bidi: embed;
+    }
+
+    .prose p[dir="ltr"] code,
+    .prose p[dir="ltr"] .inline-code {
         direction: ltr;
         display: inline-block;
         unicode-bidi: embed;
     }
 
     /* Preserve whitespace in pre blocks */
-    .prose pre {
-        white-space: pre;
-        direction: ltr;
-        text-align: left;
-    }
+
 
     [dir="rtl"] ul,
     [dir="rtl"] ol {
@@ -681,5 +680,4 @@ body {
         margin-left: 0.5em;
     }
 
-    /* >>>>>>> 31c9046 (wip) */
 }

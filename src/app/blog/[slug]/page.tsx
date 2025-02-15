@@ -134,10 +134,10 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
     }
 
     return (
-        <div className="container py-10 mx-auto text-white">
+        <div className=" py-10 mx-auto text-white">
             <BlogPostJsonLd post={post} />
             <motion.div
-                className="space-y-8 p-4 bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl"
+                className="space-y-8 bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}

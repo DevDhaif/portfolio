@@ -89,7 +89,7 @@ export default function RootLayout({
                     "font-default"
                 )}
             >
-                <Pattern />
+                {/* <Pattern /> */}
                 {/* Primary Background Layer */}
                 <div className="fixed inset-0 -z-50">
                     <div className="absolute inset-0 bg-gradient-to-b from-[#000030] via-[#00002f] to-[#000017]" />
