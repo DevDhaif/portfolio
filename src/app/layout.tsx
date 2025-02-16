@@ -33,61 +33,118 @@ const jetbrains = JetBrains_Mono({
     display: 'swap',
 })
 export const metadata: Metadata = {
+    metadataBase: new URL('https://devdhaif.vercel.app'),
     title: {
-        default: 'Dhaifallah Alfarawi | Full Stack Developer',
-        template: '%s | Dhaifallah Alfarawi'
+        default: 'Dhaifallah Alfarawi | مطور ويب | ضيف الله الفروي',
+        template: '%s | Dhaifallah Alfarawi | ضيف الله الفروي'
     },
-    description: 'Full Stack Developer specializing in React, Next.js, and Laravel. Portfolio and blog by Dhaifallah Alfarawi (ضيف الله الفروي)', keywords: ['Dhaifallah',
-        'Devdhaif',
-        'ضيف الله الفروي',
-        'Dhaifallah al-farawi',
-        'ضيف الله',
+    description: 'Dhaifallah Alfarawi (ضيف الله الفروي) - Full Stack Developer specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب والمواقع',
+    keywords: [
+        // Name variations
+        'Dhaifallah',
         'Dhaifallah Alfarawi',
+        'Dhaifallah Al-farawi',
+        'Devdhaif',
+        // Arabic variations
+        'ضيف الله',
+        'ضيف الله الفروي',
+        'ضيف الله الفروي البيضاء',
+        'ضيف الله الفروي اليمن',
+        // Location keywords
+        'Yemen developer',
+        'Yemeni developer',
+        'Al Bayda developer',
+        'مطور يمني',
+        'مبرمج يمني',
+        // Professional keywords
         'Full Stack Developer',
         'React Developer',
         'Next.js Developer',
         'Laravel Developer',
-        'Yemeni Developer',
+        'Web Developer',
+        'Web Engineer',
+        'Software Developer',
+        'Frontend Developer',
+        'Front-end Developer',
+        'Software Engineer',
         'مطور ويب',
+        'مبرمج مواقع',
+        'مطور تطبيقات',
+        // Skills
+        'React.js',
+        'React',
+        'React Developer',
+        'React js',
+        'Tailwind CSS',
+        'Tailwind',
+        'tailwindcss',
+        'Next.js',
+        'Laravel',
+        'TypeScript',
+        'JavaScript',
+        'PHP',
+        'Full Stack Development',
     ],
-    authors: [{ name: 'Dhaifallah Alfarawi' }],
+    authors: [
+        {
+            name: 'Dhaifallah Alfarawi',
+            url: 'https://devdhaif.vercel.app'
+        }
+    ],
     creator: 'Dhaifallah Alfarawi',
+    publisher: 'Dhaifallah Alfarawi',
     alternates: {
-        canonical: 'https://devdhaif.vercel.app'
+        canonical: 'https://devdhaif.vercel.app',
+        languages: {
+            'en-US': 'https://devdhaif.vercel.app',
+            'ar-SA': 'https://devdhaif.vercel.app'
+        }
     },
     openGraph: {
         type: 'website',
         locale: 'en_US',
+        alternateLocale: 'ar_SA',
         url: 'https://devdhaif.vercel.app/',
-        siteName: 'Dhaifallah Alfarawi Portfolio',
-        title: 'Dhaifallah Alfarawi | Full Stack Developer',
-        description: 'Full Stack Developer specializing in React, Next.js, and Laravel. Portfolio and blog by Dhaifallah Alfarawi (ضيف الله الفروي)',
+        siteName: 'Dhaifallah Alfarawi | ضيف الله الفروي',
+        title: 'Dhaifallah Alfarawi | Full Stack Developer | ضيف الله الفروي',
+        description: 'Dhaifallah Alfarawi (ضيف الله الفروي) - Full Stack Developer  specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب',
         images: [
             {
                 url: 'https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75',
                 width: 1200,
                 height: 630,
-                alt: 'Dhaifallah Alfarawi'
+                alt: 'Dhaifallah Alfarawi - ضيف الله الفروي'
             }
         ]
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Dhaifallah Alfarawi | Full Stack Developer',
-        description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
+        title: 'Dhaifallah Alfarawi | ضيف الله الفروي',
+        description: 'Full Stack Developer  specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب',
+        site: '@devdhaif',
+        creator: '@devdhaif',
         images: ['https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75'],
     },
     robots: {
         index: true,
         follow: true,
+        nocache: true,
         googleBot: {
             index: true,
             follow: true,
             'max-video-preview': -1,
             'max-image-preview': 'large',
             'max-snippet': -1,
+            noimageindex: false,
         },
     },
+    verification: {
+        google: 'your-google-site-verification',
+        yandex: 'your-yandex-verification',
+        yahoo: 'your-yahoo-verification'
+    },
+    category: 'technology',
+    classification: 'Portfolio',
 }
 
 export default function RootLayout({
