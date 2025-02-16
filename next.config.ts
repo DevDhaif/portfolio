@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    async rewrites() {
+        return [
+            {
+                source: '/google1234.html',
+                destination: '/google1234.html',
+            },
+        ];
+    },
 };
 
 export default nextConfig;
