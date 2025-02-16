@@ -1,14 +1,8 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/utils/supabase/server'
 import ClientBlogPost from './ClientBlogPost'
-import { createBlogPostSchema } from '@/lib/schemas/blog'
 
-type Props = {
-    params: { slug: string }
-    searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const supabase = createClient()
     const { data: post } = await supabase
         .from('posts')
@@ -26,26 +20,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: post.title,
         description: post.description,
-        keywords: [...(post.tags || []), 'Dhaifallah Alfarawi', 'Devdhaif', 'Blog'],
-        authors: [{ name: 'Dhaifallah Alfarawi' }],
         openGraph: {
             title: post.title,
             description: post.description,
             type: 'article',
-            publishedTime: post.created_at,
-            modifiedTime: post.updated_at,
-            authors: ['Dhaifallah Alfarawi'],
-            tags: post.tags,
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: post.title,
-            description: post.description,
+            authors: ['Dhaifallah Alfarawi']
         }
     }
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost({ params }: { params: { slug: string } }) {
     const supabase = createClient()
     const { data: post } = await supabase
         .from('posts')
@@ -57,15 +41,5 @@ export default async function BlogPost({ params }: Props) {
         return <div>Post not found</div>
     }
 
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(createBlogPostSchema(post))
-                }}
-            />
-            <ClientBlogPost initialPost={post} params={params} />
-        </>
-    )
+    return <ClientBlogPost initialPost={post} params={params} />
 }
