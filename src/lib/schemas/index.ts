@@ -6,17 +6,19 @@ export const WEBSITE_SCHEMA = {
     "author": {
         "@type": "Person",
         "name": "Dhaifallah Alfarawi",
+        "alternateName": ["ضيف الله الفروي", "Devdhaif"],
         "sameAs": [
             "https://github.com/DevDhaif",
             "https://linkedin.com/in/devdhaif"
         ]
     }
-}
+} as const;
 
 export const PERSON_SCHEMA = {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Dhaifallah Alfarawi",
+    "alternateName": ["ضيف الله الفروي", "Devdhaif"],
     "jobTitle": "Full Stack Developer",
     "url": "https://devdhaif.vercel.app/",
     "sameAs": [
@@ -28,6 +30,7 @@ export const PERSON_SCHEMA = {
         "React",
         "Next.js",
         "TypeScript",
-        "Laravel"
+        "Laravel",
+        "Full Stack Development"
     ]
-}
+} as const;

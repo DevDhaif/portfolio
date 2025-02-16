@@ -36,17 +36,31 @@ export const metadata: Metadata = {
         default: 'Dhaifallah Alfarawi | Full Stack Developer',
         template: '%s | Dhaifallah Alfarawi'
     },
-    description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
-    keywords: ['Dhaifallah', 'ضيف الله الفروي', 'Devdhaif', 'Full Stack Developer', 'React Developer', 'Next.js Developer'],
+    description: 'Full Stack Developer specializing in React, Next.js, and Laravel. Portfolio and blog by Dhaifallah Alfarawi (ضيف الله الفروي)', keywords: ['Dhaifallah',
+        'Devdhaif',
+        'ضيف الله الفروي',
+        'Dhaifallah al-farawi',
+        'ضيف الله',
+        'Dhaifallah Alfarawi',
+        'Full Stack Developer',
+        'React Developer',
+        'Next.js Developer',
+        'Laravel Developer',
+        'Yemeni Developer',
+        'مطور ويب',
+    ],
     authors: [{ name: 'Dhaifallah Alfarawi' }],
     creator: 'Dhaifallah Alfarawi',
+    alternates: {
+        canonical: 'https://devdhaif.vercel.app'
+    },
     openGraph: {
         type: 'website',
         locale: 'en_US',
         url: 'https://devdhaif.vercel.app/',
         siteName: 'Dhaifallah Alfarawi Portfolio',
         title: 'Dhaifallah Alfarawi | Full Stack Developer',
-        description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
+        description: 'Full Stack Developer specializing in React, Next.js, and Laravel. Portfolio and blog by Dhaifallah Alfarawi (ضيف الله الفروي)',
         images: [
             {
                 url: 'https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75',
@@ -55,6 +69,12 @@ export const metadata: Metadata = {
                 alt: 'Dhaifallah Alfarawi'
             }
         ]
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Dhaifallah Alfarawi | Full Stack Developer',
+        description: 'Full Stack Developer specializing in React, Next.js, and Laravel',
+        images: ['https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75'],
     },
     robots: {
         index: true,
