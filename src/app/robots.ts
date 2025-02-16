@@ -1,10 +1,12 @@
-export default function robots() {
+import { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
     return {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: '/private/',
+            disallow: ['/admin', '/login']
         },
-        sitemap: 'https://devdhaif.vercel.app/sitemap.xml',
+        sitemap: 'https://devdhaif.vercel.app/sitemap.xml'
     }
 }
