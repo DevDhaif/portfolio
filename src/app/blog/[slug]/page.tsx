@@ -3,13 +3,12 @@ import { createClient } from '@/utils/supabase/server'
 import ClientBlogPost from './ClientBlogPost'
 import { createBlogPostSchema } from '@/lib/schemas/blog'
 
-interface PageProps {
-    params: {
-        slug: string
-    }
+type Props = {
+    params: { slug: string }
+    searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const supabase = createClient()
     const { data: post } = await supabase
         .from('posts')
@@ -46,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 }
 
-export default async function BlogPost({ params }: PageProps) {
+export default async function BlogPost({ params }: Props) {
     const supabase = createClient()
     const { data: post } = await supabase
         .from('posts')
