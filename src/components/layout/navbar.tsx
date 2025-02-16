@@ -8,11 +8,11 @@ import { X, Menu, ExternalLink } from "lucide-react"
 import Link from "next/link"
 
 const navItems = [
-    { name: "Home", href: "#" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
+    { name: "Home", href: "/#" },
+    { name: "About", href: "/#about" },
+    { name: "Projects", href: "/#projects" },
     { name: "Blog", href: "/blog", isExternal: true },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "/#contact" },
 ]
 
 export function Navbar() {
@@ -55,7 +55,7 @@ export function Navbar() {
                             className="group relative px-3 py-2"
                         >
                             <div className="flex items-center gap-1">
-                                <span className="text-sm font-medium text-blue-100/70 group-hover:text-blue-100 transition-colors duration-300">
+                                <span className="text font-medium text-blue-100/70 group-hover:text-blue-100 transition-colors duration-300">
                                     {item.name}
                                 </span>
                                 {item.isExternal && (
