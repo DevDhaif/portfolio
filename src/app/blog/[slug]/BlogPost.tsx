@@ -11,10 +11,11 @@ import { EyeIcon, HeartIcon } from 'lucide-react'
 import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
 import { BlogPostJsonLd } from '@/components/JsonLd/JsonLd'
 import { Post } from '@/lib/schemas/blog'
-
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
+    const { trackBlogPost, trackBlogInteraction } = useAnalytics()
     const [post, setPost] = useState<Post | null>(null)
     const [loading, setLoading] = useState(true)
     const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null)
@@ -75,7 +76,15 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
     }, [slug, supabase, router])
 
 
-
+    useEffect(() => {
+        if (post) {
+            trackBlogPost({
+                title: post.title,
+                slug: post.slug,
+                tags: post.tags
+            })
+        }
+    }, [post])
 
     const handleLike = async () => {
         if (!post || isLiking || hasLiked) return
@@ -95,6 +104,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
                     likes_count: result.likes
                 } : null)
                 setHasLiked(true)
+                trackBlogInteraction('like', post.slug)
             }
         } catch (error) {
             console.error('Like error:', error)

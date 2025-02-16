@@ -13,6 +13,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { RootSchema } from '@/components/JsonLd/RootSchema'
 import { Pattern } from '@/components/Pattern'
+import { AnalyticsProvider } from "@/components/providers/AnalyticsProvider"
 
 const exo2 = Exo_2({
     subsets: ["latin"],
@@ -146,6 +147,7 @@ export default function RootLayout({
                             <GlobalProvider>
                                 {children}
                                 <Analytics />
+                                <AnalyticsProvider />
                                 <SpeedInsights />
                             </GlobalProvider>
                         </div>
