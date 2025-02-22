@@ -1,7 +1,6 @@
-// components/home/projects.tsx
 "use client"
 
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { ProjectCard } from "./project-card"
 import { createClient } from '@/utils/supabase/client'
 import Link from "next/link"
@@ -15,6 +14,12 @@ import { GridItem } from "@/components/grid-item"
 import { Loading } from "@/components/loading"
 import { AnimatedGrid } from "../AnimatedGrid"
 
+const springConfig = {
+    stiffness: 100,
+    damping: 15,
+    mass: 0.5
+}
+
 export function Projects() {
     const [projects, setProjects] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
@@ -25,10 +30,18 @@ export function Projects() {
         offset: ["start end", "end end"]
     })
 
-    const opacity = useTransform(scrollYProgress,
-        [0, 0.1, 0.9, 1], [0, 1, 1, 0])
-    const y = useTransform(scrollYProgress,
-        [0, 0.8], ["0%", "5%"])
+    // Smoother scroll-based animations using springs
+    const smoothProgress = useSpring(scrollYProgress, springConfig)
+
+    const opacity = useTransform(smoothProgress,
+        [0, 0.1, 0.9, 1],
+        [0, 1, 1, 0.8]
+    )
+
+    const y = useTransform(smoothProgress,
+        [0, 0.8],
+        ["2%", "0%"]
+    )
 
     useEffect(() => {
         async function loadProjects() {
@@ -78,6 +91,33 @@ export function Projects() {
         loadProjects()
     }, [])
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0,
+                duration: 0.1
+            }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 100 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 15,
+                mass: 0.8,
+                duration: 0.1
+            }
+        }
+    }
+
     if (loading) {
         return <Loading text="Loading projects..." />
     }
@@ -88,11 +128,15 @@ export function Projects() {
             <section
                 ref={containerRef}
                 id="projects"
-                className="relative py-24 sm:py-32 overflow-hidden"
+                className="relative py-20 sm:py-28 overflow-hidden"
             >
                 <motion.div
                     className="container relative"
                     style={{ opacity, y }}
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
                 >
                     <SectionHeader
                         title="Projects"
@@ -101,30 +145,60 @@ export function Projects() {
 
                     <GridItemsWrapper>
                         {projects.map((project, index) => (
-                            <GridItem key={project.id} index={index}>
-                                <ProjectCard {...project} index={index} />
-                            </GridItem>
+                            <motion.div
+                                key={project.id}
+                                variants={itemVariants}
+                                custom={index}
+                            >
+                                <GridItem index={index}>
+                                    <ProjectCard {...project} index={index} />
+                                </GridItem>
+                            </motion.div>
                         ))}
                     </GridItemsWrapper>
 
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: false }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="mt-16 text-center"
+                        variants={{
+                            hidden: { opacity: 0, y: 100 },
+                            visible: {
+                                opacity: 1,
+                                y: 0,
+                                transition: {
+                                    type: "spring",
+                                    stiffness: 100,
+                                    damping: 15,
+                                    duration: 0.1
+                                }
+                            }
+                        }}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="mt-14 text-center"
                     >
-                        <p className="text-blue-100/70 mb-6">
+                        <p className="text-blue-100/70 mb-5">
                             Interested in more projects?
                         </p>
                         <Link
                             href="https://github.com/devdhaif"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full bg-blue-500 text-white transition-all hover:bg-blue-600"
+                            className="group relative inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full bg-blue-500 text-white transition-all duration-200 hover:bg-blue-600"
                         >
-                            <span className="relative z-10">View More on GitHub</span>
-                            <Github className="w-5 h-5 relative z-10 transition-transform group-hover:translate-x-1" />
+                            <motion.span
+                                className="relative z-10"
+                                whileHover={{ x: -4 }}
+                                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            >
+                                View More on GitHub
+                            </motion.span>
+                            <motion.div
+                                className="relative z-10"
+                                whileHover={{ x: 4 }}
+                                transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            >
+                                <Github className="w-5 h-5" />
+                            </motion.div>
                         </Link>
                     </motion.div>
                 </motion.div>

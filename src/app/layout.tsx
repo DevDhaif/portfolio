@@ -170,15 +170,11 @@ export default function RootLayout({
                 {/* <Pattern /> */}
                 {/* Primary Background Layer */}
                 <div className="fixed inset-0 -z-50">
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#000030] via-[#00002f] to-[#000017]" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.08),rgba(0,0,0,0))]" />
+                    <div className="absolute inset-0 bg-slate-950" />
+                    {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.08),rgba(0,0,0,0))]" /> */}
                 </div>
 
-                {/* Ambient Background Effects */}
-                <div className="fixed inset-0 -z-40">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(120,119,198,0.05),transparent_50%)]" />
-                    <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,rgba(30,30,60,0.05),transparent_50%)]" />
-                </div>
+
 
                 {/* Content Noise Overlay */}
                 <div className="fixed inset-0 -z-30 opacity-[0.015] pointer-events-none bg-noise" />

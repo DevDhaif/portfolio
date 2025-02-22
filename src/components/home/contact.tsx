@@ -83,7 +83,7 @@ export function Contact() {
                                         className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500"
                                         initial={{ x: "100%" }}
                                         whileHover={{ x: 0 }}
-                                        transition={{ duration: 0.3 }}
+                                        transition={{ duration: 0.1 }}
                                     />
                                 </Button>
                             </form>

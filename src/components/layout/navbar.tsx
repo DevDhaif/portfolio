@@ -28,7 +28,7 @@ export function Navbar() {
                 className="flex h-20 items-center justify-between  backdrop-blur-md"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.1 }}
             >
                 {/* Logo */}
                 <Link
@@ -79,7 +79,7 @@ export function Navbar() {
                 >
                     <motion.div
                         animate={{ rotate: isOpen ? 90 : 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.1 }}
                         className="text-blue-100/70 hover:text-blue-100 transition-colors"
                     >
                         {isOpen ? <X size={24} /> : <Menu size={24} />}

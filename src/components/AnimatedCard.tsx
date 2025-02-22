@@ -18,7 +18,7 @@ export function AnimatedCard({
     className = ""
 }: AnimatedCardProps) {
     return (
-        <div className="relative group cursor-pointer">
+        <div className="relative group h-full cursor-pointer">
             {/* Gradient background */}
             <div className={`
                 absolute inset-0 rounded-xl bg-gradient-to-br ${gradient}

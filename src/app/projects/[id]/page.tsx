@@ -98,7 +98,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     className="space-y-8 p-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.1 }}
                 >
                     <h1 className="text-4xl font-bold text-white">{project.name}</h1>
                     <p className="text-xl text-muted-foreground">{project.longDescription}</p>

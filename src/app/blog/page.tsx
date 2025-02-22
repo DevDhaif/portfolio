@@ -63,9 +63,9 @@ export default async function BlogPage() {
     })
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen  py-12">
             <div className="container mx-auto px-4">
-                <h1 className="text-4xl font-bold mb-12">Blog Posts</h1>
+                <h1 className="text-4xl font-bold mb-12 text-white">Blog Posts</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {postsWithUrls.map((post) => (

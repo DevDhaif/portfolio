@@ -85,7 +85,7 @@ export function Hero() {
                 ref={containerRef}
                 className="relative min-h-[100vh] flex items-center justify-center overflow-hidden"
             >
-                <AnimatedBackground />
+                {/* <AnimatedBackground /> */}
 
                 <motion.div
                     className="relative container px-4 md:px-6 pt-24 pb-32"
@@ -164,7 +164,7 @@ export function Hero() {
                                             className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500"
                                             initial={{ x: "100%" }}
                                             whileHover={{ x: 0 }}
-                                            transition={{ duration: 0.3 }}
+                                            transition={{ duration: 0.1 }}
                                         />
                                     </Button>
                                 </Link>

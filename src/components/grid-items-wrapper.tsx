@@ -10,7 +10,11 @@ interface GridItemsWrapperProps {
     columnClassName?: string
 }
 
-export function GridItemsWrapper({ children, className = "", columnClassName = "sm:grid-cols-2 lg:grid-cols-3" }: GridItemsWrapperProps) {
+export function GridItemsWrapper({
+    children,
+    className = "",
+    columnClassName = "sm:grid-cols-2 lg:grid-cols-3"
+}: GridItemsWrapperProps) {
     return (
         <motion.div
             initial="hidden"

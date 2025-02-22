@@ -124,7 +124,7 @@ export function MouseFollower() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 1.9 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.1 }}
                     >
                         <div className="absolute inset-0 rounded-full border border-blue-400/40 animate-pulse" />
                     </motion.div>
@@ -136,7 +136,7 @@ export function MouseFollower() {
                         className="absolute -inset-4 pointer-events-none"
                         initial={{ opacity: 0.9, scale: 0.8 }}
                         animate={{ opacity: 0, scale: 4 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        transition={{ duration: 0.1, ease: "easeOut" }}
                     >
                         <div className="absolute inset-0 rounded-full border-2  border-white/60 animate-ping" />
                     </motion.div>

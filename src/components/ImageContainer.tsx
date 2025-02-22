@@ -18,7 +18,7 @@ export function ImageContainer({ src, alt, priority = false }: ImageContainerPro
         <div className="relative h-52 overflow-hidden flex-shrink-0">
             <motion.div
                 animate={{ scale: isHovered ? 1.1 : 1 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.1 }}
                 className="h-full transform-gpu"
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}

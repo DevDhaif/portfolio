@@ -87,8 +87,8 @@ export function AnimatedBackground() {
         canvasSize: CanvasSize
     ): void => {
         const gradient = ctx.createLinearGradient(0, 0, 0, canvasSize.height)
-        gradient.addColorStop(0, '#000010')
-        gradient.addColorStop(1, '#000030')
+        gradient.addColorStop(0, '#000020')
+        gradient.addColorStop(1, '#202040')
         ctx.fillStyle = gradient
         ctx.fillRect(0, 0, canvasSize.width, canvasSize.height)
     }
@@ -117,7 +117,7 @@ export function AnimatedBackground() {
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
             const opacity = 0.1 * (1 - distance / DEFAULT_CONFIG.connectionDistance)
-            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`
+            ctx.strokeStyle = `rgba(0, 0, 0, ${opacity})`
             ctx.stroke()
         }
     }
@@ -177,7 +177,8 @@ export function AnimatedBackground() {
         <canvas
             ref={canvasRef}
             className="fixed inset-0 -z-10"
-            style={{ backgroundColor: '#000010' }}
+            // slate 950 from tailwindcss palette
+            style={{ backgroundColor: '#1f2d3d' }}
             aria-hidden="true"
         />
     )

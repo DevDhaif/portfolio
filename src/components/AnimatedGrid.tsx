@@ -39,7 +39,7 @@ export function AnimatedGrid({
                         }}
                         viewport={{ once: false }} // This makes it re-animate on scroll
                         whileHover={{ scale: 1.05 }}
-                        className="relative group"
+                        className="relative group h-full"
                     >
                         {child}
                     </motion.div>

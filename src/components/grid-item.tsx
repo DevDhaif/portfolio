@@ -27,7 +27,7 @@ export function GridItem({ children, index }: GridItemProps) {
                 }
             }}
             whileHover={{ y: -5 }}
-            className="relative group"
+            className="relative group h-full"
         >
             <motion.div
                 className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/50 to-purple-500/50 rounded-2xl opacity-0 group-hover:opacity-20 transition-all duration-300 blur"

@@ -91,7 +91,7 @@ export default function ClientBlogPost({ initialPost }: Props) {
                 className="space-y-8 bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.1 }}
             >
                 <header className="space-y-6">
                     <h1 className="text-4xl font-bold">{post.title}</h1>

@@ -53,7 +53,7 @@ export function Experience() {
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start 80%", "end 20%"]
+        offset: ["start 80%", "end 0%"]
     })
 
     const opacity = useTransform(
@@ -65,7 +65,7 @@ export function Experience() {
     const y = useTransform(
         scrollYProgress,
         [0, 0.5, 1],
-        ["0%", "3%", "6%"]
+        ["0%", "3%", "0%"]
     )
 
     return (
@@ -78,13 +78,13 @@ export function Experience() {
                 style={{ opacity, y }}
                 initial={{ opacity: 0, y: "5%" }}
                 animate={{ opacity: 1, y: "0%" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ duration: 0.1, ease: "easeOut" }}
             >
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50%" }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 0.1 }}
                     className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-16 text-center bg-gradient-to-b from-white to-white/80 bg-clip-text text-transparent"
                 >
                     Work Experience
@@ -92,12 +92,12 @@ export function Experience() {
 
                 {/* Desktop Timeline */}
                 <div className="hidden md:block relative">
-                    <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-gradient-to-b from-blue-500/50 via-blue-500/20 to-transparent" />
+                    <div className="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-blue-500" />
                     <div className="space-y-16">
                         {experiences.map((experience, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 100 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{
                                     once: true,
@@ -105,28 +105,28 @@ export function Experience() {
                                 }}
                                 transition={{
                                     duration: 0.6,
-                                    delay: index * 0.3,
+                                    delay: index * 0.1,
                                 }}
                                 className={`flex items-center ${index % 2 === 0 ? "flex-row-reverse" : ""}`}
                             >
                                 <div className="w-1/2 pr-8 pl-8">
                                     <motion.div
-                                        whileHover={{ scale: 1.02 }}
+                                        whileHover={{ y: -8 }}
                                         transition={{
                                             type: "spring",
                                             stiffness: 300,
                                             damping: 20
                                         }}
-                                        className="relative group"
+                                        className="relative group duration-200"
                                     >
                                         {/* Card glow effect */}
                                         <motion.div
                                             className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-50"
-                                            transition={{ duration: 0.8 }}
+                                            transition={{ duration: 0.1 }}
                                         />
 
                                         {/* Card content */}
-                                        <div className="relative p-6 rounded-xl border border-blue-500/20 bg-blue-950/40 backdrop-blur-sm">
+                                        <div className="relative p-6 rounded-xl border border-blue-500/50 bg-slate-950 backdrop-blur-sm">
                                             <div className="flex items-center gap-2 mb-4">
                                                 <BriefcaseIcon className="w-5 h-5 text-blue-400" />
                                                 <h3 className="font-semibold text-lg text-blue-100">
@@ -185,7 +185,7 @@ export function Experience() {
                                     }}
                                     transition={{
                                         duration: 0.5,
-                                        delay: index * 0.3 + 0.2,
+                                        delay: index * 0.1 + 0.1,
                                     }}
                                     className="z-10 relative"
                                 >
@@ -203,11 +203,11 @@ export function Experience() {
 
                 {/* Mobile Timeline */}
                 <div className="md:hidden relative space-y-12">
-                    <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/50 via-blue-500/20 to-transparent" />
+                    <div className="absolute left-4 top-0 bottom-0 w-px bg-blue-500" />
                     {experiences.map((experience, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, x: -100 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{
                                 once: true,
@@ -215,7 +215,7 @@ export function Experience() {
                             }}
                             transition={{
                                 duration: 0.6,
-                                delay: index * 0.4,
+                                delay: index * 0.05,
                             }}
                             className="relative pl-12"
                         >
@@ -229,7 +229,7 @@ export function Experience() {
                                 }}
                                 transition={{
                                     duration: 0.5,
-                                    delay: index * 0.4 + 0.2,
+                                    delay: index * 0.2 + 0.1,
                                 }}
                                 // Updated positioning and z-index
                                 className="absolute left-1 top-2 z-50"
@@ -260,10 +260,10 @@ export function Experience() {
                                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                                 {/* Card content */}
-                                <div className="relative p-6 rounded-xl border border-blue-500/20 bg-blue-950/40 backdrop-blur-sm">
+                                <div className="relative p-6 rounded-xl border border-blue-500/50 bg-slate-950/90 backdrop-blur-sm">
                                     <div className="flex items-center gap-2 mb-4">
-                                        <BriefcaseIcon className="w-5 h-5 text-blue-400" />
-                                        <h3 className="font-semibold text-lg text-blue-100">
+                                        <BriefcaseIcon className="min-w-5 min-h-5 text-blue-400" />
+                                        <h3 className="font-semibold text-pretty text-lg text-blue-100">
                                             {experience.title}
                                         </h3>
                                     </div>

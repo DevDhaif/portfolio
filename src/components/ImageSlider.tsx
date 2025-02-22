@@ -10,7 +10,7 @@ function ImageSlider({ images }: { images: { url: string; alt: string }[] }) {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentIndex((current) => (current === images.length - 1 ? 0 : current + 1))
-        }, 3000)  
+        }, 3000)
 
         return () => clearInterval(interval)
     }, [images.length, currentIndex])
@@ -35,7 +35,7 @@ function ImageSlider({ images }: { images: { url: string; alt: string }[] }) {
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -50 }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.1 }}
                     />
                 </AnimatePresence>
 

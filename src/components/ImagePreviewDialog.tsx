@@ -81,6 +81,7 @@ export function ImagePreviewDialog({
                 <div className="absolute top-0 left-0 right-0 z-50 flex justify-between items-center p-4 bg-gradient-to-b from-black/60 to-transparent">
                     <div className="flex gap-2">
                         <Button
+                        className="bg-black/80"
                             variant="ghost"
                             size="icon"
                             onClick={() => setZoom(prev => Math.max(1, prev - 0.5))}
@@ -89,6 +90,7 @@ export function ImagePreviewDialog({
                             <ZoomOut className="text-white h-5 w-5" />
                         </Button>
                         <Button
+                        className="bg-black/80"
                             variant="ghost"
                             size="icon"
                             onClick={() => setZoom(prev => Math.min(3, prev + 0.5))}
@@ -97,6 +99,7 @@ export function ImagePreviewDialog({
                             <ZoomIn className="text-white h-5 w-5" />
                         </Button>
                         <Button
+                        className="bg-black/80"
                             variant="ghost"
                             size="icon"
                             onClick={handleDownload}
@@ -119,17 +122,17 @@ export function ImagePreviewDialog({
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:text-white/80"
+                        className="absolute left-4 top-1/2 bg-black/80 -translate-y-1/2 z-50 text-white hover:text-white/80"
                         onClick={onPrevious}
                     >
-                        <ChevronLeft className="text-white h-8 w-8" />
+                        <ChevronLeft className="text-white  h-8 w-8" />
                     </Button>
                 )}
                 {hasNext && (
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:text-white/80"
+                        className="absolute right-4 bg-black/80 top-1/2 -translate-y-1/2 z-50 text-white hover:text-white/80"
                         onClick={onNext}
                     >
                         <ChevronRight className="text-white h-8 w-8" />
