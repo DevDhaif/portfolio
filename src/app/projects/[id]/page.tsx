@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, use } from 'react'
+import { useEffect, useState, use, useMemo } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Project } from '@/lib/types'
 import Image from 'next/image'
@@ -8,12 +8,24 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ProjectJsonLd } from '@/components/JsonLd/ProjectJsonLd'
+import { ImagePreviewDialog } from '@/components/ImagePreviewDialog'
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
+    const allImages = useMemo(() => {
+        if (!project) return []
+        return [
+            project.mainImage,
+            ...(project.images?.map(img => img.url) || [])
+        ]
+    }, [project])
 
+    const handleImageClick = (index: number) => {
+        setSelectedImageIndex(index)
+    }
     useEffect(() => {
         async function loadProject() {
             const supabase = createClient()
@@ -28,11 +40,9 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 .single()
 
             if (data) {
-
                 const mainImageUrl = supabase.storage
                     .from('projects-images')
                     .getPublicUrl(data.main_image).data.publicUrl
-
 
                 const images = data.project_images?.map((img: any) => ({
                     id: img.id,
@@ -83,22 +93,22 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     return (
         <>
             <ProjectJsonLd project={project} />
-            <div className="container py-10 mx-auto">
+            <div className="relative container py-10 mx-auto">
                 <motion.div
                     className="space-y-8 p-2"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <h1 className="text-4xl font-bold">{project.name}</h1>
+                    <h1 className="text-4xl font-bold text-white">{project.name}</h1>
                     <p className="text-xl text-muted-foreground">{project.longDescription}</p>
 
                     {/* Skills/Tags */}
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 text-gray-300">
                         {project.skills.map((skill) => (
                             <span
                                 key={skill}
-                                className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium"
+                                className="inline-flex items-center rounded-md border px-2 py-0.5 font-semibold"
                             >
                                 {skill}
                             </span>
@@ -106,7 +116,9 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     </div>
 
                     {/* Main Image */}
-                    <div className="aspect-video relative overflow-hidden rounded-lg">
+                    <div
+                        className="aspect-video relative overflow-hidden rounded-lg cursor-pointer"
+                        onClick={() => handleImageClick(0)} >
                         <Image
                             src={project.mainImage}
                             alt={project.name}
@@ -118,8 +130,11 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     {/* Gallery */}
                     {project.images && project.images.length > 0 && (
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {project.images.map((image) => (
-                                <div key={image.id} className="aspect-video relative overflow-hidden rounded-lg">
+                            {project.images?.map((image, index) => (
+                                <div
+                                    key={image.id}
+                                    className="aspect-video relative overflow-hidden rounded-lg cursor-pointer"
+                                    onClick={() => handleImageClick(index + 1)} >
                                     <Image
                                         src={image.url}
                                         alt={image.alt}
@@ -152,8 +167,8 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     {/* Highlights */}
                     {project.highlights && project.highlights.length > 0 && (
                         <div>
-                            <h2 className="text-2xl font-bold mb-4">Highlights</h2>
-                            <ul className="list-disc list-inside space-y-2">
+                            <h2 className="text-2xl font-bold mb-4 text-gray-50">Highlights</h2>
+                            <ul className="list-disc text-gray-300 list-inside space-y-2">
                                 {project.highlights.map((highlight, index) => (
                                     <li key={index}>{highlight}</li>
                                 ))}
@@ -161,8 +176,23 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                         </div>
                     )}
                 </motion.div>
+
+                {/* Image Preview Dialog */}
+                <ImagePreviewDialog
+                    isOpen={selectedImageIndex !== null}
+                    onClose={() => setSelectedImageIndex(null)}
+                    imageUrl={selectedImageIndex !== null ? allImages[selectedImageIndex] : ''}
+                    altText={project?.name || 'Project image'}
+                    onNext={() => setSelectedImageIndex(prev =>
+                        prev !== null && prev < allImages.length - 1 ? prev + 1 : prev
+                    )}
+                    onPrevious={() => setSelectedImageIndex(prev =>
+                        prev !== null && prev > 0 ? prev - 1 : prev
+                    )}
+                    hasNext={selectedImageIndex !== null && selectedImageIndex < allImages.length - 1}
+                    hasPrevious={selectedImageIndex !== null && selectedImageIndex > 0}
+                />
             </div>
         </>
-
     )
 }
