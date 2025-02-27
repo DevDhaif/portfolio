@@ -80,7 +80,8 @@ export function Stats() {
         },
         {
             label: "Hours of Code",
-            value: codingHours,
+            // value: codingHours,
+            value: "2000+",
             icon: Code,
             gradient: "from-cyan-500 to-blue-500",
             description: "Clean, maintainable code",
