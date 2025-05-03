@@ -11,7 +11,7 @@ import {
     Heading1, Heading2, Quote,
 } from 'lucide-react'
 import 'highlight.js/styles/tokyo-night-dark.css'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
@@ -24,6 +24,7 @@ import bash from 'highlight.js/lib/languages/bash'
 import json from 'highlight.js/lib/languages/json'
 import yaml from 'highlight.js/lib/languages/yaml'
 import markdown from 'highlight.js/lib/languages/markdown'
+import { TextDirection } from '@/extensions/direction'
 
 const lowlight = createLowlight({
     javascript, typescript, python, css, xml,
@@ -82,6 +83,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
                 },
                 languageClassPrefix: 'language-'
             }),
+            TextDirection,
             Image.configure({
                 inline: false,
                 HTMLAttributes: {
@@ -98,13 +100,41 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         content,
         editorProps: {
             attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg prose-invert focus:outline-none'
-            }
+                class: 'prose prose-sm sm:prose lg:prose-lg prose-invert focus:outline-none rtl-support'
+            },
+            handleKeyDown(view, event) {
+                if (event.key === '`' && event.ctrlKey) {
+                    event.preventDefault();
+                    insertCodeBlock();
+                    return true;
+                }
+
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    const { $from } = view.state.selection;
+                    const node = $from.parent;
+
+                    if (node.type.name === 'paragraph' && !node.textContent) {
+                        event.preventDefault();
+                        return true;
+                    }
+
+                    if (editor?.isActive('bulletList') || editor?.isActive('orderedList')) {
+                        return false;
+                    }
+                }
+
+                return false;
+            },
+            // Add this option for better paragraph handling
+            transformPastedHTML(html) {
+                // Remove excessive <br> tags from pasted content
+                return html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</p><p>');
+            },
         },
         onUpdate: ({ editor }) => {
             onChange(editor.getJSON())
         }
-    })
+    });
 
     const insertCodeBlock = useCallback(() => {
         if (!editor) return
@@ -135,13 +165,74 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         }
 
         if (e.key === 'Enter' && !e.shiftKey) {
+            // Check if current paragraph is empty
+            if (editor?.state?.selection) {
+                const { $from } = editor.state.selection;
+                const node = $from.parent;
+
+                // Skip creating new empty paragraphs
+                if (node.type.name === 'paragraph' && !node.textContent) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            // Normal list behavior
             if (editor?.isActive('bulletList') || editor?.isActive('orderedList')) {
                 return;
             }
-            e.preventDefault();
-            editor?.chain().focus().splitBlock().run();
         }
     }, [editor, insertCodeBlock]);
+
+
+    // In src/components/Editor/Editor.tsx
+
+    // Add this useEffect to update text direction while typing
+    useEffect(() => {
+        if (!editor) return;
+
+        // Helper function to detect RTL text
+        const detectAndUpdateDirection = () => {
+            editor.view.state.doc.descendants((node, pos) => {
+                if (node.type.name === 'paragraph' || node.type.name === 'heading') {
+                    const content = node.textContent || '';
+                    if (content.trim()) {
+                        const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+                        const hasRTL = rtlRegex.test(content);
+                        const startsWithRTL = rtlRegex.test(content.trim()[0]);
+                        const shouldBeRTL = hasRTL && startsWithRTL;
+
+                        const currentDir = node.attrs.dir;
+                        if ((shouldBeRTL && currentDir !== 'rtl') ||
+                            (!shouldBeRTL && currentDir !== 'ltr')) {
+
+                            // Update the node's direction
+                            editor.view.dispatch(
+                                editor.view.state.tr.setNodeMarkup(pos, undefined, {
+                                    ...node.attrs,
+                                    dir: shouldBeRTL ? 'rtl' : 'ltr'
+                                })
+                            );
+                        }
+                    }
+                }
+                return true;
+            });
+        };
+
+        // Set up event listener for content changes
+        const handler = () => {
+            requestAnimationFrame(detectAndUpdateDirection);
+        };
+
+        editor.on('update', handler);
+
+        return () => {
+            editor.off('update', handler);
+        };
+    }, [editor]);
+
+   
 
     const insertImage = (file: File) => {
         if (!editor) return;

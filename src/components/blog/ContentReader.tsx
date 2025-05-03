@@ -68,11 +68,53 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     //     node.content[0].type === 'image') {
     //     return processContent(node.content[0]);
     // }
+    // In src/components/blog/ContentReader.tsx
+
     const processContent = (node: any): any => {
         if (!node) return node;
 
-        if (node.type === 'listItem') {
-            // Don't process paragraph direction inside list items
+        // Handle empty paragraphs
+        if (node.type === 'paragraph' &&
+            (!node.content || node.content.length === 0)) {
+            return {
+                ...node,
+                attrs: {
+                    ...node.attrs,
+                    dir: 'ltr',
+                    class: 'min-h-[1em]'
+                }
+            };
+        }
+
+        // Determine text direction for paragraphs with content
+        if ((node.type === 'paragraph' || node.type === 'heading') &&
+            node.content && node.content.length > 0) {
+            // Get text content
+            const textContent = node.content
+                .filter((child: any) => child.type === 'text')
+                .map((child: any) => child.text || '')
+                .join(' ');
+
+            // Only process if there's actual text
+            if (textContent.trim()) {
+                // Detect RTL text
+                const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+                const hasRTL = rtlRegex.test(textContent);
+                const startsWithLatin = /^[A-Za-z]/.test(textContent.trim());
+
+                return {
+                    ...node,
+                    attrs: {
+                        ...node.attrs,
+                        dir: hasRTL && !startsWithLatin ? 'rtl' : 'ltr',
+                        class: hasRTL && !startsWithLatin ? 'text-right' : 'text-left'
+                    }
+                };
+            }
+        }
+
+        // Handle list items
+        if (node.type === 'listItem' && node.content) {
             const textContent = node.content
                 ?.flatMap((p: any) =>
                     p.content?.map((c: any) => c.text || '').filter(Boolean) || []
@@ -80,37 +122,24 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                 .join(' ');
 
             if (textContent.trim()) {
+                const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+                const hasRTL = rtlRegex.test(textContent);
+                const startsWithRTL = rtlRegex.test(textContent.trim()[0]);
+
                 return {
                     ...node,
                     attrs: {
                         ...node.attrs,
-                        dir: true ? 'rtl' : 'ltr',
-                        class: true ? 'text-right' : 'text-left'
+                        dir: hasRTL && startsWithRTL ? 'rtl' : 'ltr',
+                        class: hasRTL && startsWithRTL ? 'text-right' : 'text-left'
                     },
-                    // Return content without direction on paragraphs
-                    content: node.content?.map((p: any) => ({ ...p, attrs: {} }))
+                    content: node.content?.map(processContent)
                 };
             }
         }
-        if (node.type === 'heading' && node.content) {
-            const textContent = node.content
-                .filter((child: any) => child.type === 'text')
-                .map((child: any) => child.text || '')
-                .join(' ');
 
-            const hasRTLChars = true;
-            const hasOnlyEnglish = /^[A-Za-z0-9\s]+$/.test(textContent);
-
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    dir: hasRTLChars && !hasOnlyEnglish ? 'rtl' : 'ltr',
-                    class: hasRTLChars && !hasOnlyEnglish ? 'text-right' : 'text-left'
-                }
-            };
-        }
-        if (node.type === 'bulletList' || node.type === 'orderedList') {
+        // Handle lists
+        if ((node.type === 'bulletList' || node.type === 'orderedList') && node.content) {
             const allTextContent = node.content
                 ?.flatMap((listItem: any) =>
                     listItem.content?.flatMap((p: any) =>
@@ -119,54 +148,22 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                 )
                 .join(' ');
 
+            const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+            const hasRTL = rtlRegex.test(allTextContent);
+            const startsWithRTL = rtlRegex.test(allTextContent.trim()[0]);
+
             return {
                 ...node,
                 attrs: {
                     ...node.attrs,
-                    dir: isRTL(allTextContent) ? 'rtl' : 'ltr',
-                    class: isRTL(allTextContent) ? 'text-right' : 'text-left'
+                    dir: hasRTL && startsWithRTL ? 'rtl' : 'ltr',
+                    class: hasRTL && startsWithRTL ? 'text-right' : 'text-left'
                 },
-                content: node.content?.map(processContent)
+                content: node.content.map(processContent)
             };
         }
-        // Then handle regular paragraphs and text direction
-        if (node.type === 'paragraph' && node.content) {
-            // Only get text content from text nodes
-            // lets say i have this as a content : <p>test<br>اختبار</p> , i want the arabic text to be rtl and text align right , and the english text to be ltr and text align left  how can i do that ?
-            const textContent = node.content
-                .filter((child: any) => child.type === 'text')
-                .map((child: any) => child.text || '')
-                .join(' ');
 
-            // Only set direction if there is actual text content
-            if (textContent.trim()) {
-                return {
-                    ...node,
-                    attrs: {
-                        ...node.attrs,
-                        dir: true ? 'rtl' : 'ltr',
-                        class: true ? 'text-right' : 'text-left'
-                    }
-                };
-            }
-            // If no text content, return node as is
-            return node;
-        }
-
-        // Handle images
-        if (node.type === 'image' && !node.attrs.src.startsWith('http')) {
-            const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-content/${node.attrs.src}`
-            console.log('Processing image URL:', imageUrl)
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    src: imageUrl
-                }
-            }
-        }
-
-        // Handle code blocks
+        // Code blocks always LTR
         if (node.type === 'codeBlock') {
             return {
                 ...node,
@@ -179,12 +176,25 @@ export function ContentRenderer({ content }: ContentRendererProps) {
             };
         }
 
+        // Process image paths
+        if (node.type === 'image' && node.attrs.src && !node.attrs.src.startsWith('http')) {
+            const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-content/${node.attrs.src}`;
+
+            return {
+                ...node,
+                attrs: {
+                    ...node.attrs,
+                    src: imageUrl
+                }
+            };
+        }
+
         // Process nested content
         if (node.content) {
             return {
                 ...node,
                 content: node.content.map(processContent)
-            }
+            };
         }
 
         return node;
