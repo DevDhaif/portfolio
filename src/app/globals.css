@@ -1,4 +1,5 @@
 @import '../styles/base.css';
+@import '../styles/tiptap-styles.css';
 
 .perspective-container {
     perspective: 1000px;
@@ -42,4 +43,3 @@
     background-image: radial-gradient(circle, white 1px, transparent 1px);
     background-size: 30px 30px;
 }
-

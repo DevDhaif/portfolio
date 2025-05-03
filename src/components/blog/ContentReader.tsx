@@ -22,7 +22,8 @@ import yaml from 'highlight.js/lib/languages/yaml'
 import markdown from 'highlight.js/lib/languages/markdown'
 import { TextDirection } from '@/extensions/direction'
 import { useEffect, useRef } from 'react'
-
+// import  '../Editor/styles.css'
+import '../../styles/tiptap-styles.css';
 // Create lowlight instance with languages
 const lowlight = createLowlight({
     javascript,
@@ -210,7 +211,17 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         const preElements = editorRef.current.querySelectorAll('pre');
 
         preElements.forEach((preElement) => {
+            // Skip if already processed
             if (preElement.hasAttribute('data-copy-added')) return;
+
+            // Get language class
+            const languageClass = Array.from(preElement.classList)
+                .find(c => c.startsWith('language-'));
+
+            if (languageClass) {
+                const language = languageClass.replace('language-', '');
+                preElement.setAttribute('data-language', language);
+            }
 
             const wrapper = document.createElement('div');
             wrapper.className = 'relative';
@@ -322,7 +333,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     }
 
     return (
-        <div ref={editorRef} className="prose prose-invert max-w-none">
+        <div ref={editorRef} className="content-reader tiptap-content">
             <EditorContent editor={editor} />
         </div>
     )

@@ -41,7 +41,7 @@ export default async function AdminLayout({
         <SessionProvider>
             <ProtectedRoute>
                 <Suspense fallback={<LoadingState />}>
-                    <div className="min-h-screen flex bg-gray-50">
+                    <div className="min-h-screen flex bg-gray-850">
                         {/* Sidebar */}
                         <div className="w-64 bg-gray-900 text-white flex flex-col shadow-lg">
                             <div className="p-6 border-b border-gray-800/50">

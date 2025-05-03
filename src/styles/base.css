@@ -38,7 +38,6 @@
         @apply bg-background text-base antialiased;
     }
 
-    /* Custom scroll bar */
     ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -52,41 +51,24 @@
         @apply rounded-full;
     }
 
-
-    /* Typography */
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        @apply font-display font-bold;
-    }
-
-    /* Custom selection */
     ::selection {
         @apply text-base;
     }
 }
 
 @layer components {
-
-    /* Container for sections */
     .section-container {
         @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24;
     }
 
-    /* Section title */
     .section-title {
         @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center;
     }
 
-    /* Accent text with gradient */
     .accent-text {
         @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
     }
 
-    /* Button styles */
     .btn-primary {
         @apply inline-flex items-center justify-center rounded-md bg-primary text-primarygray-500 px-4 py-2 text-sm font-medium shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
     }
@@ -99,7 +81,6 @@
         @apply inline-flex items-center justify-center rounded-md border border-border bg-background text-base px-4 py-2 text-sm font-medium shadow-sm transition-colors hover: focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
     }
 
-    /* Card styles */
     .card {
         @apply bg-card rounded-lg border border-border p-6 shadow-sm transition-all hover:shadow-md;
     }
@@ -108,17 +89,14 @@
         @apply hover:shadow-glow hover:-translate-y-1 duration-300;
     }
 
-    /* Grid background with dots */
     .grid-background {
         @apply bg-grid-pattern bg-grid;
     }
 
-    /* Backdrop blur */
     .glass {
         @apply bg-card/60 backdrop-blur-md;
     }
 
-    /* Text and background noise effect */
     .noise-bg {
         @apply relative;
     }
@@ -128,7 +106,6 @@
         @apply absolute inset-0 bg-gradient-noise opacity-5 mix-blend-overlay pointer-events-none;
     }
 
-    /* Glow effects */
     .glow-text {
         @apply relative;
     }
@@ -140,7 +117,6 @@
     }
 }
 
-/* Additional custom utilities */
 @layer utilities {
     .text-balance {
         text-wrap: balance;

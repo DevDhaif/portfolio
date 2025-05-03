@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* All TipTap styles in one file */
+@layer components {
+
+    /* Base TipTap content styles */
+    .tiptap-content {
+        @apply max-w-none text-gray-200 leading-relaxed;
+
+        /* Headings */
+        & h1 {
+            @apply text-3xl font-bold mb-6 text-gray-50 border-b border-gray-800/50 pb-2;
+        }
+
+        & h2 {
+            @apply text-2xl font-bold mb-4 text-gray-100 mt-8;
+        }
+
+        & h3 {
+            @apply text-xl font-bold mb-3 text-gray-200 mt-6;
+        }
+
+        & h4 {
+            @apply text-lg font-bold mb-3 text-gray-300;
+        }
+
+        & h5 {
+            @apply text-base font-bold mb-3 text-gray-300;
+        }
+
+        & h6 {
+            @apply text-sm font-bold mb-3 text-gray-300;
+        }
+
+        /* Paragraphs and lists */
+        & p {
+            @apply mb-6 leading-relaxed text-base;
+            line-height: 1.8;
+        }
+
+        & ul {
+            @apply list-disc pl-6 mb-6 space-y-2;
+        }
+
+        & ol {
+            @apply list-decimal pl-6 mb-6 space-y-2;
+        }
+
+        & li>ul,
+        & li>ol {
+            @apply my-2;
+        }
+
+        /* Blockquotes */
+        & blockquote {
+            @apply border-l-4 border-blue-500/50 bg-blue-900/10 pl-6 py-2 pr-4 italic my-6;
+        }
+
+        /* Links */
+        & a {
+            @apply text-blue-400 hover:text-blue-300 underline decoration-blue-500/30 hover:decoration-blue-400 transition-all duration-200;
+            text-underline-offset: 2px;
+        }
+
+        /* Code blocks */
+        & pre {
+            @apply bg-[#282c34] text-white p-5 rounded-lg my-8 overflow-x-auto border border-gray-800 relative;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        & pre code {
+            @apply bg-transparent p-0 text-sm;
+            tab-size: 2;
+        }
+
+        & :not(pre)>code {
+            @apply bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono;
+        }
+
+        /* Empty paragraph handling */
+        & p:empty {
+            min-height: 1em;
+        }
+
+        /* Images */
+        & img {
+            @apply rounded-lg max-w-full my-6 mx-auto;
+        }
+
+        /* Tables */
+        & table {
+            @apply w-full my-6 border-collapse overflow-hidden rounded-lg border border-gray-800;
+        }
+
+        & table th {
+            @apply bg-gray-800 text-gray-200 p-3 text-left font-medium;
+        }
+
+        & table td {
+            @apply border-t border-gray-800 p-3;
+        }
+
+        /* Direction handling */
+        &[dir="rtl"] {
+            @apply text-right;
+        }
+
+        &[dir="ltr"] {
+            @apply text-left;
+        }
+
+        /* RTL list styling */
+        &[dir="rtl"] ul,
+        &[dir="rtl"] ol {
+            @apply pr-6 pl-0;
+        }
+    }
+
+    /* Editor-specific styles */
+    .tiptap-editor {
+        @apply outline-none min-h-[300px] p-4;
+
+        /* Placeholder text */
+        & p.is-editor-empty:first-child::before {
+            @apply text-gray-500;
+            content: attr(data-placeholder);
+            float: left;
+            pointer-events: none;
+            height: 0;
+        }
+
+        /* Selection styling */
+        &.ProseMirror-focused {
+            @apply outline-none;
+        }
+
+        & .ProseMirror-selectednode {
+            @apply outline outline-2 outline-blue-500;
+        }
+
+        /* Current line highlight */
+        & .has-focus {
+            @apply bg-blue-500/5 -mx-4 px-4;
+        }
+
+        /* Image handling in editor */
+        & img {
+            @apply border border-gray-700 shadow-sm cursor-pointer transition-all;
+
+            &:hover {
+                @apply border-blue-500;
+            }
+
+            &.ProseMirror-selectednode {
+                @apply outline outline-2 outline-blue-500 border-blue-500;
+            }
+        }
+
+        /* Placeholder for drag/drop */
+        & .ProseMirror-dropcursor {
+            @apply bg-blue-500/30 w-px;
+        }
+    }
+
+    /* Content reader specific styles */
+    .content-reader {
+        /* Use specific typography styles instead of prose-lg/prose-invert */
+        @apply max-w-none text-gray-300 text-lg;
+
+        /* Content reader enhancements */
+        & img {
+            @apply border border-gray-800/30 shadow-lg;
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+                transform: scale(1.01);
+            }
+        }
+
+        /* Code block enhancements */
+        & pre {
+            @apply shadow-lg;
+            position: relative;
+
+            /* Language indicator */
+            &::before {
+                content: attr(data-language);
+                @apply absolute right-2 top-2 text-xs px-2 py-1 rounded bg-gray-800/80 text-gray-400;
+            }
+        }
+
+        /* Link enhancements */
+        & a {
+            @apply relative;
+
+            &::after {
+                content: "";
+                @apply absolute bottom-0 left-0 w-full h-0.5 bg-blue-500/0 transition-all;
+            }
+
+            &:hover::after {
+                @apply bg-blue-500/30;
+            }
+        }
+
+        /* Better list spacing */
+        & ul,
+        & ol {
+            @apply my-6;
+        }
+
+        /* Better blockquote styling */
+        & blockquote {
+            @apply border-l-4 border-blue-500/50 bg-blue-900/10 pl-6 py-4 pr-4 italic my-8 rounded-r-lg shadow-sm;
+
+            & p:last-child {
+                @apply mb-0;
+            }
+        }
+    }
+
+    /* Editor toolbar styles */
+    .editor-toolbar {
+        @apply flex flex-wrap gap-2 border-b border-gray-800 bg-gray-900 p-2 sticky top-0 z-10;
+    }
+
+    .editor-toolbar-button {
+        @apply p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-gray-100 transition-colors;
+
+        &.is-active {
+            @apply bg-blue-500/20 text-blue-300;
+        }
+    }
+
+    .editor-toolbar-divider {
+        @apply w-px h-6 bg-gray-800;
+    }
+}
+
+/* Copy button notification */
+.copy-notification {
+    @apply absolute right-2 top-2 bg-green-500/90 text-white px-2 py-1 rounded text-xs shadow-lg;
+    animation: fadeInOut 2s forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-gray-700 hover:bg-gray-600;
+}
+
+/* Selection styling */
+::selection {
+    @apply bg-blue-900/40 text-white;
+}
