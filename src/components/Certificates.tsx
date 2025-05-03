@@ -6,11 +6,9 @@ import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState, useRef } from "react"
 import { Certificate } from "@/lib/types"
 import { Award } from "lucide-react"
-import { SectionHeader } from "@/components/section-header"
-import { GridItemsWrapper } from "@/components/grid-items-wrapper"
-import { GridItem } from "@/components/grid-item"
 import { Loading } from "@/components/loading"
 import { CertificateCard } from "./certificate-card"
+import { SectionHeading } from "./ui/section-heading"
 
 export function Certificates() {
     const [certificates, setCertificates] = useState<Certificate[]>([])
@@ -64,19 +62,19 @@ export function Certificates() {
                 className="container relative"
                 style={{ opacity, y }}
             >
-                <SectionHeader
-                    badge={<Award className="w-5 h-5" />}
+                <SectionHeading
                     title="Certificates"
-                    description="Showcasing my skills and achievements through recognized certifications."
+                    subtitle="Showcasing my skills and achievements through recognized certifications."
+                    badge={"Awards & Certifications"}
                 />
 
-                <GridItemsWrapper>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {certificates.map((cert, index) => (
-                        <GridItem key={cert.id} index={index}>
+                        <div key={cert.id}>
                             <CertificateCard {...cert} index={index} />
-                        </GridItem>
+                        </div>
                     ))}
-                </GridItemsWrapper>
+                </div>
             </motion.div>
         </section>
     )

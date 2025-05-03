@@ -31,7 +31,7 @@ const lowlight = createLowlight({
 })
 
 lowlight.registerAlias({ xml: ['html'] })
-
+import './styles.css'
 interface EditorProps {
     content: string;
     onChange: (content: any) => void;
@@ -165,7 +165,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
 
     return (
         <div className="border rounded-lg overflow-hidden">
-            <div className="border-b bg-muted p-2 flex flex-wrap gap-2">
+            <div className="border-b    p-2 flex flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                     <Button
                         type="button"

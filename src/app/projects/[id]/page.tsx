@@ -101,7 +101,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     transition={{ duration: 0.1 }}
                 >
                     <h1 className="text-4xl font-bold text-white">{project.name}</h1>
-                    <p className="text-xl text-muted-foreground">{project.longDescription}</p>
+                    <p className="text-xl text-gray-500">{project.longDescription}</p>
 
                     {/* Skills/Tags */}
                     <div className="flex flex-wrap gap-2 text-gray-300">

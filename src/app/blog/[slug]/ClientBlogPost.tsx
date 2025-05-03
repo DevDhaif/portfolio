@@ -86,7 +86,7 @@ export default function ClientBlogPost({ initialPost }: Props) {
     }
 
     return (
-        <article className="py-10 mx-auto text-white">
+        <article className="py-10 mx-auto text-white max-w-5xl bg-red-950 p-12">
             <motion.div
                 className="space-y-8 bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl"
                 initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export default function ClientBlogPost({ initialPost }: Props) {
                 <header className="space-y-6">
                     <h1 className="text-4xl font-bold">{post.title}</h1>
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                         <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             {formatDate(post.created_at)}
@@ -117,19 +117,7 @@ export default function ClientBlogPost({ initialPost }: Props) {
                         </button>
                     </div>
 
-                    {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                            {post.tags.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="inline-flex items-center rounded-full bg-white/5 px-3 py-1 text-sm 
-                                        font-medium border border-white/10 hover:bg-white/10 transition-colors"
-                                >
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-                    )}
+
                 </header>
 
                 {coverImageUrl && (

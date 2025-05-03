@@ -2,7 +2,6 @@
 
 import { use, useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ContentRenderer } from '@/components/blog/ContentReader'
@@ -131,28 +130,17 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
     return (
         <div className=" py-10 mx-auto text-white">
             <BlogPostJsonLd post={post} />
-            <motion.div
-                className="space-y-8  bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.1 }}
-            >
+            <div className="space-y-8 max-w-4xl p-8 mx-auto  bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl">
                 <div className="flex items-center justify-between">
                     <h1 className="text-4xl font-bold">{post?.title}</h1>
                     <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1 text-muted-foreground">
+                        <span className="flex items-center gap-1 text-gray-500">
                             <EyeIcon className="w-4 h-4" />
                             {post?.views_count || 0}
                         </span>
-                        <button
-                            onClick={handleLike}
-                            disabled={isLiking || hasLiked}
-                            className={`flex items-center gap-1 transition-colors ${hasLiked ? 'text-red-500' : 'hover:text-red-500'
-                                } ${isLiking ? 'opacity-50' : ''}`}
-                        >
-                            <HeartIcon
-                                className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`}
-                            />
+                        <button onClick={handleLike} disabled={isLiking || hasLiked} className={`flex items-center gap-1 transition-colors ${hasLiked ? 'text-red-500' : 'hover:text-red-500'
+                            } ${isLiking ? 'opacity-50' : ''}`}>
+                            <HeartIcon className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`} />
                             {post?.likes_count || 0}
                         </button>
                     </div>
@@ -161,24 +149,14 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium"
-                        >
-                            {tag}
-                        </span>
+                        <span key={tag} className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium">{tag}</span>
                     ))}
                 </div>
 
                 {/* Main Image */}
                 {coverImageUrl && (
                     <div className="aspect-video relative overflow-hidden rounded-lg">
-                        <Image
-                            src={coverImageUrl}
-                            alt={post.title}
-                            fill
-                            className="object-cover"
-                        />
+                        <Image src={coverImageUrl} alt={post.title} fill className="object-cover" />
                     </div>
                 )}
 
@@ -186,7 +164,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
                 <div className="prose prose-lg dark:prose-invert mx-auto">
                     <ContentRenderer content={post.content} />
                 </div>
-            </motion.div>
+            </div>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import { use } from 'react'
 import { generateMetadata } from './generateMetadata'
-import BlogPost from './BlogPost'  // Changed this line
+import BlogPost from './BlogPost'
 
 export { generateMetadata }
 

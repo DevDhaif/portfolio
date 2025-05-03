@@ -1,38 +1,31 @@
-"use client"
-import { Hero } from "@/components/home/hero"
-import { Projects } from "@/components/home/projects"
-import { Skills } from "@/components/home/skills"
-import { Experience } from "@/components/home/experience"
-import { Stats } from "@/components/home/stats"
-import { Contact } from "@/components/home/contact"
-import { ScrollProgress } from "@/components/ui/scroll-progress"
-import { useRef } from "react"
-import { Certificates } from "@/components/Certificates"
-import { Posts } from "@/components/home/posts"
-import dynamic from "next/dynamic"
-const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'), {
-    ssr: false,
-    loading: () => <div className="fixed inset-0 -z-10 bg-[#000010]" />
-})
-export default function Home() {
-    const containerRef = useRef<HTMLDivElement>(null)
+import { Metadata } from "next";
+import { HeroSection } from "@/components/sections/hero";
+import { AboutSection } from "@/components/sections/about";
+import { ProjectsSection } from "@/components/sections/projects";
+import { SkillsSection } from "@/components/sections/skills";
+import { BlogSection } from "@/components/sections/blog";
+import { ContactSection } from "@/components/sections/contact";
+import { Experience } from "@/components/home/experience";
+import { Stats } from "@/components/home/stats";
+import { Certificates } from "@/components/Certificates";
 
+export const metadata: Metadata = {
+    title: "Dhaifallah Alfarawi | Front End Developer",
+    description: "Front End Developer specializing in React, Next.js, Tailwindcss, creating modern web applications.",
+};
+
+export default function HomePage() {
     return (
         <>
-            <div className="relative">
-                <AnimatedBackground />
-                <ScrollProgress />
-                <div ref={containerRef} className="flex flex-col">
-                    <Hero />
-                    <Stats />
-                    <Skills />
-                    <Projects />
-                    <Experience />
-                    <Posts />
-                    <Certificates />
-                    <Contact />
-                </div>
-            </div >
+            <HeroSection />
+            <Stats />
+            <AboutSection />
+            <ProjectsSection />
+            <SkillsSection />
+            <BlogSection />
+            <Experience />
+            <Certificates />
+            <ContactSection />
         </>
-    )
+    );
 }

@@ -28,7 +28,7 @@ export async function GET() {
                 }
             }
         );
-
+        console.log('Response from Wakatime API:', response);
         if (!response.ok) {
             throw new Error(`Wakatime API responded with status: ${response.status}`);
         }

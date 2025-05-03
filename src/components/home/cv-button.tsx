@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
-
-export function CVButton() {
+import clsx from 'clsx'
+export function CVButton({ className }: { className?: string }) {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleDownload = async () => {
@@ -29,9 +29,16 @@ export function CVButton() {
     return (
         <Button
             size="sm"
-            className="text-lg"
+            className={clsx(
+                // "bg-gradient-to-r from-blue-400 to-blue-300 text-white hover:from-blue-500 hover:to-blue-400",
+                // "border border-transparent",
+                // "transition-all duration-300 ease-in-out",
+                // "flex items-center gap-2",
+                className
+            )}
             onClick={handleDownload}
             disabled={isLoading}
+
         >
             <div className="flex items-center gap-2">
                 {isLoading ? (

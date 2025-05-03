@@ -1,240 +1,132 @@
-import type { Metadata } from "next"
-import { Exo_2, Orbitron, JetBrains_Mono } from "next/font/google"
-import "./globals.css"
-import { cn } from "@/lib/utils"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
-import { MouseFollower } from "@/components/ui/mouse-follower"
-import { GlobalProvider } from "@/context/global-context"
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin"
-import { extractRouterConfig } from "uploadthing/server"
-import { ourFileRouter } from "@/app/api/uploadthing/core"
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { RootSchema } from '@/components/JsonLd/RootSchema'
-import { Pattern } from '@/components/Pattern'
-import { AnalyticsProvider } from "@/components/providers/AnalyticsProvider"
+import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import "./globals.css";
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { Noise } from "@/components/ui/noise";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { Toaster } from "@/components/ui/toaster";
 
-const exo2 = Exo_2({
+const inter = Inter({
     subsets: ["latin"],
-    variable: '--font-exo',
-    display: 'swap',
-})
+    variable: "--font-inter",
+    display: "swap",
+});
 
-const orbitron = Orbitron({
+const jetbrainsMono = JetBrains_Mono({
     subsets: ["latin"],
-    variable: '--font-orbitron',
-    display: 'swap',
-})
+    variable: "--font-jetbrains-mono",
+    display: "swap",
+});
 
-const jetbrains = JetBrains_Mono({
-    subsets: ["latin"],
-    variable: '--font-jetbrains',
-    display: 'swap',
-})
+// Use Cabinet Grotesk for headings
+// const cabinetGrotesk = localFont({
+//     src: "../fonts/CabinetGrotesk-Variable.woff2",
+//     variable: "--font-cabinet-grotesk",
+//     display: "swap",
+// });
+
 export const metadata: Metadata = {
-    metadataBase: new URL('https://devdhaif.vercel.app'),
     title: {
-        default: 'Dhaifallah Alfarawi | مطور ويب | ضيف الله الفروي',
-        template: '%s | Dhaifallah Alfarawi | ضيف الله الفروي'
+        default: "Dhaifallah Alfarawi | Front end Developer",
+        template: "%s | Dhaifallah Alfarawi",
     },
-    description: 'Dhaifallah Alfarawi (ضيف الله الفروي) - Full Stack Developer specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب والمواقع',
+    description:
+        "Front end Developer specializing in React, Next.js, and Laravel, creating modern web applications.",
     keywords: [
-        // Name variations
-        'Dhaifallah',
-        'Dhaifallah Alfarawi',
-        'Dhaifallah Al-farawi',
-        'Devdhaif',
-        // Arabic variations
-        'ضيف الله',
-        'ضيف الله الفروي',
-        'ضيف الله الفروي البيضاء',
-        'ضيف الله الفروي اليمن',
-        // Location keywords
-        'Yemen developer',
-        'Yemeni developer',
-        'Al Bayda developer',
-        'مطور يمني',
-        'مبرمج يمني',
-        // Professional keywords
-        'Full Stack Developer',
-        'React Developer',
-        'Next.js Developer',
-        'Laravel Developer',
-        'Web Developer',
-        'Web Engineer',
-        'Software Developer',
-        'Frontend Developer',
-        'Front-end Developer',
-        'Software Engineer',
-        'مطور ويب',
-        'مبرمج مواقع',
-        'مطور تطبيقات',
-        // Skills
-        'React.js',
-        'React',
-        'React Developer',
-        'React js',
-        'Tailwind CSS',
-        'Tailwind',
-        'tailwindcss',
-        'Next.js',
-        'Laravel',
-        'TypeScript',
-        'JavaScript',
-        'PHP',
-        'Full Stack Development',
+        "Dhaifallah Alfarawi",
+        "Devdhaif",
+        "Front End Developer",
+        "Next.js",
+        "React",
+        "Laravel",
+        "Saudi Arabia",
+        "Web Developer",
+        "JavaScript",
+        "TypeScript",
+        "Tailwind CSS",
+        "Web Design",
+        "UI/UX",
+        "Responsive Design",
+        "Freelance Developer",
+        "Laravel Developer",
+        "Web Applications",
+        "Web Development",
+        "Software Engineer",
+        "مطور واجهات أمامية",
+        "مطور ويب",
+        "مطور جافا سكريبت",
+        "مطور تايلويند",
+        "مطور رياكت",
+        "مطور لارافيل",
+        "مطور ويب السعودية",
+        "مطور ويب في السعودية",
+        "مطور ويب سعودي",
+        "مطور ويب في الرياض",
+        "مطور واجهات أمامية في الرياض",
+        "مطور واجهات أمامية في السعودية",
+        // اليمن
+        "مطور واجهات أمامية في اليمن",
+        "مطور ويب في اليمن",
+        "مطور ويب في صنعاء",
+        "مطور واجهات أمامية في صنعاء",
+        "مطور واجهات أمامية في البيضاء",
+        "مطور ويب في صنعاء",
+        "مطور ويب في البيضاء",
     ],
-    authors: [
-        {
-            name: 'Dhaifallah Alfarawi',
-            url: 'https://devdhaif.vercel.app'
-        }
-    ],
-    creator: 'Dhaifallah Alfarawi',
-    publisher: 'Dhaifallah Alfarawi',
-    alternates: {
-        canonical: 'https://devdhaif.vercel.app',
-        languages: {
-            'en-US': 'https://devdhaif.vercel.app',
-            'ar-SA': 'https://devdhaif.vercel.app'
-        }
-    },
-    openGraph: {
-        type: 'website',
-        locale: 'en_US',
-        alternateLocale: 'ar_SA',
-        url: 'https://devdhaif.vercel.app/',
-        siteName: 'Dhaifallah Alfarawi | ضيف الله الفروي',
-        title: 'Dhaifallah Alfarawi | Full Stack Developer | ضيف الله الفروي',
-        description: 'Dhaifallah Alfarawi (ضيف الله الفروي) - Full Stack Developer  specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب',
-        images: [
-            {
-                url: 'https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75',
-                width: 1200,
-                height: 630,
-                alt: 'Dhaifallah Alfarawi - ضيف الله الفروي'
-            }
-        ]
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Dhaifallah Alfarawi | ضيف الله الفروي',
-        description: 'Full Stack Developer  specializing in React, Next.js, and Laravel. مطور ويب متخصص في تطوير تطبيقات الويب',
-        site: '@devdhaif',
-        creator: '@devdhaif',
-        images: ['https://devdhaif.vercel.app/_next/image?url=https%3A%2F%2Fwwocsjwfwdlmdibslxya.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fcertificates-images%2F1733572471503-front-end-libraries.webp&w=640&q=75'],
-    },
-    robots: {
-        index: true,
-        follow: true,
-        nocache: true,
-        googleBot: {
-            index: true,
-            follow: true,
-            'max-video-preview': -1,
-            'max-image-preview': 'large',
-            'max-snippet': -1,
-            noimageindex: false,
-        },
-    },
-    verification: {
-        google: 'your-google-site-verification',
-        yandex: 'your-yandex-verification',
-        yahoo: 'your-yahoo-verification'
-    },
-    category: 'technology',
-    classification: 'Portfolio',
-}
+};
 
 export default function RootLayout({
     children,
 }: {
-    children: React.ReactNode
+    children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning className="dark">
-            <head>
-                <RootSchema />
-            </head>
+        <html
+            lang="en"
+            className={cn(
+                "dark",
+                inter.variable,
+                jetbrainsMono.variable,
+                // cabinetGrotesk.variable
+            )}
+            suppressHydrationWarning
+        >
+            <body className="min-h-screen bg-background font-sans antialiased overflow-x-hidden selection:  selection:text-base">
+                <>
+                    {/* Background Elements */}
+                    <div className="fixed inset-0 -z-10">
+                        <div className="absolute inset-0 bg-background" />
+                        <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-5" />
+                        <Noise />
 
-            <body
-                className={cn(
-                    "min-h-screen antialiased font-plus-jakarta selection:bg-white/10 selection:text-white relative",
-                    exo2.variable,
-                    orbitron.variable,
-                    jetbrains.variable,
-                    "font-default"
-                )}
-            >
-                {/* <Pattern /> */}
-                {/* Primary Background Layer */}
-                <div className="fixed inset-0 -z-50">
-                    <div className="absolute inset-0 bg-slate-950" />
-                    {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.08),rgba(0,0,0,0))]" /> */}
-                </div>
+                        {/* Gradient blob */}
+                        <div className="absolute top-[-50%] left-[-50%] h-[200%] w-[200%] animate-[spin_100s_linear_infinite] bg-[radial-gradient(var(--accent)/4%,transparent_70%)]" />
 
-
-
-                {/* Content Noise Overlay */}
-                <div className="fixed inset-0 -z-30 opacity-[0.015] pointer-events-none bg-noise" />
-
-                <MouseFollower />
-
-                <div className="relative flex min-h-screen flex-col">
-                    {/* Sticky Header */}
-                    <div className="sticky top-0 z-50 w-full border-b border-white/5">
-                        <div className="absolute inset-0 bg-[#000010]/70 backdrop-blur-xl" />
-                        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <Navbar />
-                        </div>
+                        {/* Background glow spots */}
+                        <div className="absolute left-1/4 top-1/4 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full  /10 blur-3xl" />
+                        <div className="absolute right-1/4 bottom-1/4 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
                     </div>
 
                     {/* Main Content */}
-                    <main className="flex-1 relative">
-                        {/* Content Wrapper */}
-                        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <NextSSRPlugin
-                                routerConfig={extractRouterConfig(ourFileRouter)}
-                            />
-                            <GlobalProvider>
-                                {children}
-                                <Analytics />
-                                <AnalyticsProvider />
-                                <SpeedInsights />
-                            </GlobalProvider>
-                        </div>
-
-                        {/* Decorative Top Gradient */}
-                        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-                            <div
-                                className="relative left-[calc(50%-20rem)] aspect-[1155/678] w-[40rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#000030] to-transparent opacity-30 sm:left-[calc(50%-30rem)] sm:w-[80rem]"
-                                style={{
-                                    clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'
-                                }}
-                            />
-                        </div>
-                    </main>
-
-                    {/* Footer */}
-                    <div className="relative w-full border-t border-white/5">
-                        <div className="absolute inset-0 bg-[#000030]/80 backdrop-blur-sm" />
-                        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-                            <Footer />
-                        </div>
+                    <div className="relative flex min-h-screen flex-col">
+                        <Header />
+                        <main className="flex-1">{children}</main>
+                        <Footer />
                     </div>
-                </div>
 
-                {/* Decorative Bottom Gradient */}
-                <div className="absolute inset-x-0 bottom-0 -z-10 transform-gpu overflow-hidden blur-3xl">
-                    <div
-                        className="relative left-[calc(50%+20rem)] aspect-[1155/678] w-[40rem] translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#000030] to-transparent opacity-30 sm:left-[calc(50%+30rem)] sm:w-[80rem]"
-                        style={{
-                            clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'
-                        }}
-                    />
-                </div>
+                    {/* UI Components */}
+                    <ScrollToTop />
+                    <Toaster />
+
+                    <Analytics />
+                    <SpeedInsights />
+                </>
             </body>
         </html>
-    )
+    );
 }

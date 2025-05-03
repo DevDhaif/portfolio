@@ -1,6 +1,8 @@
-import type { Config } from "tailwindcss";
+// tailwind.config.js
+import { fontFamily } from "tailwindcss/defaultTheme";
 
-export default {
+/** @type {import('tailwindcss').Config} */
+const config = {
     darkMode: ["class"],
     content: [
         "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,68 +10,87 @@ export default {
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
+        container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+                "2xl": "1400px",
+            },
+        },
         extend: {
-            fontFamily: {
-                // Use Exo 2 as your main font
-                default: ['var(--font-exo)', 'system-ui', 'sans-serif'],
-                // Orbitron for futuristic titles/headings
-                title: ['var(--font-orbitron)', 'var(--font-exo)', 'system-ui', 'sans-serif'],
-                // JetBrains Mono for code
-                code: ['var(--font-jetbrains)', 'monospace'],
-            },
             colors: {
-                background: 'hsl(var(--background))',
-                foreground: 'hsl(var(--foreground))',
-                card: {
-                    DEFAULT: 'hsl(var(--card))',
-                    foreground: 'hsl(var(--card-foreground))'
+                // Main background colors
+                background: {
+                    DEFAULT: "#030712", // Very dark gray (almost black)
+                    secondary: "#111827", // Slightly lighter dark gray
                 },
-                popover: {
-                    DEFAULT: 'hsl(var(--popover))',
-                    foreground: 'hsl(var(--popover-foreground))'
+                // Text colors
+                text: {
+                    primary: "#F9FAFB", // Almost white
+                    secondary: "#9CA3AF", // Medium gray
+                    accent: "#10B981", // Emerald green
                 },
-                primary: {
-                    DEFAULT: 'hsl(var(--primary))',
-                    foreground: 'hsl(var(--primary-foreground))'
-                },
-                secondary: {
-                    DEFAULT: 'hsl(var(--secondary))',
-                    foreground: 'hsl(var(--secondary-foreground))'
-                },
-                muted: {
-                    DEFAULT: 'hsl(var(--muted))',
-                    foreground: 'hsl(var(--muted-foreground))'
-                },
+                // Accent colors
                 accent: {
-                    DEFAULT: 'hsl(var(--accent))',
-                    foreground: 'hsl(var(--accent-foreground))'
+                    primary: "#10B981", // Emerald green
+                    secondary: "#3B82F6", // Blue
+                    tertiary: "#8B5CF6", // Purple
+                    subtle: "rgba(16, 185, 129, 0.1)", // Transparent emerald
                 },
-                destructive: {
-                    DEFAULT: 'hsl(var(--destructive))',
-                    foreground: 'hsl(var(--destructive-foreground))'
+                // Border colors
+                border: {
+                    DEFAULT: "#1F2937", // Dark gray
+                    hover: "#374151", // Medium gray
                 },
-                border: 'hsl(var(--border))',
-                input: 'hsl(var(--input))',
-                ring: 'hsl(var(--ring))',
-                chart: {
-                    '1': 'hsl(var(--chart-1))',
-                    '2': 'hsl(var(--chart-2))',
-                    '3': 'hsl(var(--chart-3))',
-                    '4': 'hsl(var(--chart-4))',
-                    '5': 'hsl(var(--chart-5))'
-                }
+                // Card colors
+                card: {
+                    DEFAULT: "#111827", // Dark gray
+                    hover: "#1F2937", // Slightly lighter
+                },
             },
-            borderRadius: {
-                lg: 'var(--radius)',
-                md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)'
+            fontFamily: {
+                sans: ["var(--font-inter)", ...fontFamily.sans],
+                mono: ["var(--font-jetbrains-mono)", ...fontFamily.mono],
+                display: ["var(--font-cabinet-grotesk)", ...fontFamily.sans],
+            },
+            boxShadow: {
+                'glow': '0 0 20px rgba(16, 185, 129, 0.2)',
+                'glow-lg': '0 0 30px rgba(16, 185, 129, 0.3)',
+            },
+            keyframes: {
+                "accordion-down": {
+                    from: { height: 0 },
+                    to: { height: "var(--radix-accordion-content-height)" },
+                },
+                "accordion-up": {
+                    from: { height: "var(--radix-accordion-content-height)" },
+                    to: { height: 0 },
+                },
+                "pulse-glow": {
+                    "0%, 100%": { opacity: 0.4 },
+                    "50%": { opacity: 0.8 },
+                },
+                "scroll-x": {
+                    from: { transform: "translateX(0)" },
+                    to: { transform: "translateX(-100%)" },
+                },
             },
             animation: {
-                'spin-slow': 'spin 3s linear infinite',
-                'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                "accordion-down": "accordion-down 0.2s ease-out",
+                "accordion-up": "accordion-up 0.2s ease-out",
+                "pulse-glow": "pulse-glow 3s ease-in-out infinite",
+                "scroll-x": "scroll-x 20s linear infinite",
             },
-        }
+            backgroundImage: {
+                'grid-pattern': 'radial-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 1px)',
+                'gradient-noise': 'url("/images/noise.png")',
+            },
+            backgroundSize: {
+                'grid': '30px 30px',
+            },
+        },
     },
     plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+};
 
+export default config;

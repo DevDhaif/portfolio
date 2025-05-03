@@ -80,8 +80,8 @@ export function Stats() {
         },
         {
             label: "Hours of Code",
-            // value: codingHours,
-            value: "2000+",
+            value: codingHours,
+            // value: "2000+",
             icon: Code,
             gradient: "from-cyan-500 to-blue-500",
             description: "Clean, maintainable code",
@@ -128,7 +128,7 @@ export function Stats() {
     }
 
     return (
-        <section ref={ref} className="relative py-20 overflow-hidden">
+        <section ref={ref} className="relative py-20  overflow-hidden">
             <motion.div
                 className="container relative"
                 variants={containerVariants}
@@ -140,54 +140,31 @@ export function Stats() {
                         const Icon = stat.icon
                         return (
                             <motion.div
-                                key={stat.label}
-                                variants={itemVariants}
-                                className="group relative"
+                                key={index}
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.2, delay: index * 0.05 }}
+                                className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-xl py-6 px-4 text-center group hover:border-blue-500/30 transition-all duration-200"
                             >
-                                <div className="relative z-10 flex flex-col items-center p-6 backdrop-blur-sm rounded-xl border border-white/10 bg-white/5">
-                                    <div className={`
-                                        p-3 rounded-lg bg-gradient-to-br ${stat.gradient}
-                                        transform group-hover:scale-110 transition-transform duration-300
-                                    `}>
-                                        <Icon className="w-6 h-6 text-white" />
-                                    </div>
-
-                                    <motion.div
-                                        className="mt-4 text-4xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent"
-                                        initial={{ scale: 0.5 }}
-                                        animate={isInView ? { scale: 1 } : { scale: 0.5 }}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 200,
-                                            damping: 12,
-                                            delay: index * 0.1 + 0.2
-                                        }}
-                                    >
-                                        {stat.isLoading ? (
-                                            <span className="inline-block w-16 h-8 bg-white/10 rounded animate-pulse" />
-                                        ) : (
-                                            stat.value
-                                        )}
-                                    </motion.div>
-
-                                    <div className="mt-2 text-sm font-medium text-blue-100/80">
-                                        {stat.label}
-                                    </div>
-
-                                    <div className="mt-2 text-xs text-blue-100/60">
-                                        {stat.description}
-                                    </div>
-
-                                    <motion.div
-                                        className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-blue-500/50 to-cyan-500/50 opacity-0 group-hover:opacity-20 blur transition-all duration-300"
-                                        style={{ zIndex: -1 }}
-                                    />
+                                {/* Icon container */}
+                                <div className="p-3 rounded-lg bg-gray-800/80 text-blue-400 w-fit mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all duration-200">
+                                    <stat.icon className="h-6 w-6" />
+                                </div>
+                                {/* Stats value */}
+                                <div className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2 group-hover:from-blue-400 group-hover:to-blue-200 transition-all duration-200">
+                                    {stat.value}
                                 </div>
 
-                                <div className={`
-                                    absolute inset-0 rounded-xl bg-gradient-to-br ${stat.gradient}
-                                    opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-300
-                                `} />
+                                {/* Label */}
+                                <div className="text-base font-semibold text-white mb-1">
+                                    {stat.label}
+                                </div>
+
+                                {/* Description */}
+                                <div className="text-sm text-gray-400">
+                                    {stat.description}
+                                </div>
                             </motion.div>
                         )
                     })}

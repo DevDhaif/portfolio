@@ -39,7 +39,7 @@ export function Navbar() {
                         whileHover={{ scale: 1.02 }}
                         className="relative"
                     >
-                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-300 via-blue-100 to-white bg-clip-text text-transparent">
+                        <span className="text-3xl font-bold bg-gradient-to-r from-blue-300 via-blue-100 to-white bg-clip-text text-white">
                             DevDhaif
                         </span>
                         <div className="absolute -bottom-1 left-0 w-0 h-[3px] bg-gradient-to-r from-blue-400 via-blue-300 to-transparent group-hover:w-full transition-all duration-500 ease-out rounded-full" />

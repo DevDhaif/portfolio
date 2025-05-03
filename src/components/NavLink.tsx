@@ -18,7 +18,7 @@ function NavLink({ href, Icon, title }: NavLinkProps) {
     return (
         <Link
             href={href}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg 
+            className={`flex bg-red-600 items-center gap-3 px-4 py-3 rounded-lg 
                        transition-all duration-200 group
                        ${isActive
                     ? 'bg-blue-500/10 text-blue-500 border-r-2 border-blue-500'
@@ -28,7 +28,7 @@ function NavLink({ href, Icon, title }: NavLinkProps) {
             <Icon className={`w-5 h-5 transition-colors
                             ${isActive
                     ? 'text-blue-500'
-                    : 'text-gray-400 group-hover:text-white'
+                    : 'text-gray-400 '
                 }`}
             />
             <span className="font-medium">{title}</span>

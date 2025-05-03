@@ -4,8 +4,8 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { signOut } from '@/app/auth/actions'
 import { SessionProvider } from '@/components/SessionProvider'
 import { LogOut, User } from 'lucide-react'
-import { NavigationWrapper } from '@/components/NavigationWrapper'
 import { Suspense } from 'react'
+import Navigation from '@/components/Navigation'
 
 function LoadingState() {
     return (
@@ -59,7 +59,7 @@ export default async function AdminLayout({
                                     </div>
                                 </div>
                             </div>
-                            <NavigationWrapper />
+                            <Navigation />
                         </div>
 
                         {/* Main content */}
