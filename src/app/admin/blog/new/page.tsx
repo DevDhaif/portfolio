@@ -6,11 +6,20 @@ import { createClient } from '@/utils/supabase/client'
 import { Editor } from '@/components/Editor'
 import ImageUpload from '@/components/ImageUpload'
 import { createPost } from '../actions'
-
+import { TagSelector } from '@/components/TagSelector'
 export default function NewPostPage() {
     const [coverImage, setCoverImage] = useState<File[]>([])
     const [content, setContent] = useState({})
     const [editorImages, setEditorImages] = useState<Map<string, File>>(new Map())
+    const [selectedTags, setSelectedTags] = useState<string[]>([])
+
+    const handleTagsChange = (tags: string[]) => {
+        setSelectedTags(tags);
+        const tagsInput = document.getElementById('tags') as HTMLInputElement;
+        if (tagsInput) {
+            tagsInput.value = tags.join(', ');
+        }
+    };
 
 
     async function handleSubmit(formData: FormData) {
@@ -75,9 +84,11 @@ export default function NewPostPage() {
             submitFormData.set('description', formData.get('description') as string);
             submitFormData.set('content', JSON.stringify(processedContent));
             submitFormData.set('coverImage', coverImageUrl || '');
-            submitFormData.set('tags', JSON.stringify(
-                formData.get('tags')?.toString().split(',').map(t => t.trim()).filter(Boolean) || []
-            ));
+            // submitFormData.set('tags', JSON.stringify(
+            //     formData.get('tags')?.toString().split(',').map(t => t.trim()).filter(Boolean) || []
+            // ));
+
+            submitFormData.set('tags', JSON.stringify(selectedTags));
 
             const result = await createPost(submitFormData)
 
@@ -97,7 +108,7 @@ export default function NewPostPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto py-8 ">
+        <div className="max-w-4xl mx-auto py-8 text-white">
             <h1 className="text-2xl font-bold mb-6">Create New Post</h1>
 
             <form action={handleSubmit} className="space-y-6">
@@ -110,7 +121,7 @@ export default function NewPostPage() {
                         id="title"
                         name="title"
                         required
-                        className="mt-1 block w-full rounded-md border px-3 py-2"
+                        className="mt-1 text-gray-800 block w-full rounded-md border px-3 py-2"
                     />
                 </div>
 
@@ -123,7 +134,7 @@ export default function NewPostPage() {
                         name="description"
                         required
                         rows={3}
-                        className="mt-1 block w-full rounded-md border px-3 py-2"
+                        className="mt-1 text-gray-800 block w-full rounded-md border px-3 py-2"
                     />
                 </div>
 
@@ -151,21 +162,32 @@ export default function NewPostPage() {
                 </div>
 
                 <div>
-                    <label htmlFor="tags" className="block text-sm font-medium">
-                        Tags (comma-separated)
+                    <label className="block text-sm font-medium mb-2">
+                        Tags
                     </label>
-                    <input
-                        type="text"
-                        id="tags"
-                        name="tags"
-                        className="mt-1 block w-full rounded-md border px-3 py-2"
-                    />
+                    <div className="space-y-4">
+                        <TagSelector
+                            selectedTags={selectedTags}
+                            onChange={handleTagsChange}
+                        />
+
+                        {/* Display selected tags */}
+                        {selectedTags.length > 0 && (
+                            <div className="mt-2">
+                                <p className="text-sm text-text-secondary mb-1">Selected tags:</p>
+                                <p className="text-sm text-accent-primary">
+                                    {selectedTags.join(', ')}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
 
                 <div className="flex justify-end gap-4">
                     <button
                         type="submit"
-                        className="bg-primary text-white px-4 py-2 rounded"
+                        className="bg-text-primary font-bold px-4 py-2 rounded-md  text-background transition-colors"
                     >
                         Publish Post
                     </button>

@@ -147,7 +147,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             <EditorContent
                 onKeyDown={handleKeyDown}
                 editor={editor}
-                className="tiptap-editor tiptap-content"
+                className="tiptap-editor tiptap-content rounded-md !text-white border border-gray-300 p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
         </div>
     );

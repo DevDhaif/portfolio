@@ -8,6 +8,7 @@
     /* Base TipTap content styles */
     .tiptap-content {
         @apply max-w-none text-gray-200 leading-relaxed;
+        
 
         /* Headings */
         & h1 {
@@ -36,7 +37,7 @@
 
         /* Paragraphs and lists */
         & p {
-            @apply mb-6 leading-relaxed text-base;
+            @apply mb-6 leading-relaxed text-base text-gray-200;
             line-height: 1.8;
         }
 
