@@ -67,7 +67,9 @@
 
         /* Code blocks */
         & pre {
-            @apply bg-[#282c34] text-white p-5 rounded-lg my-8 overflow-x-auto border border-gray-800 relative;
+            direction: ltr;
+
+            @apply bg-[#282c34] text-white p-5 rounded-lg my-8 overflow-x-auto border border-gray-800 relative text-left;
             font-family: 'JetBrains Mono', monospace;
         }
 

@@ -11,12 +11,7 @@ import {
 } from '@/hooks/useEditorConfig';
 import { useTextDirection } from '@/hooks/useTextDirection';
 import { useTempFiles } from '@/hooks/useTempFiles';
-
-interface EditorProps {
-    content: string;
-    onChange: (content: any) => void;
-    onTempFileChange?: (tempFiles: Map<string, File>) => void;
-}
+import { EditorProps } from '@/types/editor';
 
 export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
     // Initialize hooks

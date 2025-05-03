@@ -33,7 +33,7 @@
         "@tiptap/extension-image": "^2.1.13",
         "@tiptap/extension-link": "^2.1.13",
         "@tiptap/pm": "^2.10.3",
-        "@tiptap/react": "^2.1.13",
+        "@tiptap/react": "^2.11.9",
         "@tiptap/starter-kit": "^2.1.13",
         "@types/highlight.js": "^9.12.4",
         "@types/js-cookie": "^3.0.6",
