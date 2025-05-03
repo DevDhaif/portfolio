@@ -7,3 +7,4 @@ Host: https://devdhaif.vercel.app
 
 # Sitemaps
 Sitemap: https://devdhaif.vercel.app/sitemap.xml
+Sitemap: https://devdhaif.vercel.app/server-sitemap.xml

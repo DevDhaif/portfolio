@@ -35,15 +35,19 @@ interface ProcessedPost {
     created_at: string;
     slug: string;
 }
-
+interface BlogPageProps {
+    params?: any;
+    searchParams: Promise<{ tag?: string; search?: string }>;
+}
 // Main page component with search params
 export default async function BlogPage({
     searchParams,
-}: {
-    searchParams: { tag?: string; search?: string };
-}) {
-    const tag = searchParams.tag || '';
-    const search = searchParams.search || '';
+}: BlogPageProps) {
+
+    const resolvedParams = await searchParams;
+
+    const tag = resolvedParams?.tag || '';
+    const search = resolvedParams?.search || '';
 
     return (
         <div className="min-h-screen bg-background py-16 md:py-24 relative overflow-hidden">
