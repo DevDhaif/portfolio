@@ -30,7 +30,7 @@ export const TextDirection = Extension.create({
     addGlobalAttributes() {
         return [
             {
-                types: ['paragraph', 'heading', 'bulletList', 'orderedList'],
+                types: ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'],
                 attributes: {
                     dir: {
                         default: null,
@@ -55,13 +55,60 @@ export const TextDirection = Extension.create({
             new Plugin({
                 key: new PluginKey(this.name),
                 update: (view: EditorView) => {
+                    // First pass: process paragraphs and headings
                     view.state.doc.descendants((node: ProseMirrorNode, pos: number) => {
-                        if (
-                            node.type.name === 'paragraph' ||
-                            node.type.name === 'heading'
-                        ) {
+                        if (node.type.name === 'paragraph' || node.type.name === 'heading') {
                             const content = node.textContent;
                             const shouldBeRTL = isRTL(content);
+                            const currentDir = node.attrs.dir;
+
+                            if ((shouldBeRTL && currentDir !== 'rtl') ||
+                                (!shouldBeRTL && currentDir !== 'ltr')) {
+                                view.dispatch(
+                                    view.state.tr.setNodeMarkup(pos, undefined, {
+                                        ...node.attrs,
+                                        dir: shouldBeRTL ? 'rtl' : 'ltr'
+                                    })
+                                );
+                            }
+                        }
+                        return true;
+                    });
+
+                    view.state.doc.descendants((node: ProseMirrorNode, pos: number) => {
+                        if (node.type.name === 'bulletList' || node.type.name === 'orderedList') {
+                            let allListText = '';
+                            node.descendants(child => {
+                                if (child.isText) {
+                                    allListText += child.text || '';
+                                }
+                                return true;
+                            });
+
+                            const shouldBeRTL = isRTL(allListText);
+                            const currentDir = node.attrs.dir;
+
+                            if ((shouldBeRTL && currentDir !== 'rtl') ||
+                                (!shouldBeRTL && currentDir !== 'ltr')) {
+                                view.dispatch(
+                                    view.state.tr.setNodeMarkup(pos, undefined, {
+                                        ...node.attrs,
+                                        dir: shouldBeRTL ? 'rtl' : 'ltr'
+                                    })
+                                );
+                            }
+                        }
+
+                        if (node.type.name === 'listItem') {
+                            let itemText = '';
+                            node.descendants(child => {
+                                if (child.isText) {
+                                    itemText += child.text || '';
+                                }
+                                return true;
+                            });
+
+                            const shouldBeRTL = isRTL(itemText);
                             const currentDir = node.attrs.dir;
 
                             if ((shouldBeRTL && currentDir !== 'rtl') ||
@@ -84,12 +131,12 @@ export const TextDirection = Extension.create({
     addCommands() {
         return {
             setTextDirection: (direction: 'rtl' | 'ltr') => ({ commands }) => {
-                return commands.updateAttributes('paragraph', {
-                    dir: direction,
-                })
+                const nodeTypes = ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'];
+                return nodeTypes.every(type => commands.updateAttributes(type, { dir: direction }));
             },
             unsetTextDirection: () => ({ commands }) => {
-                return commands.resetAttributes('paragraph', 'dir')
+                const nodeTypes = ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'];
+                return nodeTypes.every(type => commands.resetAttributes(type, 'dir'));
             },
         }
     },

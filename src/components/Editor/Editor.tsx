@@ -1,14 +1,10 @@
 // src/components/Editor/Editor.tsx
 import { useEditor, EditorContent } from '@tiptap/react';
-import 'highlight.js/styles/tokyo-night-dark.css';
+import 'highlight.js/styles/github-dark.css';
 import { useCallback } from 'react';
 import '../../styles/tiptap-styles.css';
 import { EditorToolbar } from './EditorToolbar';
-import {
-    createEditorLowlight,
-    useEditorExtensions,
-    useDetectLanguage
-} from '@/hooks/useEditorConfig';
+import { createEditorLowlight, useEditorExtensions, useDetectLanguage } from '@/hooks/useEditorConfig';
 import { useTextDirection } from '@/hooks/useTextDirection';
 import { useTempFiles } from '@/hooks/useTempFiles';
 import { EditorProps } from '@/types/editor';
@@ -20,7 +16,6 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
     const detectLanguage = useDetectLanguage(lowlight);
     const { tempFiles, addTempFile } = useTempFiles(onTempFileChange);
 
-    // Editor initialization
     const editor = useEditor({
         extensions,
         content,
@@ -60,10 +55,8 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         }
     });
 
-    // Apply text direction detection
     useTextDirection(editor);
 
-    // Code block insertion
     const insertCodeBlock = useCallback(() => {
         if (!editor) return;
 
@@ -85,7 +78,6 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             .run();
     }, [editor, detectLanguage]);
 
-    // Key event handler
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
         if (e.key === '`' && e.ctrlKey) {
             e.preventDefault();
@@ -104,7 +96,6 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
         }
     }, [editor, insertCodeBlock]);
 
-    // Image insertion
     const handleInsertImage = useCallback(() => {
         const input = document.createElement('input');
         input.type = 'file';
