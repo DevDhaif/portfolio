@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import ImageUpload from '@/components/ImageUpload'
 import { Project } from '@/lib/types'
-import { supabase } from '@/lib/supabase'
+
 import Link from 'next/link'
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
@@ -15,7 +15,7 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
     const [projectImages, setProjectImages] = useState<File[]>([])
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
-
+    const supabase = createClient();
     useEffect(() => {
         let mounted = true
 
