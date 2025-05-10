@@ -137,7 +137,7 @@ async function PostsGrid({ tag, search }: { tag: string; search: string }) {
                         <span className="font-medium text-accent-primary">{tag}</span>
                     </div>
                     <Link href="/blog">
-                        <Button variant="outline" size="sm">Clear Filter</Button>
+                        <Button variant="outline" className='text-accent-primary bg-accent-subtle hover:bg-accent-primary hover:text-background hover:border-accent-primary border-accent-subtle' size="sm">Clear Filter</Button>
                     </Link>
                 </div>
             )}
@@ -159,7 +159,7 @@ async function PostsGrid({ tag, search }: { tag: string; search: string }) {
                             <Link
                                 key={tag}
                                 href={`/blog?tag=${encodeURIComponent(tag)}`}
-                                className="inline-flex items-center rounded-full bg-card border border-border hover:border-accent-primary/30 px-3 py-1.5 text-sm transition-colors duration-200 hover:bg-accent-subtle"
+                                className="inline-flex items-center rounded-full bg-card border border-border hover:border-accent-primary/30 px-3 py-1.5 text-sm transition-colors duration-200 text-accent-primary hover:bg-accent-subtle"
                             >
                                 <Tag className="mr-1.5 h-3.5 w-3.5 text-accent-primary" />
                                 {tag}
@@ -301,7 +301,7 @@ async function SearchAndFilterBar({ currentTag, currentSearch }: { currentTag: s
                         name="search"
                         placeholder="Search articles..."
                         defaultValue={currentSearch}
-                        className="pl-10 bg-card/50 border-border focus:border-accent-primary/50"
+                        className="pl-10 bg-card/50 border-border focus:border-accent-primary/50 text-text-primary placeholder:text-text-secondary"
                     />
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary group-focus-within:text-accent-primary transition-colors" />
                     {currentSearch && (
