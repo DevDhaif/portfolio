@@ -13,7 +13,8 @@ import { Post } from '@/lib/schemas/blog'
 import { useAnalytics } from '@/hooks/useAnalytics'
 
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+    const { slug: encodedSlug } = use(params);
+    const slug = decodeURIComponent(encodedSlug);
     const { trackBlogPost, trackBlogInteraction } = useAnalytics()
     const [post, setPost] = useState<Post | null>(null)
     const [loading, setLoading] = useState(true)

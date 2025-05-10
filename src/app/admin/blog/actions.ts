@@ -5,6 +5,16 @@ import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { cookies } from 'next/headers'
 
+const generateSlug = (title: string) => {
+    const baseSlug = title.trim().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '')
+        .substring(0, 30);
+
+    const timestamp = Date.now().toString().slice(-6);
+
+    return `post-${timestamp}-${baseSlug}`;
+};
 export async function createPost(formData: FormData) {
     try {
         const supabase = await createClient()
@@ -12,7 +22,7 @@ export async function createPost(formData: FormData) {
         const content = JSON.parse(formData.get('content') as string)
         const tags = JSON.parse(formData.get('tags') as string)
 
-        const {  error: insertError } = await supabase
+        const { error: insertError } = await supabase
             .from('posts')
             .insert([{
                 title: formData.get('title'),
@@ -20,10 +30,8 @@ export async function createPost(formData: FormData) {
                 content,
                 cover_image: formData.get('coverImage'),
                 tags,
-                slug: formData.get('title')?.toString().toLowerCase()
-                    .replace(/\s+/g, '-')
-                    .replace(/[^\w\-]+/g, ''),
-                published: true
+                slug: generateSlug(formData.get('title')?.toString() || ''),
+                published: true,
             }])
             .select()
             .single()
