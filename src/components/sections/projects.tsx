@@ -48,7 +48,7 @@ export function  ProjectsSection() {
                 const { data: projects } = await supabase
                     .from('projects')
                     .select(`*, project_images (*)`)
-                    .order('updated_at', { ascending: false })
+                    .order('created_at', { ascending: true })
 
                 if (projects) {
                     const projectsWithUrls = projects.map(project => {
