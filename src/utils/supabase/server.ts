@@ -1,13 +1,8 @@
 
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
-
-interface CookieValue {
-    name: string
-    value: string
-    options?: CookieOptions
-}
+import { CookieValue } from '@/types'
 
 export function createClient() {
     const cookieStore = cookies()

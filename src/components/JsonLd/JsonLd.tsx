@@ -1,7 +1,5 @@
 // src/components/JsonLd/JsonLd.tsx
-export interface JsonLdProps {
-    schema: Record<string, any>;
-}
+import { JsonLdProps } from "@/types";
 
 export function JsonLd({ schema }: JsonLdProps) {
     return (

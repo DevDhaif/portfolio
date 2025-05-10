@@ -5,11 +5,9 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { Session } from '@supabase/supabase-js'
+import { SessionContextType } from '@/types'
 
-interface SessionContextType {
-    session: Session | null
-    loading: boolean
-}
+
 
 const SessionContext = createContext<SessionContextType>({ session: null, loading: true })
 

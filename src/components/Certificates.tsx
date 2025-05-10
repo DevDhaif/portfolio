@@ -4,7 +4,7 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState, useRef } from "react"
-import { Certificate } from "@/lib/types"
+import { Certificate } from "@/types"
 import { Award } from "lucide-react"
 import { Loading } from "@/components/loading"
 import { CertificateCard } from "./certificate-card"

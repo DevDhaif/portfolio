@@ -51,3 +51,21 @@ export interface BlogPageProps {
     params?: any;
     searchParams: Promise<{ tag?: string; search?: string }>;
 }
+export interface Certificate {
+    id: string;
+    title: string;
+    description?: string;
+    skills: string[];
+    credentialId?: string;
+    issueDate: string;
+    source: string;
+    sourceIcon?: string;
+    urlLink?: string;
+    certificateImageUrl?: string;
+    issue_date: Date,
+    createdAt: string;
+    updatedAt: string;
+}
+export interface CertificateCardProps extends Certificate {
+    index: number
+}

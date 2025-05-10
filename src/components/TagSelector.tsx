@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { TagSelectorProps } from "@/types";
 
 // Common tags for web development
 const PREDEFINED_TAGS = [
@@ -12,11 +12,6 @@ const PREDEFINED_TAGS = [
     "Redux", "State Management", "Authentication", "SEO", "Accessibility"
 ];
 
-interface TagSelectorProps {
-    selectedTags: string[];
-    onChange: (tags: string[]) => void;
-    className?: string;
-}
 
 export function TagSelector({ selectedTags, onChange, className }: TagSelectorProps) {
     // Toggle tag selection

@@ -1,12 +1,8 @@
 
 'use client'
 
+import { DeleteProjectButtonProps } from '@/types'
 import { useTransition } from 'react'
-
-interface DeleteProjectButtonProps {
-    projectId: string
-    onDelete: (id: string) => Promise<void>
-}
 
 export function DeleteProjectButton({ projectId, onDelete }: DeleteProjectButtonProps) {
     const [isPending, startTransition] = useTransition()

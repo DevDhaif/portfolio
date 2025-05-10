@@ -1,14 +1,8 @@
 
+import { ImageUploadProps } from '@/types'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { createClient } from '@/utils/supabase/client'
 
-interface ImageUploadProps {
-    value: File[]
-    onChange: (files: File[]) => void
-    maxFiles?: number
-    bucket: string
-}
 
 export default function ImageUpload({ value, onChange, maxFiles = 1, bucket }: ImageUploadProps) {
     const onDrop = useCallback((acceptedFiles: File[]) => {

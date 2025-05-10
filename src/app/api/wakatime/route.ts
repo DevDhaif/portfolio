@@ -1,19 +1,8 @@
+import { WakatimeResponse } from '@/types';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
-
-interface WakatimeResponse {
-    data: {
-        text: string;
-        total_seconds: number;
-        daily_average: number;
-        range: {
-            start: string;
-            end: string;
-        };
-    };
-}
 
 export async function GET() {
     try {

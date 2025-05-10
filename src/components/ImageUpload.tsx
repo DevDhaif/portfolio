@@ -1,18 +1,8 @@
 
 'use client'
 
-import Image from 'next/image'
-import { X } from 'lucide-react'
+import { ImageUploadProps } from "@/types"
 
-interface ImageUploadProps {
-    onChange: (files: File[]) => void
-    value: File[]
-    maxFiles?: number
-    bucket?: string
-    multiple?: boolean
-    currentImage?: string
-    currentImages?: string[]
-}
 export default function ImageUpload({
     onChange,
     value = [],

@@ -5,17 +5,7 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight, Download, ZoomIn, ZoomOut, X } from "lucide-react"
 import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-
-interface ImagePreviewDialogProps {
-    isOpen: boolean
-    onClose: () => void
-    imageUrl: string
-    altText?: string
-    onNext?: () => void
-    onPrevious?: () => void
-    hasNext?: boolean
-    hasPrevious?: boolean
-}
+import { ImagePreviewDialogProps } from "@/types"
 
 export function ImagePreviewDialog({
     isOpen,

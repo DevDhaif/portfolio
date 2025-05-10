@@ -22,6 +22,7 @@ import markdown from 'highlight.js/lib/languages/markdown'
 import { TextDirection } from '@/extensions/direction'
 import { useEffect, useRef } from 'react'
 import '../../styles/tiptap-styles.css';
+import { ContentRendererProps } from '@/types'
 const lowlight = createLowlight({
     javascript,
     typescript,
@@ -47,9 +48,6 @@ lowlight.registerAlias({
     markdown: ['md', 'mkd']
 })
 
-interface ContentRendererProps {
-    content: any;
-}
 
 const isRTL = (text: string | undefined | null): boolean => {
     if (!text) return false;

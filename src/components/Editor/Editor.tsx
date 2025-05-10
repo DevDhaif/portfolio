@@ -7,7 +7,8 @@ import { EditorToolbar } from './EditorToolbar';
 import { createEditorLowlight, useEditorExtensions, useDetectLanguage } from '@/hooks/useEditorConfig';
 import { useTextDirection } from '@/hooks/useTextDirection';
 import { useTempFiles } from '@/hooks/useTempFiles';
-import { EditorProps } from '@/types/editor';
+import { EditorProps } from '@/types';
+
 
 export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
     // Initialize hooks

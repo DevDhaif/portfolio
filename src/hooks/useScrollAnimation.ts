@@ -1,13 +1,6 @@
 // hooks/useScrollAnimation.ts
-import { useTransform, useScroll, type MotionValue } from "framer-motion"
-
-interface ScrollAnimationConfig {
-    yOffset?: string
-    opacityThreshold?: {
-        start: number
-        end: number
-    }
-}
+import { ScrollAnimationConfig } from "@/types"
+import { useTransform, useScroll } from "framer-motion"
 
 export function useScrollAnimation(config: ScrollAnimationConfig = {}) {
     const {

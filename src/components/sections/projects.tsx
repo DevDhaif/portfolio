@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import { createClient } from '@/utils/supabase/client'
 import Link from "next/link"
 import { Github, ExternalLink, Code, Server, Wrench } from "lucide-react"
-import { Project } from "@/lib/types"
+import { Project } from "@/types"
 import { ProjectsListJsonLd } from "../JsonLd/schemas"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { ProjectCard } from "@/components/ui/project-card"

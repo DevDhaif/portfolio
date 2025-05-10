@@ -4,17 +4,7 @@ import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
 import { Code, Users, Archive, Timer, Book } from "lucide-react"
-
-interface WakatimeResponse {
-    data: {
-        formatted_time: string;
-        total_seconds: number;
-    }
-}
-
-interface PostsResponse {
-    count: number;
-}
+import { PostsResponse, WakatimeResponse } from "@/types"
 
 export function Stats() {
     const ref = useRef(null)

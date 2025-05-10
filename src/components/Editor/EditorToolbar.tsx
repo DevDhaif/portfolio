@@ -1,27 +1,15 @@
-import { Editor } from '@tiptap/react';
 import { Button } from '@/components/ui/button';
 import { Bold, Italic, List, ListOrdered, Code, Link as LinkIcon, Image as ImageIcon, Heading1, Heading2, Quote, AlignLeft, AlignRight } from 'lucide-react';
 import { useState } from 'react';
-interface ToolbarButtonProps {
-    icon: React.ReactNode;
-    onClick: () => void;
-    isActive?: boolean;
-}
+import { CodeBlockWithLanguageProps, EditorToolbarProps, ToolbarButtonProps, ToolbarDividerProps } from '@/types';
+
 const ToolbarButton = ({ icon, onClick, isActive }: ToolbarButtonProps) => (
     <Button type="button" variant="ghost" size="sm" onClick={onClick} className={`editor-toolbar-button ${isActive ? 'is-active' : ''}`} > {icon} </Button>
 );
-interface ToolbarDividerProps {
-    className?: string;
-    style?: React.CSSProperties;
-    children?: React.ReactNode;
 
-}
 const ToolbarDivider = ({ }: ToolbarDividerProps) => (
     <div className="w-px h-6 bg-white/20" />
 );
-interface CodeBlockWithLanguageProps {
-    editor: Editor;
-}
 const CodeBlockWithLanguage = ({ editor }: CodeBlockWithLanguageProps) => {
     const [showLanguages, setShowLanguages] = useState(false);
     const languages = ['javascript', 'typescript', 'html', 'css', 'python', 'php', 'sql', 'bash', 'json', 'yaml', 'markdown'];
@@ -44,11 +32,7 @@ const CodeBlockWithLanguage = ({ editor }: CodeBlockWithLanguageProps) => {
         </div>
     );
 };
-interface EditorToolbarProps {
-    editor: Editor;
-    onInsertImage: () => void;
-    onInsertCodeBlock: () => void;
-}
+
 export const EditorToolbar = ({ editor, onInsertImage, onInsertCodeBlock }: EditorToolbarProps) => {
     if (!editor) return null;
 

@@ -2,14 +2,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import type { Certificate } from "@/lib/types"
 import Link from 'next/link'
 import Image from "next/image"
 import { ExternalLink, Calendar, Medal } from "lucide-react"
+import { CertificateCardProps } from "@/types"
 
-interface CertificateCardProps extends Certificate {
-    index: number
-}
+
 
 export function CertificateCard({
     title,

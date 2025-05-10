@@ -3,13 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-
-interface NavLinkProps {
-    href: string;
-    Icon: LucideIcon;
-    title: string;
-}
+import { NavLinkProps } from '@/types'
 
 function NavLink({ href, Icon, title }: NavLinkProps) {
     const pathname = usePathname()

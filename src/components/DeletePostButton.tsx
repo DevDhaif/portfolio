@@ -12,11 +12,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-
-interface DeletePostButtonProps {
-    postId: string
-    onDelete: (id: string) => Promise<void>
-}
+import { DeletePostButtonProps } from '@/types'
 
 export function DeletePostButton({ postId, onDelete }: DeletePostButtonProps) {
     const [isOpen, setIsOpen] = useState(false)
