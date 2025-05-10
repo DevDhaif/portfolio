@@ -8,7 +8,7 @@ import { ContentRenderer } from '@/components/blog/ContentReader'
 import { incrementViews, toggleLike } from '@/app/admin/blog/actions'
 import { EyeIcon, HeartIcon } from 'lucide-react'
 import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
-import { BlogPostJsonLd } from '@/components/JsonLd/JsonLd'
+import { BlogPostJsonLd } from '@/components/JsonLd/schemas'
 import { Post } from '@/lib/schemas/blog'
 import { useAnalytics } from '@/hooks/useAnalytics'
 

@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { ProjectJsonLd } from '@/components/JsonLd/ProjectJsonLd'
+import { ProjectJsonLd } from '@/components/JsonLd/schemas'
 import { ImagePreviewDialog } from '@/components/ImagePreviewDialog'
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {

@@ -10,7 +10,8 @@ import { Footer } from "@/components/layout/footer";
 import { Noise } from "@/components/ui/noise";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { Toaster } from "@/components/ui/toaster";
-
+import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
+import { JsonLd } from '@/components/JsonLd/JsonLd';
 const inter = Inter({
     subsets: ["latin"],
     variable: "--font-inter",
@@ -79,6 +80,16 @@ export const metadata: Metadata = {
         "مطور ويب في البيضاء",
     ],
 };
+export function generateMetadata() {
+    return {
+        other: {
+            'structured-data': [
+                JSON.stringify(WEBSITE_SCHEMA),
+                JSON.stringify(PERSON_SCHEMA)
+            ],
+        },
+    };
+}
 
 export default function RootLayout({
     children,

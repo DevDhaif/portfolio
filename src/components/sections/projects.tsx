@@ -6,7 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 import Link from "next/link"
 import { Github, ExternalLink, Code, Server, Wrench } from "lucide-react"
 import { Project } from "@/lib/types"
-import { ProjectsListJsonLd } from "@/components/JsonLd/ProjectsListJsonLd"
+import { ProjectsListJsonLd } from "../JsonLd/schemas"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { ProjectCard } from "@/components/ui/project-card"
 import { Button } from "@/components/ui/button"
@@ -24,7 +24,7 @@ const TECH_MAPPINGS = {
     "tailwindcss": ["Tailwind CSS", "Tailwindcss", "TailwindCSS"],
 }
 
-export function  ProjectsSection() {
+export function ProjectsSection() {
     const [projects, setProjects] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
     const [visibleProjects, setVisibleProjects] = useState(6)
