@@ -6,17 +6,7 @@ import Link from "next/link";
 import { Github, ExternalLink, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-interface ProjectCardProps {
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-    tags: string[];
-    githubUrl?: string;
-    liveUrl?: string;
-    index: number;
-}
+import { ProjectCardProps } from "@/types";
 
 export function ProjectCard({ id, title, description, image, tags, githubUrl, liveUrl, index }: ProjectCardProps) {
     const [imageLoaded, setImageLoaded] = useState(false);

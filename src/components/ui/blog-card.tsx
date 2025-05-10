@@ -6,23 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface BlogCardProps {
-    id: string;
-    title: string;
-    description: string;
-    date: string;
-    coverImage: string;
-    slug: string;
-    tags: string[];
-}
-
+import { BlogCardProps } from "@/types";
 export function BlogCard({
     id,
     title,
     description,
     date,
-    coverImage, 
+    coverImage,
     slug,
     tags,
 }: BlogCardProps) {
@@ -78,7 +68,7 @@ export function BlogCard({
                                     {tag}
                                 </span>
                             ))}
-                            
+
                         </div>
                     )}
                 </div>

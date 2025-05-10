@@ -2,14 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-interface SectionHeadingProps {
-    title: string;
-    subtitle?: string;
-    badge?: string;
-    alignment?: "left" | "center";
-    className?: string;
-}
+import { SectionHeadingProps } from "@/types";
 
 export function SectionHeading({
     title,

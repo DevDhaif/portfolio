@@ -3,18 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Terminal as TerminalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface TerminalProps {
-    commands: string[];
-    typingSpeed?: number;
-    delayBetweenCommands?: number;
-    className?: string;
-    prompt?: string;
-    title?: string;
-    showTitle?: boolean;
-    height?: string;
-    stopAfterCycle?: boolean;
-}
+import { TerminalProps } from "@/types";
 
 export function Terminal({
     commands,

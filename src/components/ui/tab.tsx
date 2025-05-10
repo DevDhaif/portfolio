@@ -2,11 +2,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-interface TabProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    active?: boolean;
-    children: React.ReactNode;
-}
+import { TabProps } from "@/types";
 
 export function Tab({ active, children, className, ...props }: TabProps) {
     return (

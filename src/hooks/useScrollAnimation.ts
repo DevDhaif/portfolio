@@ -2,10 +2,10 @@
 import { useTransform, useScroll, type MotionValue } from "framer-motion"
 
 interface ScrollAnimationConfig {
-    yOffset?: string // How far the element should move (e.g., "20%")
+    yOffset?: string
     opacityThreshold?: {
-        start: number // When to start fading in (0-1)
-        end: number   // When to start fading out (0-1)
+        start: number
+        end: number
     }
 }
 

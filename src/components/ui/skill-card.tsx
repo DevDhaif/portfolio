@@ -3,12 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-
-interface SkillCardProps {
-    name: string;
-    icon: string;
-    category?: string;
-}
+import { SkillCardProps } from "@/types";
 
 export function SkillCard({ name, icon, category }: SkillCardProps) {
     // Define category colors
@@ -20,7 +15,7 @@ export function SkillCard({ name, icon, category }: SkillCardProps) {
 
     const categoryColor = category ? categoryColors[category as keyof typeof categoryColors] : "";
 
-    return ( 
+    return (
         <motion.div
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
