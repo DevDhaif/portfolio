@@ -10,6 +10,7 @@ import { Textarea } from "../ui/textarea";
 import { Send, Mail, Phone, MapPin, Loader2, Check, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { submitContactForm } from "@/app/actions/contact";
 
 export function ContactSection() {
     const containerRef = useRef<HTMLElement>(null);
@@ -42,39 +43,77 @@ export function ContactSection() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!formData.name.trim()) {
+            toast({
+                title: "Name is required",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            toast({
+                title: "Valid email is required",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        if (!formData.subject.trim()) {
+            toast({
+                title: "Subject is required",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        if (!formData.message.trim()) {
+            toast({
+                title: "Message is required",
+                variant: "destructive",
+            });
+            return;
+        }
+
         setIsSubmitting(true);
         setFormStatus(null);
 
         try {
-            // Simulate form submission - replace with actual API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
+            const result = await submitContactForm(formData);
+            console.log('Resend API key:', process.env.RESEND_API_KEY)
 
-            // Set success state
-            setFormStatus("success");
+            if (result.success) {
+                setFormStatus("success");
 
-            // Show success toast
-            toast({
-                title: "Message sent!",
-                description: "I'll get back to you as soon as possible.",
-                variant: "default",
-            });
-
-            // Reset form after 1.5s
-            setTimeout(() => {
-                setFormData({
-                    name: "",
-                    email: "",
-                    subject: "",
-                    message: "",
+                toast({
+                    title: "Message sent!",
+                    description: "I'll get back to you as soon as possible.",
+                    variant: "default",
                 });
-                setFormStatus(null);
-            }, 1500);
 
+                setTimeout(() => {
+                    setFormData({
+                        name: "",
+                        email: "",
+                        subject: "",
+                        message: "",
+                    });
+                    setFormStatus(null);
+                }, 1500);
+            } else {
+                setFormStatus("error");
+
+                toast({
+                    title: "Message failed to send",
+                    description: result.error || "Please try again or contact me directly via email.",
+                    variant: "destructive",
+                });
+            }
         } catch (error) {
-            // Set error state
             setFormStatus("error");
             console.error("Error sending message:", error);
-            // Show error toast
+
             toast({
                 title: "Message failed to send",
                 description: "Please try again or contact me directly via email.",
@@ -84,6 +123,7 @@ export function ContactSection() {
             setIsSubmitting(false);
         }
     };
+
 
     const contactInfo = [
         {
@@ -116,9 +156,9 @@ export function ContactSection() {
             className="py-24 md:py-32 relative overflow-hidden bg-background"
         >
             {/* Background elements */}
-            {/* <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-5 pointer-events-none" />
+            <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-5 pointer-events-none" />
             <div className="absolute top-1/2 -translate-y-1/2 -left-64 w-96 h-96 bg-accent-primary/20 rounded-full blur-3xl opacity-20" />
-            <div className="absolute top-3/4 -translate-y-1/2 -right-64 w-96 h-96 bg-accent-tertiary/20 rounded-full blur-3xl opacity-20" /> */}
+            <div className="absolute top-3/4 -translate-y-1/2 -right-64 w-96 h-96 bg-accent-tertiary/20 rounded-full blur-3xl opacity-20" />
 
             <motion.div
                 style={{ opacity, y }}
@@ -210,11 +250,6 @@ export function ContactSection() {
                                 </span>
                             </motion.div>
 
-                            {/* Response time */}
-                            <div className="text-text-secondary text-sm flex items-center gap-2">
-                                <Clock className="h-4 w-4 text-accent-secondary" />
-                                <span>Average response time: <span className="font-medium">24 hours</span></span>
-                            </div>
                         </div>
                     </motion.div>
 
@@ -268,7 +303,7 @@ export function ContactSection() {
                                             required
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className="border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
+                                            className="text-accent-primary border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -281,7 +316,7 @@ export function ContactSection() {
                                             required
                                             value={formData.email}
                                             onChange={handleChange}
-                                            className="border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
+                                            className="text-accent-primary border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
                                         />
                                     </div>
                                 </div>
@@ -295,7 +330,7 @@ export function ContactSection() {
                                         required
                                         value={formData.subject}
                                         onChange={handleChange}
-                                        className="border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
+                                        className="text-accent-primary border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50"
                                     />
                                 </div>
 
@@ -309,7 +344,7 @@ export function ContactSection() {
                                         required
                                         value={formData.message}
                                         onChange={handleChange}
-                                        className="border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50 resize-none"
+                                        className="text-accent-primary border-border bg-background/50 focus:border-accent-primary/50 focus:ring-1 focus:ring-accent-primary/50 resize-none"
                                     />
                                 </div>
 
@@ -339,7 +374,6 @@ export function ContactSection() {
     );
 }
 
-// Missing Clock component from the code above
 function Clock(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
