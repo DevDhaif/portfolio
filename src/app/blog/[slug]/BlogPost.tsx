@@ -128,10 +128,14 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
         )
     }
 
+    const formattedContent = typeof post.content === 'string'
+        ? JSON.parse(post.content)
+        : post.content;
+
     return (
-        <div className=" py-10 mx-auto text-white">
+        <div className="py-10 mx-auto text-white">
             <BlogPostJsonLd post={post} />
-            <div className="space-y-8 max-w-4xl p-8 mx-auto  bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl">
+            <div className="space-y-8 max-w-4xl p-8 mx-auto bg-gradient-to-b from-[#000020]/5 to-[#000040]/5 backdrop-blur-xl">
                 <div className="flex items-center justify-between">
                     <h1 className="text-4xl font-bold">{post?.title}</h1>
                     <div className="flex items-center gap-4">
@@ -163,7 +167,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
 
                 {/* Content */}
                 <div className="prose prose-lg dark:prose-invert mx-auto">
-                    <ContentRenderer content={post.content} />
+                    <ContentRenderer content={formattedContent} />
                 </div>
             </div>
         </div>

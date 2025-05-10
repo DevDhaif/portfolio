@@ -84,22 +84,10 @@ export function AboutSection() {
 
                         {/* Social Links */}
                         <div className="flex items-center justify-center gap-6 pt-2">
-                            <Link
-                                href="https://github.com/devdhaif"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-400 hover:text-white transition-colors p-2"
-                                aria-label="GitHub"
-                            >
+                            <Link href="https://github.com/devdhaif" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2" aria-label="GitHub">
                                 <Github className="h-6 w-6" />
                             </Link>
-                            <Link
-                                href="https://linkedin.com/in/devdhaif"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-400 hover:text-white transition-colors p-2"
-                                aria-label="LinkedIn"
-                            >
+                            <Link href="https://linkedin.com/in/devdhaif" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2" aria-label="LinkedIn">
                                 <Linkedin className="h-6 w-6" />
                             </Link>
                         </div>
@@ -107,13 +95,7 @@ export function AboutSection() {
 
 
                     {/* Right column - About text */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.2, delay: 0.1 }}
-                        className="space-y-6"
-                    >
+                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.2, delay: 0.1 }} className="space-y-6">
                         <h2 className="text-4xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                             Crafting exceptional front-end experiences
                         </h2>
@@ -138,38 +120,17 @@ export function AboutSection() {
                     </motion.div>
                 </div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.2 }}
-                    className="relative z-10"
-                >
-                    <motion.h3
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.2 }}
-                        className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent"
-                    >
+                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.2 }} className="relative z-10">
+                    <motion.h3 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.2 }} className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                         My Services
                     </motion.h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {services.map((service, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 10 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.2, delay: index * 0.05 }}
-                                whileHover={{ y: -5 }}
-                                className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-200 group shadow-md hover:shadow-blue-900/10"
-                            >
+                            <motion.div key={index} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                                transition={{ duration: 0.2, delay: index * 0.05 }} whileHover={{ y: -5 }} className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-200 group shadow-md hover:shadow-blue-900/10">
                                 {/* Icon container */}
-                                <div className="p-3 rounded-lg bg-gray-800/80 text-blue-400 w-fit mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all duration-200">
-                                    {service.icon}
-                                </div>
+                                <div className="p-3 rounded-lg bg-gray-800/80 text-blue-400 w-fit mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all duration-200">{service.icon}</div>
 
                                 {/* Title */}
                                 <h4 className="text-xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors duration-200">

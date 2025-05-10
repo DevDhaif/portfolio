@@ -51,6 +51,11 @@ lowlight.registerAlias({
 
 export function ContentRenderer({ content }: ContentRendererProps) {
     const editorRef = useRef<HTMLDivElement>(null);
+
+    const parsedContent = typeof content === 'string'
+        ? JSON.parse(content)
+        : content;
+
     const addCopyButtons = () => {
         if (!editorRef.current) return;
 
@@ -152,17 +157,19 @@ export function ContentRenderer({ content }: ContentRendererProps) {
         editable: false,
     })
     useEffect(() => {
+        if (editor && parsedContent) {
+            console.log('Setting editor content:', parsedContent);
+            editor.commands.setContent(parsedContent);
+
+            setTimeout(addCopyButtons, 200);
+        }
+    }, [editor, parsedContent]);
+    useEffect(() => {
         if (editor) {
             const timeoutId = setTimeout(addCopyButtons, 100)
             return () => clearTimeout(timeoutId)
         }
     }, [editor])
-
-    useEffect(() => {
-        const timeoutId = setTimeout(addCopyButtons, 100)
-        return () => clearTimeout(timeoutId)
-    }, [content])
-
 
     if (!editor) {
         return null

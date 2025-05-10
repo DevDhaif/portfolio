@@ -22,12 +22,7 @@ export function HeroSection() {
             <div className="container mx-auto max-w-6xl z-10 relative">
                 <div className="flex flex-col items-center text-center space-y-10">
                     {/* Available badge */}
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="inline-block rounded-full px-4 py-1.5 border border-green-500/20 bg-green-500/5"
-                    >
+                    <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-block rounded-full px-4 py-1.5 border border-green-500/20 bg-green-500/5">
                         <span className="text-sm font-medium text-green-300 flex items-center">
                             <span className="h-2 w-2 rounded-full bg-green-400 mr-2 animate-pulse"></span>
                             Available for Freelance Work
@@ -37,12 +32,7 @@ export function HeroSection() {
                     {/* Main content */}
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-4 text-center">
                         {/* Left column - Text */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="flex flex-col items-center md:items-start text-center md:text-left"
-                        >
+                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="flex flex-col items-center md:items-start text-center md:text-left">
                             <h2 className="text-4xl md:text-5xl font-bold text-white">
                                 <span className="block mb-3">Hi, I&apos;m Dhaifallah</span>
                             </h2>
@@ -60,26 +50,14 @@ export function HeroSection() {
                         </motion.div>
 
                         {/* Right column - Terminal */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            className="flex justify-center md:justify-end"
-                        >
+                        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="flex justify-center md:justify-end">
                             <div className="w-full md:w-[500px] relative">
                                 <motion.div
                                     whileHover={{ y: 5, scale: 1.05, rotate: 1, x: 5, zIndex: 20, transition: { type: "spring", stiffness: 200, damping: 20 } }}
                                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
                                     className="w-full relative z-10"
                                 >
-                                    <Terminal
-                                        commands={terminalCommands}
-                                        typingSpeed={50}
-                                        delayBetweenCommands={1000}
-                                        title="frontend_dev.sh"
-                                        className="shadow-lg text-left border border-gray-800 shadow-cyan-500/20"
-                                        height="h-64"
-                                    />
+                                    <Terminal commands={terminalCommands} typingSpeed={50} delayBetweenCommands={1000} title="frontend_dev.sh" className="shadow-lg text-left border border-gray-800 shadow-cyan-500/20" height="h-64" />
                                 </motion.div>
 
                                 {/* Glow effect */}
