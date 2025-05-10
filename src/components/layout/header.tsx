@@ -112,6 +112,9 @@ export function Header() {
     }, [isOpen]);
 
     const isActive = (href: string, exact = false) => {
+        if (exact && pathname === href) return true;
+        if (exact && pathname.startsWith(href)) return false;
+
         if (href === '/blog' && pathname === '/blog') return true;
 
         if (href === '/blog' && pathname.startsWith('/blog/')) return false;
@@ -154,7 +157,7 @@ export function Header() {
                                 <span className="bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-tertiary bg-clip-text text-transparent bg-size-200 bg-pos-0 group-hover:bg-pos-100 transition-all duration-700">
                                     DevDhaif
                                 </span>
-                               
+
                             </span>
                         </motion.div>
                     </Link>
@@ -379,7 +382,7 @@ export function Header() {
                                                 { name: 'GitHub', icon: 'G' },
                                                 { name: 'LinkedIn', icon: 'L' },
                                                 { name: 'Twitter', icon: 'T' }
-                                            ].map((social, idx) => (
+                                            ].map((social) => (
                                                 <motion.a
                                                     key={social.name}
                                                     href="#"

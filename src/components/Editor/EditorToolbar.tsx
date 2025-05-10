@@ -33,7 +33,7 @@ const CodeBlockWithLanguage = ({ editor }: CodeBlockWithLanguageProps) => {
     );
 };
 
-export const EditorToolbar = ({ editor, onInsertImage, onInsertCodeBlock }: EditorToolbarProps) => {
+export const EditorToolbar = ({ editor, onInsertImage }: EditorToolbarProps) => {
     if (!editor) return null;
 
     return (

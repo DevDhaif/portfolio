@@ -1,7 +1,6 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { CVButton } from "../home/cv-button"
 import { useState } from "react"
 import { X, Menu, ExternalLink } from "lucide-react"

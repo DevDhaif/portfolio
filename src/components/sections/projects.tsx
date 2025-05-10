@@ -11,7 +11,6 @@ import { SectionHeading } from "@/components/ui/section-heading"
 import { ProjectCard } from "@/components/ui/project-card"
 import { Button } from "@/components/ui/button"
 import { Loading } from "@/components/loading"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 // Animation configurations
 const SPRING_CONFIG = { stiffness: 100, damping: 15, mass: 0.5 }
@@ -127,15 +126,6 @@ export function ProjectsSection() {
         visible: {
             opacity: 1,
             transition: { staggerChildren: 0.05, delayChildren: 0, duration: 0.1 }
-        }
-    }
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { type: "spring", stiffness: 100, damping: 15, mass: 0.8, duration: 0.1 }
         }
     }
 

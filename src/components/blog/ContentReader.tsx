@@ -49,135 +49,7 @@ lowlight.registerAlias({
 })
 
 
-const isRTL = (text: string | undefined | null): boolean => {
-    if (!text) return false;
-    const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
-    return rtlRegex.test(text.trim());
-}
-
 export function ContentRenderer({ content }: ContentRendererProps) {
-    const processContent = (node: any): any => {
-        if (!node) return node;
-
-        if (node.type === 'paragraph' &&
-            (!node.content || node.content.length === 0)) {
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    dir: 'ltr',
-                    class: 'min-h-[1em]'
-                }
-            };
-        }
-
-        if ((node.type === 'paragraph' || node.type === 'heading') &&
-            node.content && node.content.length > 0) {
-            const textContent = node.content
-                .filter((child: any) => child.type === 'text')
-                .map((child: any) => child.text || '')
-                .join(' ');
-
-            if (textContent.trim()) {
-                const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
-                const hasRTL = rtlRegex.test(textContent);
-                const startsWithLatin = /^[A-Za-z]/.test(textContent.trim());
-
-                return {
-                    ...node,
-                    attrs: {
-                        ...node.attrs,
-                        dir: hasRTL && !startsWithLatin ? 'rtl' : 'ltr',
-                        class: hasRTL && !startsWithLatin ? 'text-right' : 'text-left'
-                    }
-                };
-            }
-        }
-
-        if (node.type === 'listItem' && node.content) {
-            const textContent = node.content
-                ?.flatMap((p: any) =>
-                    p.content?.map((c: any) => c.text || '').filter(Boolean) || []
-                )
-                .join(' ');
-
-            if (textContent.trim()) {
-                const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
-                const hasRTL = rtlRegex.test(textContent);
-                const startsWithRTL = rtlRegex.test(textContent.trim()[0]);
-
-                return {
-                    ...node,
-                    attrs: {
-                        ...node.attrs,
-                        dir: hasRTL && startsWithRTL ? 'rtl' : 'ltr',
-                        class: hasRTL && startsWithRTL ? 'text-right' : 'text-left'
-                    },
-                    content: node.content?.map(processContent)
-                };
-            }
-        }
-
-        if ((node.type === 'bulletList' || node.type === 'orderedList') && node.content) {
-            const allTextContent = node.content
-                ?.flatMap((listItem: any) =>
-                    listItem.content?.flatMap((p: any) =>
-                        p.content?.map((c: any) => c.text || '').filter(Boolean) || []
-                    ) || []
-                )
-                .join(' ');
-
-            const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
-            const hasRTL = rtlRegex.test(allTextContent);
-            const startsWithRTL = rtlRegex.test(allTextContent.trim()[0]);
-
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    dir: hasRTL && startsWithRTL ? 'rtl' : 'ltr',
-                    class: hasRTL && startsWithRTL ? 'text-right' : 'text-left'
-                },
-                content: node.content.map(processContent)
-            };
-        }
-
-        if (node.type === 'codeBlock') {
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    dir: 'ltr',
-                    class: 'text-left',
-                    language: node.attrs?.language || 'javascript'
-                }
-            };
-        }
-
-        if (node.type === 'image' && node.attrs.src && !node.attrs.src.startsWith('http')) {
-            const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/blog-content/${node.attrs.src}`;
-
-            return {
-                ...node,
-                attrs: {
-                    ...node.attrs,
-                    src: imageUrl
-                }
-            };
-        }
-
-        if (node.content) {
-            return {
-                ...node,
-                content: node.content.map(processContent)
-            };
-        }
-
-        return node;
-    };
-
-    const processedContent = processContent(content)
-
     const editorRef = useRef<HTMLDivElement>(null);
     const addCopyButtons = () => {
         if (!editorRef.current) return;
@@ -277,7 +149,6 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                 }
             }),
         ],
-        content: processContent(content),
         editable: false,
     })
     useEffect(() => {

@@ -7,6 +7,7 @@ import ImageUpload from '@/components/ImageUpload'
 import { Project } from '@/types';
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function EditProjectPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
@@ -227,11 +228,12 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                         Current Main Image
                     </label>
                     {project.mainImage && (
-                        <img
+                        <Image
                             src={supabase.storage
                                 .from('projects-images')
                                 .getPublicUrl(project.mainImage).data.publicUrl}
                             alt={project.name}
+                            fill
                             className="w-48 h-32 object-cover rounded mt-2"
                         />
                     )}
@@ -253,13 +255,14 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                         Current Project Images
                     </label>
                     <div className="flex gap-2 mt-2">
-                        {project.images?.map((image, index) => (
-                            <img
+                        {project.images?.map((image) => (
+                            <Image
                                 key={image.id}
                                 src={supabase.storage
                                     .from('projects-images')
                                     .getPublicUrl(image.url).data.publicUrl}
                                 alt={image.alt}
+                                fill
                                 className="w-24 h-24 object-cover rounded"
                             />
                         ))}

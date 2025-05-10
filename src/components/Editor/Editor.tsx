@@ -106,8 +106,6 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
             if (!file || !editor) return;
 
             const tempUrl = URL.createObjectURL(file);
-            const filename = `content-${Date.now()}-${file.name}`;
-
             addTempFile(tempUrl, file);
 
             editor.chain().focus().insertContent({

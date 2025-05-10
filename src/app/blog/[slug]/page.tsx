@@ -1,4 +1,3 @@
-import { use } from 'react'
 import { generateMetadata } from './generateMetadata'
 import BlogPost from './BlogPost'
 

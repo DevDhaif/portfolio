@@ -1,8 +1,6 @@
-// app/admin/certificates/error.tsx
 'use client'
 
 export default function Error({
-    error,
     reset,
 }: {
     error: Error

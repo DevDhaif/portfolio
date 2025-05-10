@@ -1,7 +1,5 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
-import localFont from "next/font/local";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cn } from "@/lib/utils";
@@ -11,7 +9,6 @@ import { Noise } from "@/components/ui/noise";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { Toaster } from "@/components/ui/toaster";
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
-import { JsonLd } from '@/components/JsonLd/JsonLd';
 const inter = Inter({
     subsets: ["latin"],
     variable: "--font-inter",

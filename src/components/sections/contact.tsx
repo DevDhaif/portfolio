@@ -73,7 +73,7 @@ export function ContactSection() {
         } catch (error) {
             // Set error state
             setFormStatus("error");
-
+            console.error("Error sending message:", error);
             // Show error toast
             toast({
                 title: "Message failed to send",

@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 
-export default function ImageUpload({ value, onChange, maxFiles = 1, bucket }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, maxFiles = 1 }: ImageUploadProps) {
     const onDrop = useCallback((acceptedFiles: File[]) => {
         onChange(acceptedFiles)
     }, [onChange])

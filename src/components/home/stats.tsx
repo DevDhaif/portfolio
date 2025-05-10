@@ -104,19 +104,6 @@ export function Stats() {
         }
     }
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 10
-            }
-        }
-    }
-
     return (
         <section ref={ref} className="relative py-20  overflow-hidden">
             <motion.div
@@ -127,7 +114,6 @@ export function Stats() {
             >
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
                     {stats.map((stat, index) => {
-                        const Icon = stat.icon
                         return (
                             <motion.div
                                 key={index}

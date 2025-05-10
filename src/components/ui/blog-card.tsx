@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BlogCardProps } from "@/types";
 export function BlogCard({
-    id,
     title,
     description,
     date,

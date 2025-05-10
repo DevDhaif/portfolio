@@ -16,9 +16,6 @@ export default function NewCertificatePage() {
             const supabase = createClient()
             // ignore ts error
             // @ts-ignore
-            let sourceIconUrl = null;
-            let certificateImageUrl = null;
-
 
             if (sourceIcon.length > 0) {
                 const fileName = `${Date.now()}-${sourceIcon[0].name}`
@@ -32,7 +29,6 @@ export default function NewCertificatePage() {
                     .from('certificates-icons')
                     .getPublicUrl(fileName)
 
-                sourceIconUrl = publicUrl
                 formData.set('sourceIcon', publicUrl)
             }
 
@@ -49,7 +45,6 @@ export default function NewCertificatePage() {
                     .from('certificates-images')
                     .getPublicUrl(fileName)
 
-                certificateImageUrl = publicUrl
                 formData.set('certificateImage', publicUrl)
             }
 

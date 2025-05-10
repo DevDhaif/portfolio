@@ -69,7 +69,7 @@ export default function EditCertificatePage({ params }: { params: Promise<{ id: 
         return () => {
             mounted = false;
         };
-    }, [id]);
+    }, [id, supabase]);
 
     async function handleSubmit(formData: FormData) {
         try {

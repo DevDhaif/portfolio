@@ -1,5 +1,3 @@
-
-import Image from '@tiptap/extension-image'
 import { Node } from '@tiptap/core'
 
 export const ImageUpload = Node.create({
