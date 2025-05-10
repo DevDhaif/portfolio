@@ -1,6 +1,6 @@
 // src/components/JsonLd/schemas.tsx
 import { JsonLd } from './JsonLd';
-import { Project, Post } from '@/lib/types';
+import { Project, Post } from '@/types';
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
 
 // Website schema

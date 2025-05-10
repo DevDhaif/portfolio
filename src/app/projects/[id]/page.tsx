@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use, useMemo } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import { Project } from '@/lib/types'
+import { Project } from '@/types'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'

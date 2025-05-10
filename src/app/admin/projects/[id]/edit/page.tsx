@@ -4,7 +4,7 @@ import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import ImageUpload from '@/components/ImageUpload'
-import { Project } from '@/lib/types'
+import { Project } from '@/types';
 
 import Link from 'next/link'
 

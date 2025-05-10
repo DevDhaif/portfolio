@@ -8,16 +8,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { createClient } from '@/utils/supabase/client';
+import { Post } from "@/types";
 
-interface Post {
-    id: string;
-    title: string;
-    description: string;
-    cover_image: string;
-    slug: string;
-    created_at: string;
-    tags: string[];
-}
+
 
 export function BlogSection() {
     const containerRef = useRef<HTMLElement>(null);

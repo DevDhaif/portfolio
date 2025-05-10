@@ -6,39 +6,9 @@ import { Search, Tag, Calendar, Loader2 } from 'lucide-react'
 import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { BlogPageProps, Post, ProcessedPost } from '@/types'
 
-// Types
-interface Post {
-    id: string;
-    title: string;
-    description: string;
-    content: {
-        type: string;
-        content: any[];
-    };
-    cover_image: string;
-    tags: string[] | string;
-    created_at: string;
-    slug: string;
-}
 
-interface ProcessedPost {
-    id: string;
-    title: string;
-    description: string;
-    content: {
-        type: string;
-        content: any[];
-    };
-    cover_image: string;
-    tags: string[];
-    created_at: string;
-    slug: string;
-}
-interface BlogPageProps {
-    params?: any;
-    searchParams: Promise<{ tag?: string; search?: string }>;
-}
 // Main page component with search params
 export default async function BlogPage({
     searchParams,
@@ -124,7 +94,7 @@ async function PostsGrid({ tag, search }: { tag: string; search: string }) {
                 processedTags = Array.isArray(parsedTags) ? parsedTags : [parsedTags];
             } catch {
                 processedTags = post.tags
-                    .replace(/[\[\]"]/g, '')
+                String(post.tags).replace(/[\[\]"]/g, '')
                     .split(',')
                     .map(tag => tag.trim());
             }
@@ -298,7 +268,7 @@ async function SearchAndFilterBar({ currentTag, currentSearch }: { currentTag: s
     const allTags = new Set<string>();
 
     if (posts) {
-        posts.forEach((post: { tags: string[] | string }) => {
+        posts.forEach((post: { tags: string | string[] }) => {
             let tags: string[] = [];
 
             if (typeof post.tags === 'string') {

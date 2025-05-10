@@ -9,7 +9,7 @@ import { incrementViews, toggleLike } from '@/app/admin/blog/actions'
 import { EyeIcon, HeartIcon } from 'lucide-react'
 import { hasLikedPost, hasViewedPost, markPostAsLiked, markPostAsViewed } from '@/utils/cookies'
 import { BlogPostJsonLd } from '@/components/JsonLd/schemas'
-import { Post } from '@/lib/schemas/blog'
+import { Post } from '@/types'
 import { useAnalytics } from '@/hooks/useAnalytics'
 
 export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {

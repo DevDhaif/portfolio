@@ -1,20 +1,7 @@
+import { Post } from "@/types";
 import { EyeIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
-interface Post {
-    id: string;
-    title: string;
-    description: string;
-    content: {
-        type: string;
-        content: any[];
-    };
-    cover_image: string;
-    tags: string[];
-    created_at: string;
-    slug: string;
-    views_count: number,
-    likes_count: number
-}
+
 
 export function BlogCard({ post }: { post: Post }) {
     return (
