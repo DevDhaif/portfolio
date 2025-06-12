@@ -40,7 +40,6 @@ export async function submitContactForm(data: ContactFormData) {
             console.error('Error saving contact form:', error)
             return { success: false, error: 'Failed to submit contact form' }
         }
-
         try {
             const emailResult = await resend.emails.send({
                 from: 'Acme <onboarding@resend.dev>',
