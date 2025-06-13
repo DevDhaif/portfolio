@@ -6,7 +6,6 @@ import { SkillsSection } from "@/components/sections/skills";
 import { BlogSection } from "@/components/sections/blog";
 import { ContactSection } from "@/components/sections/contact";
 import { Experience } from "@/components/home/experience";
-import { Stats } from "@/components/home/stats";
 import { Certificates } from "@/components/Certificates";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function HomePage() {
     return (
         <>
             <HeroSection />
-            <Stats />
             <AboutSection />
             <ProjectsSection />
             <SkillsSection />

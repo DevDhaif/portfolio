@@ -103,6 +103,7 @@ export function BlogSection() {
                                         coverImage={post.cover_image}
                                         slug={post.slug}
                                         tags={post.tags || []}
+                                        created_at={post.created_at}
                                     />
                                 </motion.div>
                             ))}

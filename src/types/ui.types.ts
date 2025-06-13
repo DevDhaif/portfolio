@@ -16,6 +16,7 @@ export interface BlogCardProps {
     coverImage: string;
     slug: string;
     tags: string[];
+    created_at: string;
 }
 
 export interface ButtonProps

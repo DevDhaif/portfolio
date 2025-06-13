@@ -1,82 +1,118 @@
+
 "use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Info } from "lucide-react";
+import { Github, ExternalLink, Info, Eye, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ProjectCardProps } from "@/types";
 
 export function ProjectCard({ id, title, description, image, tags, githubUrl, liveUrl, index }: ProjectCardProps) {
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <div className="group relative h-full rounded-xl overflow-hidden bg-card border border-border hover:border-accent-primary/30 transition-all duration-300 hover:shadow-glow">
-            {/* Image Container with Fixed Height */}
-            <div className="relative w-full h-48 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10 opacity-70" />
-                <div className="absolute inset-0 bg-background/20 z-5" />
+        <div
+            className="group relative h-full rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/80 border border-border hover:border-accent-primary/40 transition-all duration-500 hover:shadow-glow hover:shadow-accent-primary/20"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            {/* Image Container with Overlay */}
+            <div className="relative w-full h-52 overflow-hidden">
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent z-20" />
+
+                {/* Hover overlay */}
+                <div className={cn(
+                    "absolute inset-0 bg-accent-primary/10 z-30 transition-opacity duration-300",
+                    isHovered ? "opacity-100" : "opacity-0"
+                )} />
+
                 {image && (
-                    <Image src={image} alt={title} fill priority={index < 6}
+                    <Image
+                        src={image}
+                        alt={title}
+                        fill
+                        priority={index < 6}
                         className={cn(
-                            "object-cover w-full h-full transform",
-                            "transition-all duration-500 ease-out",
-                            imageLoaded ? "opacity-100 blur-0" : "opacity-0 blur-md",
+                            "object-cover w-full h-full transition-all duration-700",
+                            imageLoaded ? "opacity-100 blur-0 scale-100" : "opacity-0 blur-md scale-110",
                             "group-hover:scale-105"
                         )}
                         onLoad={() => setImageLoaded(true)}
                     />
                 )}
+
+                {/* Floating action buttons */}
+                <div className={cn(
+                    "absolute top-4 right-4 z-40 flex gap-2 transition-all duration-300",
+                )}>
+                    {githubUrl && (
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="icon"
+                            className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-md border-border/50 hover:bg-accent-primary hover:border-accent-primary text-white"
+                        >
+                            <Link href={githubUrl} target="_blank" rel="noreferrer">
+                                <Github className="h-4 w-4" />
+                            </Link>
+                        </Button>
+                    )}
+                    {liveUrl && (
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="icon"
+                            className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-md border-border/50 hover:bg-accent-primary hover:border-accent-primary text-white"
+                        >
+                            <Link href={liveUrl} target="_blank" rel="noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                            </Link>
+                        </Button>
+                    )}
+                </div>
             </div>
 
             {/* Content */}
-            <div className="flex flex-col p-4 h-[calc(100%-12rem)]">
-                {/* Title */}
-                <h3 className="text-lg font-display font-medium mb-2 text-text-primary group-hover:text-accent-primary transition-colors duration-300"> {title} </h3>
+            <div className="flex flex-col p-6 h-[calc(100%-13rem)]">
+                {/* Header */}
+                <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-primary transition-colors duration-300 line-clamp-1">
+                        {title}
+                    </h3>
+
+                </div>
 
                 {/* Description */}
-                <p className="text-sm text-text-secondary line-clamp-3 mb-4 flex-grow">
+                <p className="text-sm text-text-secondary line-clamp-3 mb-4 flex-grow leading-relaxed">
                     {description}
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
+                <div className="flex flex-wrap gap-2 mb-6">
                     {tags.map((tag) => (
-                        <span key={tag} className="inline-block rounded-full bg-accent-subtle border border-accent-primary/20 px-2 py-0.5 text-xs font-medium text-accent-primary">
+                        <span
+                            key={tag}
+                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-subtle border border-accent-primary/30 text-accent-primary hover:bg-accent-primary/20 transition-colors"
+                        >
                             {tag}
                         </span>
                     ))}
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-2 mt-auto pt-2 border-t border-border/50">
-                    <Button asChild variant="secondary" size="sm" className="flex-1 bg-accent-subtle hover:bg-accent-primary/20 text-accent-primary">
-                        <Link href={`/projects/${id}`}>
-                            <Info className="mr-1.5 h-3.5 w-3.5" />
-                            Details
-                        </Link>
-                    </Button>
-
-                    <div className="flex gap-1.5">
-                        {githubUrl && (
-                            <Button asChild variant="outline" size="icon" className="h-8 w-8 rounded-lg border-border hover:border-border-hover hover:bg-card-hover">
-                                <Link href={githubUrl} target="_blank" rel="noreferrer">
-                                    <Github className="h-4 w-4 text-text-secondary group-hover:text-text-primary" />
-                                    <span className="sr-only">GitHub</span>
-                                </Link>
-                            </Button>
-                        )}
-                        {liveUrl && (
-                            <Button asChild variant="outline" size="icon" className="h-8 w-8 rounded-lg border-border hover:border-border-hover hover:bg-card-hover">
-                                <Link href={liveUrl} target="_blank" rel="noreferrer">
-                                    <ExternalLink className="h-4 w-4 text-text-secondary group-hover:text-text-primary" />
-                                    <span className="sr-only">Live Demo</span>
-                                </Link>
-                            </Button>
-                        )}
-                    </div>
-                </div>
+                {/* Action Button */}
+                <Button
+                    asChild
+                    className="w-full bg-teal-700 text-white font-medium rounded-xl h-11 transition-all duration-300"
+                >
+                    <Link href={`/projects/${id}`} className="flex items-center justify-center gap-2">
+                        <Eye className="h-4 w-4" />
+                        View Details
+                    </Link>
+                </Button>
             </div>
         </div>
     );

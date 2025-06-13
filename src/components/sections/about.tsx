@@ -1,149 +1,280 @@
+
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, Linkedin } from "lucide-react";
+import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, Linkedin, Sparkles, Target, Users, Zap, Timer, Book } from "lucide-react";
 import Link from "next/link";
 import { CVButton } from "../home/cv-button";
+import { PostsResponse } from "@/types";
 
 export function AboutSection() {
     const containerRef = useRef<HTMLElement>(null);
+    const [postsCount, setPostsCount] = useState("0")
+    const [isLoadingPosts, setIsLoadingPosts] = useState(true)
 
-    // Services
     const services = [
         {
-            icon: <LayoutGrid className="h-5 w-5" />,
+            icon: <LayoutGrid className="h-6 w-6" />,
             title: "UI/UX Design",
-            description: "Creating intuitive, beautiful interfaces focused on user experience"
+            description: "Creating intuitive, beautiful interfaces focused on user experience",
+            color: "from-blue-500/20 to-cyan-500/20",
+            iconBg: "bg-blue-500/10 border-blue-500/20 text-blue-400"
         },
         {
-            icon: <Code className="h-5 w-5" />,
+            icon: <Code className="h-6 w-6" />,
             title: "Front-End Development",
-            description: "Building responsive web applications with React & Next.js"
+            description: "Building responsive web applications with React & Next.js",
+            color: "from-emerald-500/20 to-green-500/20",
+            iconBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
         },
         {
-            icon: <Search className="h-5 w-5" />,
+            icon: <Search className="h-6 w-6" />,
             title: "SEO Optimization",
-            description: "Improving website visibility for better search rankings"
+            description: "Improving website visibility for better search rankings",
+            color: "from-purple-500/20 to-violet-500/20",
+            iconBg: "bg-purple-500/10 border-purple-500/20 text-purple-400"
         },
         {
-            icon: <FileCode className="h-5 w-5" />,
+            icon: <FileCode className="h-6 w-6" />,
             title: "System Design",
-            description: "UML, requirements engineering, and software architecture"
+            description: "UML, requirements engineering, and software architecture",
+            color: "from-orange-500/20 to-red-500/20",
+            iconBg: "bg-orange-500/10 border-orange-500/20 text-orange-400"
         }
     ];
+    useEffect(() => {
 
+
+        async function fetchPostsCount() {
+            try {
+                const response = await fetch('/api/posts/count')
+                if (!response.ok) throw new Error('Failed to fetch posts count')
+
+                const data: PostsResponse = await response.json()
+                setPostsCount(`${data.count}`)
+            } catch (error) {
+                console.error('Error fetching posts count:', error)
+                setPostsCount("0")
+            } finally {
+                setIsLoadingPosts(false)
+            }
+        }
+
+        fetchPostsCount()
+    }, [])
+    const stats = [
+        { icon: <Timer className="h-5 w-5" />, label: "Years Experience", value: "5+" },
+        { icon: <Target className="h-5 w-5" />, label: "Projects Completed", value: "12+" },
+        { icon: <Users className="h-5 w-5" />, label: "Happy Clients", value: "30+" },
+        { icon: <Book className="h-5 w-5" />, label: "Blog Posts", value: postsCount, isLoading: isLoadingPosts },
+    ];
 
     return (
         <section
             id="about"
             ref={containerRef}
-            className="py-20 md:py-32 relative overflow-hidden bg-black"
+            className="py-20 md:py-32 relative overflow-hidden"
         >
-            {/* Background elements */}
+            {/* Enhanced background elements */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Gradient elements */}
-                <div className="absolute top-10 right-10 w-96 h-96 rounded-full bg-gradient-to-br from-purple-500/10 to-blue-500/5 blur-3xl opacity-50" />
-                <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-gradient-to-tr from-indigo-500/10 to-pink-500/5 blur-3xl opacity-30" />
-
-                {/* Dot pattern */}
-                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle,_white_1px,_transparent_1px)] bg-[size:30px_30px]" />
+                <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-gradient-to-br from-accent-primary/10 to-accent-secondary/5 blur-3xl opacity-50" />
+                <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-gradient-to-tr from-accent-tertiary/10 to-accent-primary/5 blur-3xl opacity-30" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-accent-primary/5 to-accent-secondary/5 blur-3xl opacity-20" />
             </div>
 
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                {/* Main content */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
-                    {/* Left column - Terminal */}
-                    <div>
+                {/* Hero Section */}
+                <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-subtle border border-accent-primary/20 text-accent-primary text-sm font-medium mb-6"
+                    >
+                        <Sparkles className="h-4 w-4" />
+                        About Me
+                    </motion.div>
 
-                        {/* Description */}
-                        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed">
-                            Specializing in modern web development with React, Next.js, Tailwindcss. Building exceptional digital experiences with clean,
-                            maintainable code.
-                        </p>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+                    >
+                        <span className="bg-gradient-to-r from-text-primary via-accent-primary to-accent-secondary bg-clip-text text-transparent">
+                            Crafting Digital
+                        </span>
+                        <br />
+                        <span className="text-text-primary">Experiences</span>
+                    </motion.h1>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-                            {/* Primary button */}
-                            <Link
-                                href="#projects"
-                                className="w-full sm:w-auto px-8 py-3 rounded-full bg-blue-600 text-white font-medium 
-                                     hover:bg-blue-500 transition-all duration-300 flex items-center justify-center gap-2
-                                     shadow-lg shadow-blue-600/20"
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="max-w-3xl mx-auto text-xl text-text-secondary leading-relaxed mb-8"
+                    >
+                        Specializing in modern web development with React, Next.js, and Tailwind CSS.
+                        Building exceptional digital experiences with clean, maintainable code and user-centered design.
+                    </motion.p>
+
+                    {/* Action Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+                    >
+                        <Link href="#projects">
+                            <Button
+                                size="lg"
+                                className="group px-8 py-6 text-lg rounded-2xl bg-gradient-to-r from-accent-primary to-accent-secondary hover:from-accent-primary/90 hover:to-accent-secondary/90 text-white font-medium transition-all duration-300 shadow-lg shadow-accent-primary/20"
                             >
-                                View Projects
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
+                                <span>View My Work</span>
+                                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+                        </Link>
 
-                            {/* Outline button */}
-                            <CVButton className="w-full text-lg  sm:w-auto px-8 py-6 rounded-full border border-cyan-600 text-cyan-600 font-medium
-                                     hover:bg-cyan-600 hover:text-white transition-all duration-300 flex items-center justify-center gap-2
-                                     shadow-lg shadow-cyan-600/20"/>
-                        </div>
+                        <CVButton className="px-8 py-6 text-lg rounded-2xl border-2 border-accent-primary text-accent-primary font-medium hover:bg-accent-primary hover:text-white transition-all duration-300" />
+                    </motion.div>
 
-                        {/* Social Links */}
-                        <div className="flex items-center justify-center gap-6 pt-2">
-                            <Link href="https://github.com/devdhaif" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2" aria-label="GitHub">
-                                <Github className="h-6 w-6" />
-                            </Link>
-                            <Link href="https://linkedin.com/in/devdhaif" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors p-2" aria-label="LinkedIn">
-                                <Linkedin className="h-6 w-6" />
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    {/* Right column - About text */}
-                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.2, delay: 0.1 }} className="space-y-6">
-                        <h2 className="text-4xl font-bold leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                            Crafting exceptional front-end experiences
-                        </h2>
-
-                        <p className="text-lg text-gray-300/90 leading-relaxed">
-                            I specialize in building beautiful, responsive interfaces and
-                            optimized front-end solutions that deliver exceptional user experiences
-                            with clean, maintainable code.
-                        </p>
-
-                        <div className="pt-4">
-                            <Link href="#contact">
-                                <Button
-                                    size="lg"
-                                    className="group text-base px-6 py-6 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-200 shadow-md shadow-blue-900/20"
-                                >
-                                    <span>Get In Touch</span>
-                                    <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </Button>
-                            </Link>
-                        </div>
+                    {/* Social Links */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="flex items-center justify-center gap-6"
+                    >
+                        <Link
+                            href="https://github.com/devdhaif"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group p-3 rounded-full bg-card border border-border hover:border-accent-primary hover:bg-accent-primary/10 transition-all duration-300"
+                        >
+                            <Github className="h-6 w-6 text-text-secondary group-hover:text-accent-primary transition-colors" />
+                        </Link>
+                        <Link
+                            href="https://linkedin.com/in/devdhaif"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group p-3 rounded-full bg-card border border-border hover:border-accent-primary hover:bg-accent-primary/10 transition-all duration-300"
+                        >
+                            <Linkedin className="h-6 w-6 text-text-secondary group-hover:text-accent-primary transition-colors" />
+                        </Link>
                     </motion.div>
                 </div>
 
-                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.2 }} className="relative z-10">
-                    <motion.h3 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.2 }} className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                        My Services
-                    </motion.h3>
+                {/* Stats Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
+                >
+                    {stats.map((stat, index) => (
+                        <div key={index} className="text-center p-6 rounded-2xl bg-card/50 border border-border hover:border-accent-primary/30 hover:bg-card transition-all duration-300">
+                            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-subtle border border-accent-primary/20 text-accent-primary mb-4">
+                                {stat.icon}
+                            </div>
+                            <div className="text-2xl font-bold text-text-primary mb-1">
+                                {stat.isLoading ? (
+                                    <div className="animate-pulse w-8 h-8 bg-gray-200/20 mx-auto rounded-full" />
+                                ) : (
+                                    stat.value
+                                )}
+                            </div>
+                            <div className="text-sm text-text-secondary">{stat.label}</div>
+                        </div>
+                    ))}
+                </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Services Section */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="relative z-10"
+                >
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="text-center mb-16"
+                    >
+                        <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-text-primary to-text-primary/80 bg-clip-text text-transparent">
+                            What I Do Best
+                        </h3>
+                        <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+                            Transforming ideas into beautiful, functional, and user-friendly digital solutions
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {services.map((service, index) => (
-                            <motion.div key={index} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                                transition={{ duration: 0.2, delay: index * 0.05 }} whileHover={{ y: -5 }} className="relative bg-gray-900/40 backdrop-blur-sm border border-gray-800/50 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-200 group shadow-md hover:shadow-blue-900/10">
-                                {/* Icon container */}
-                                <div className="p-3 rounded-lg bg-gray-800/80 text-blue-400 w-fit mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all duration-200">{service.icon}</div>
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                whileHover={{ y: -8 }}
+                                className="group relative p-8 rounded-3xl bg-gradient-to-br from-card to-card/80 border border-border hover:border-accent-primary/30 hover:shadow-glow hover:shadow-accent-primary/10 transition-all duration-500"
+                            >
+                                {/* Background gradient */}
+                                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-                                {/* Title */}
-                                <h4 className="text-xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors duration-200">
-                                    {service.title}
-                                </h4>
+                                {/* Content */}
+                                <div className="relative">
+                                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl border ${service.iconBg} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                        {service.icon}
+                                    </div>
 
-                                {/* Description */}
-                                <p className="text-gray-400 text-sm leading-relaxed">
-                                    {service.description}
-                                </p>
+                                    <h4 className="text-2xl font-bold text-text-primary mb-4 group-hover:text-accent-primary transition-colors duration-300">
+                                        {service.title}
+                                    </h4>
+
+                                    <p className="text-text-secondary leading-relaxed">
+                                        {service.description}
+                                    </p>
+                                </div>
                             </motion.div>
                         ))}
                     </div>
+                </motion.div>
+
+                {/* CTA Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className="text-center mt-20 pt-16 border-t border-border/50"
+                >
+                    <h3 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+                        Ready to bring your ideas to life?
+                    </h3>
+                    <p className="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
+                        Let's collaborate and create something amazing together. I'm always excited to work on new projects and challenges.
+                    </p>
+                    <Link href="#contact">
+                        <Button
+                            size="lg"
+                            className="group px-8 py-6 text-lg rounded-2xl bg-gradient-to-r from-accent-primary to-accent-secondary hover:from-accent-primary/90 hover:to-accent-secondary/90 text-white font-medium transition-all duration-300 shadow-lg shadow-accent-primary/20"
+                        >
+                            <span>Get In Touch</span>
+                            <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                    </Link>
                 </motion.div>
             </div>
         </section>
