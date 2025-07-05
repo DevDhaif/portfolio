@@ -33,6 +33,7 @@ export interface Project {
     highlights: string[];
     createdAt: string;
     updatedAt: string;
+    importance?: number; // Importance from 1 to 5
 }
 export interface ProcessedPost {
     id: string;

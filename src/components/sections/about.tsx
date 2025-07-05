@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, Linkedin, Sparkles, Target, Users, Zap, Timer, Book } from "lucide-react";
+import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, Linkedin, Sparkles, Target, Users, Timer, Book } from "lucide-react";
 import Link from "next/link";
 import { CVButton } from "../home/cv-button";
 import { PostsResponse } from "@/types";
@@ -264,7 +264,7 @@ export function AboutSection() {
                         Ready to bring your ideas to life?
                     </h3>
                     <p className="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
-                        Let's collaborate and create something amazing together. I'm always excited to work on new projects and challenges.
+                        Let&apos;s collaborate and create something amazing together. I&apos;m always excited to work on new projects and challenges.
                     </p>
                     <Link href="#contact">
                         <Button

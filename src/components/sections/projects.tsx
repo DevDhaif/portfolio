@@ -76,11 +76,17 @@ export function ProjectsSection() {
                             liveUrl: project.live_url,
                             highlights: project.highlights,
                             createdAt: project.created_at,
-                            updatedAt: project.updated_at
+                            updatedAt: project.updated_at,
+                            importance: project.importance
                         }
                     })
+                        // Sort projects by importance (if available) from 1 to 5 where the 1  is the most important
+                        .sort((a, b) => a.importance - b.importance);
+                    // Set the projects state with URLs
+
 
                     setProjects(projectsWithUrls)
+                    console.log(`sorted projects by importance:`, projectsWithUrls)
                 }
             } catch (error) {
                 console.error("Error loading projects:", error)

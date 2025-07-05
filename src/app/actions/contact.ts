@@ -26,6 +26,11 @@ export async function submitContactForm(data: ContactFormData) {
             return { success: false, error: 'Contact form database not set up' }
         }
 
+        if (count !== null && count >= 10) {
+            console.error('Contact form limit reached')
+            return { success: false, error: 'Contact form limit reached' }
+        }
+
         const { error } = await supabase
             .from('contact_submissions')
             .insert([{

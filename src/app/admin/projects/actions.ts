@@ -20,7 +20,10 @@ export async function createProject(formData: FormData) {
                 skills: formData.get('skills')?.toString().split(',').map(s => s.trim()) || [],
                 github_url: formData.get('githubUrl'),
                 live_url: formData.get('liveUrl'),
-                highlights: formData.get('highlights')?.toString().split('\n').filter(Boolean) || []
+                highlights: formData.get('highlights')?.toString().split('\n').filter(Boolean) || [],
+                // importance from 1 to 5, default to 3
+                importance: parseInt(formData.get('importance') as string, 10) || 3,
+                // type from 'personal', 'work', 'school', default to 'personal
             }])
             .select()
             .single()

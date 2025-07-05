@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Info, Eye, Star } from "lucide-react";
+import { Github, ExternalLink, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ProjectCardProps } from "@/types";
