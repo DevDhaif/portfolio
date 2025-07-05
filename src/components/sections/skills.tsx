@@ -19,6 +19,7 @@ const skillsData = {
         { name: "Vue.js", icon: "/icons/vue.svg" },
         { name: "Tailwind CSS", icon: "/icons/tailwind.svg" },
         { name: "Redux", icon: "/icons/redux.svg" },
+        { name: "Zustand", icon: "/icons/zustand.svg" },
     ],
     backend: [
         { name: "PHP", icon: "/icons/php.svg" },
@@ -45,7 +46,7 @@ const categoryIcons = {
     tools: <Wrench className="h-4 w-4" />,
 };
 
-export function  SkillsSection() {
+export function SkillsSection() {
     const containerRef = useRef<HTMLElement>(null);
     const [activeTab, setActiveTab] = useState("all");
 

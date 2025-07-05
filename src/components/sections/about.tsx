@@ -134,7 +134,7 @@ export function AboutSection() {
                         <Link href="#projects">
                             <Button
                                 size="lg"
-                                className="group px-8 py-6 text-lg rounded-2xl bg-gradient-to-r from-accent-primary to-accent-secondary hover:from-accent-primary/90 hover:to-accent-secondary/90 text-white font-medium transition-all duration-300 shadow-lg shadow-accent-primary/20"
+                                className="group px-8 py-6 text-lg rounded-2xl bg-accent-subtle border border-accent-primary text-white font-medium transition-all duration-300 shadow-lg  hover:bg-accent-primary  "
                             >
                                 <span>View My Work</span>
                                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
