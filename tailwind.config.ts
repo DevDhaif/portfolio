@@ -1,7 +1,5 @@
-// tailwind.config.js
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-/** @type {import('tailwindcss').Config} */
 const config = {
     darkMode: ["class"],
     content: [
@@ -19,78 +17,55 @@ const config = {
         },
         extend: {
             colors: {
-                // Main background colors
-                background: {
-                    DEFAULT: "#030712", // Very dark gray (almost black)
-                    secondary: "#111827", // Slightly lighter dark gray
+                // Simplified color palette
+                background: "#FFFFFF",
+                foreground: "#000000",
+
+                primary: {
+                    DEFAULT: "#000000",
+                    foreground: "#FFFFFF",
                 },
-                // Text colors
-                text: {
-                    primary: "#F9FAFB", // Almost white
-                    secondary: "#9CA3AF", // Medium gray
-                    accent: "#10B981", // Emerald green
+
+                secondary: {
+                    DEFAULT: "#F5F5F5",
+                    foreground: "#000000",
                 },
-                // Accent colors
+
                 accent: {
-                    primary: "#10B981", // Emerald green
-                    secondary: "#3B82F6", // Blue
-                    tertiary: "#8B5CF6", // Purple
-                    subtle: "rgba(16, 185, 129, 0.1)", // Transparent emerald
+                    DEFAULT: "#0066FF",
+                    foreground: "#FFFFFF",
                 },
-                // Border colors
-                border: {
-                    DEFAULT: "#1F2937", // Dark gray
-                    hover: "#374151", // Medium gray
+
+                muted: {
+                    DEFAULT: "#F8F8F8",
+                    foreground: "#666666",
                 },
-                // Card colors
-                card: {
-                    DEFAULT: "#111827", // Dark gray
-                    hover: "#1F2937", // Slightly lighter
-                },
+
+                border: "#E5E5E5",
+                card: "#FFFFFF",
             },
             fontFamily: {
                 sans: ["var(--font-inter)", ...fontFamily.sans],
                 mono: ["var(--font-jetbrains-mono)", ...fontFamily.mono],
-                display: ["var(--font-cabinet-grotesk)", ...fontFamily.sans],
             },
-            boxShadow: {
-                'glow': '0 0 20px rgba(16, 185, 129, 0.2)',
-                'glow-lg': '0 0 30px rgba(16, 185, 129, 0.3)',
+            // Remove complex animations and effects
+            animation: {
+                "fade-in": "fadeIn 0.3s ease-in-out",
+                "slide-up": "slideUp 0.4s ease-out",
             },
             keyframes: {
-                "accordion-down": {
-                    from: { height: 0 },
-                    to: { height: "var(--radix-accordion-content-height)" },
+                fadeIn: {
+                    "0%": { opacity: "0" },
+                    "100%": { opacity: "1" },
                 },
-                "accordion-up": {
-                    from: { height: "var(--radix-accordion-content-height)" },
-                    to: { height: 0 },
+                slideUp: {
+                    "0%": { opacity: "0", transform: "translateY(20px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" },
                 },
-                "pulse-glow": {
-                    "0%, 100%": { opacity: 0.4 },
-                    "50%": { opacity: 0.8 },
-                },
-                "scroll-x": {
-                    from: { transform: "translateX(0)" },
-                    to: { transform: "translateX(-100%)" },
-                },
-            },
-            animation: {
-                "accordion-down": "accordion-down 0.2s ease-out",
-                "accordion-up": "accordion-up 0.2s ease-out",
-                "pulse-glow": "pulse-glow 3s ease-in-out infinite",
-                "scroll-x": "scroll-x 20s linear infinite",
-            },
-            backgroundImage: {
-                'grid-pattern': 'radial-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 1px)',
-                'gradient-noise': 'url("/images/noise.png")',
-            },
-            backgroundSize: {
-                'grid': '30px 30px',
             },
         },
     },
-    plugins: [require("tailwindcss-animate"),require('@tailwindcss/typography'),],
+    plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],
 };
 
 export default config;

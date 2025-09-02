@@ -3,29 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --background: 215 28% 17%;
-        -gray-500: 0 0% 98%;
-        --card: 210 40% 11%;
-        --cardgray-500: 0 0% 98%;
-        --popover: 215 28% 17%;
-        --popovergray-500: 0 0% 98%;
-        --primary: 160 84% 39%;
-        --primarygray-500: 0 0% 100%;
-        --secondary: 215 25% 27%;
-        --secondarygray-500: 0 0% 98%;
-        -gray-300: 215 25% 27%;
-        -gray-300gray-500: 215 25% 65%;
-        --accent: 160 84% 39%;
-        --accentgray-500: 0 0% 100%;
-        --destructive: 0 84% 60%;
-        --destructivegray-500: 0 0% 98%;
-        --border: 215 28% 17%;
-        --input: 215 28% 17%;
-        --ring: 160 84% 39%;
-        --radius: 0.5rem;
-    }
-
     * {
         @apply border-border;
     }
@@ -35,94 +12,36 @@
     }
 
     body {
-        @apply bg-background text-base antialiased;
-    }
-
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        @apply bg-background;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        @apply rounded-full;
-    }
-
-    ::selection {
-        @apply text-base;
+        @apply bg-background text-foreground font-sans antialiased;
     }
 }
 
 @layer components {
-    .section-container {
-        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24;
+    .section {
+        @apply py-16 md:py-24;
     }
 
-    .section-title {
-        @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-center;
-    }
-
-    .accent-text {
-        @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
-    }
-
-    .btn-primary {
-        @apply inline-flex items-center justify-center rounded-md bg-primary text-primarygray-500 px-4 py-2 text-sm font-medium shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
-    }
-
-    .btn-secondary {
-        @apply inline-flex items-center justify-center rounded-md border border-border text-secondarygray-500 px-4 py-2 text-sm font-medium shadow-sm transition-colors hover: /80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
-    }
-
-    .btn-outline {
-        @apply inline-flex items-center justify-center rounded-md border border-border bg-background text-base px-4 py-2 text-sm font-medium shadow-sm transition-colors hover: focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
+    .container {
+        @apply max-w-6xl mx-auto px-4 sm:px-6;
     }
 
     .card {
-        @apply bg-card rounded-lg border border-border p-6 shadow-sm transition-all hover:shadow-md;
+        @apply bg-card border border-border rounded-lg p-6;
     }
 
-    .card-hover {
-        @apply hover:shadow-glow hover:-translate-y-1 duration-300;
+    .btn {
+        @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-md transition-colors;
     }
 
-    .grid-background {
-        @apply bg-grid-pattern bg-grid;
+    .btn-primary {
+        @apply bg-primary text-primary-foreground hover:bg-primary/90;
     }
 
-    .glass {
-        @apply bg-card/60 backdrop-blur-md;
+    .btn-secondary {
+        @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
     }
 
-    .noise-bg {
-        @apply relative;
-    }
-
-    .noise-bg::before {
-        content: "";
-        @apply absolute inset-0 bg-gradient-noise opacity-5 mix-blend-overlay pointer-events-none;
-    }
-
-    .glow-text {
-        @apply relative;
-    }
-
-    .glow-text::after {
-        content: attr(data-text);
-        @apply absolute top-0 left-0 w-full h-full text-primary opacity-50 blur-sm;
-        z-index: -1;
-    }
-}
-
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
-
-    .text-pretty {
-        text-wrap: pretty;
+    .btn-outline {
+        @apply border border-border bg-background hover:bg-muted;
     }
 }
