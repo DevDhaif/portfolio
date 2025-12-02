@@ -8,7 +8,7 @@ import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, L
 import Link from "next/link";
 import { CVButton } from "../home/cv-button";
 import { PostsResponse } from "@/types";
-
+import CountUp from '../bits/CountUp'
 export function AboutSection() {
     const containerRef = useRef<HTMLElement>(null);
     const [postsCount, setPostsCount] = useState("0")
@@ -188,7 +188,15 @@ export function AboutSection() {
                                 {stat.isLoading ? (
                                     <div className="animate-pulse w-8 h-8 bg-gray-200/20 mx-auto rounded-full" />
                                 ) : (
-                                    stat.value
+
+                                    <CountUp
+                                        from={0}
+                                        to={stat.value}
+                                        separator=","
+                                        direction="up"
+                                        duration={3}
+                                        className="count-up-text" onStart={undefined} onEnd={undefined} />
+
                                 )}
                             </div>
                             <div className="text-sm text-text-secondary">{stat.label}</div>

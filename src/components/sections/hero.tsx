@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Terminal } from "../ui/terminal";
-
+import { SplitText } from '../bits/SplitText'
 const terminalCommands = [
     "Skills: React, Next.js, TypeScript, Tailwind CSS",
     "Expertise: UI/UX, Responsive Design, State Management",
@@ -33,9 +33,20 @@ export function HeroSection() {
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-4 text-center">
                         {/* Left column - Text */}
                         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="flex flex-col items-center md:items-start text-center md:text-left">
-                            <h2 className="text-4xl md:text-5xl font-bold text-white">
-                                <span className="block mb-3">Hi, I&apos;m Dhaifallah</span>
-                            </h2>
+                            <SplitText
+                                text="Hi, I&apos;m Dhaifallah"
+                                className="text-5xl font-semibold text-center text-white"
+                                delay={100}
+                                duration={0.6}
+                                ease="power3.out"
+                                splitType="chars"
+                                from={{ opacity: 0, y: 40 }}
+                                to={{ opacity: 1, y: 0 }}
+                                threshold={0.1}
+                                rootMargin="-100px"
+                                textAlign="center"
+                                onLetterAnimationComplete={() => console.log("Animation complete")}
+                            />
                             <span className="text-center leading-relaxed tracking-wide text-5xl font-bold  bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent">Front End </span>
                             <span className="text-center leading-relaxed tracking-wide text-5xl font-bold  bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent">Developer</span>
 
