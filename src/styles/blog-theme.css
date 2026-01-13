@@ -1,0 +1,166 @@
+/* Blog Theme Styles - Light Professional Theme */
+
+.blog-theme {
+  /* Light theme color palette - High contrast */
+  --blog-bg-primary: #ffffff;
+  --blog-bg-secondary: #f8fafc;
+  --blog-bg-accent: #f1f5f9;
+  --blog-text-primary: #000000;
+  --blog-text-secondary: #1e293b;
+  --blog-text-muted: #475569;
+  --blog-accent: #2563eb;
+  --blog-accent-hover: #1d4ed8;
+  --blog-border: #cbd5e1;
+  --blog-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth scrolling */
+.blog-theme {
+  scroll-behavior: smooth;
+  color: #000000;
+}
+
+/* Custom scrollbar for light theme */
+.blog-theme ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.blog-theme ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 5px;
+}
+
+.blog-theme ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 5px;
+  border: 2px solid #f1f5f9;
+}
+
+.blog-theme ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Selection color */
+.blog-theme ::selection {
+  background-color: #bfdbfe;
+  color: #1e3a8a;
+}
+
+/* Focus visible outline */
+.blog-theme *:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Typography enhancements */
+.blog-theme h1,
+.blog-theme h2,
+.blog-theme h3,
+.blog-theme h4,
+.blog-theme h5,
+.blog-theme h6 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--blog-text-primary);
+}
+
+/* Link styles */
+.blog-theme a {
+  color: var(--blog-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.blog-theme a:hover {
+  color: var(--blog-accent-hover);
+}
+
+/* Button enhancements */
+.blog-theme button {
+  transition: all 0.2s ease;
+}
+
+/* Card hover effects */
+.blog-theme .card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blog-theme .card-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* Image loading state */
+.blog-theme img {
+  transition: opacity 0.3s ease;
+}
+
+.blog-theme img[loading='lazy'] {
+  opacity: 0;
+}
+
+.blog-theme img[loading='lazy'].loaded {
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blog-theme .animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.blog-theme .animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    #f1f5f9 0%,
+    #e2e8f0 20%,
+    #f1f5f9 40%,
+    #f1f5f9 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .blog-theme {
+    font-size: 16px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .blog-theme header,
+  .blog-theme footer,
+  .blog-theme .no-print {
+    display: none;
+  }
+
+  .blog-theme {
+    background: white;
+  }
+
+  .blog-theme a {
+    color: #000;
+    text-decoration: underline;
+  }
+}

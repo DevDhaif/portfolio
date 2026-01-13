@@ -1,23 +1,103 @@
 // src/hooks/useTempFiles.ts
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
-export const useTempFiles = (onTempFileChange?: (files: Map<string, File>) => void) => {
-    const [tempFiles, setTempFiles] = useState<Map<string, File>>(new Map());
+interface UseTempFilesReturn {
+  tempFiles: Map<string, File>;
+  addTempFile: (url: string, file: File) => string;
+  removeTempFile: (url: string) => void;
+  getTempFile: (url: string) => File | undefined;
+  cleanup: () => void;
+  hasFiles: boolean;
+}
 
-    const updateTempFiles = useCallback((newTempFiles: Map<string, File>) => {
-        setTempFiles(newTempFiles);
-        onTempFileChange?.(newTempFiles);
-    }, [onTempFileChange]);
+/**
+ * Hook for managing temporary file URLs (blob URLs)
+ * Handles cleanup to prevent memory leaks
+ */
+export const useTempFiles = (
+  onTempFileChange?: (files: Map<string, File>) => void
+): UseTempFilesReturn => {
+  const [tempFiles, setTempFiles] = useState<Map<string, File>>(new Map());
 
-    const addTempFile = useCallback((url: string, file: File) => {
-        const newFiles = new Map(tempFiles).set(url, file);
-        updateTempFiles(newFiles);
-        return url;
-    }, [tempFiles, updateTempFiles]);
+  // Track URLs for cleanup
+  const urlsRef = useRef<Set<string>>(new Set());
 
-    return {
-        tempFiles,
-        updateTempFiles,
-        addTempFile
+  // Update callback ref to avoid stale closures
+  const onChangeRef = useRef(onTempFileChange);
+  useEffect(() => {
+    onChangeRef.current = onTempFileChange;
+  }, [onTempFileChange]);
+
+  /**
+   * Add a temporary file
+   */
+  const addTempFile = useCallback((url: string, file: File): string => {
+    urlsRef.current.add(url);
+
+    setTempFiles((prev) => {
+      const newFiles = new Map(prev).set(url, file);
+      onChangeRef.current?.(newFiles);
+      return newFiles;
+    });
+
+    return url;
+  }, []);
+
+  /**
+   * Remove a temporary file and revoke its URL
+   */
+  const removeTempFile = useCallback((url: string): void => {
+    // Revoke the blob URL to free memory
+    URL.revokeObjectURL(url);
+    urlsRef.current.delete(url);
+
+    setTempFiles((prev) => {
+      const newFiles = new Map(prev);
+      newFiles.delete(url);
+      onChangeRef.current?.(newFiles);
+      return newFiles;
+    });
+  }, []);
+
+  /**
+   * Get a temporary file by URL
+   */
+  const getTempFile = useCallback(
+    (url: string): File | undefined => {
+      return tempFiles.get(url);
+    },
+    [tempFiles]
+  );
+
+  /**
+   * Cleanup all temporary files
+   */
+  const cleanup = useCallback((): void => {
+    // Revoke all blob URLs
+    urlsRef.current.forEach((url) => {
+      URL.revokeObjectURL(url);
+    });
+    urlsRef.current.clear();
+
+    setTempFiles(new Map());
+    onChangeRef.current?.(new Map());
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      urlsRef.current.forEach((url) => {
+        URL.revokeObjectURL(url);
+      });
     };
+  }, []);
+
+  return {
+    tempFiles,
+    addTempFile,
+    removeTempFile,
+    getTempFile,
+    cleanup,
+    hasFiles: tempFiles.size > 0,
+  };
 };

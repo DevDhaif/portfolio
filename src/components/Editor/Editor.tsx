@@ -1,139 +1,208 @@
 // src/components/Editor/Editor.tsx
-import { useEditor, EditorContent } from '@tiptap/react';
+'use client';
+
+import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
+import { useCallback, useMemo, useEffect } from 'react';
 import 'highlight.js/styles/github-dark.css';
-import { useCallback } from 'react';
 import '../../styles/tiptap-styles.css';
 import { EditorToolbar } from './EditorToolbar';
-import { createEditorLowlight, useEditorExtensions, useDetectLanguage } from '@/hooks/useEditorConfig';
+import { EditorFooter } from './EditorFooter';
+import {
+  createEditorLowlight,
+  getEditorExtensions,
+} from '@/config/tiptap-extensions';
 import { useTextDirection } from '@/hooks/useTextDirection';
 import { useTempFiles } from '@/hooks/useTempFiles';
+import { useEditorStats } from '@/hooks/useEditorStats';
+import { validateImage, compressImage } from '@/utils/image-utils';
 import { EditorProps } from '@/types';
-
+import { EDITOR_CONFIG } from '@/config/editor.config';
 
 export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
-    // Initialize hooks
-    const lowlight = createEditorLowlight();
-    const extensions = useEditorExtensions(lowlight);
-    const detectLanguage = useDetectLanguage(lowlight);
-    const { tempFiles, addTempFile } = useTempFiles(onTempFileChange);
+  // Memoize lowlight to prevent recreation on every render
+  const lowlight = useMemo(() => createEditorLowlight(), []);
+  const extensions = useMemo(
+    () => getEditorExtensions(lowlight, true),
+    [lowlight]
+  );
 
-    const editor = useEditor({
-        extensions,
-        content,
-        editorProps: {
-            attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg prose-invert focus:outline-none rtl-support'
-            },
-            handleKeyDown(view, event) {
-                if (event.key === '`' && event.ctrlKey) {
-                    event.preventDefault();
-                    insertCodeBlock();
-                    return true;
-                }
+  const { addTempFile, cleanup } = useTempFiles(onTempFileChange);
 
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    const { $from } = view.state.selection;
-                    const node = $from.parent;
+  const editor = useEditor({
+    extensions,
+    content,
+    editorProps: {
+      attributes: {
+        class:
+          'prose prose-sm sm:prose lg:prose-lg prose-invert focus:outline-none',
+        'aria-label': 'Rich text editor',
+        role: 'textbox',
+        'aria-multiline': 'true',
+      },
+      // Handle paste for images
+      handlePaste(view, event) {
+        const items = event.clipboardData?.items;
+        if (!items) return false;
 
-                    if (node.type.name === 'paragraph' && !node.textContent) {
-                        event.preventDefault();
-                        return true;
-                    }
-
-                    if (editor?.isActive('bulletList') || editor?.isActive('orderedList')) {
-                        return false;
-                    }
-                }
-
-                return false;
-            },
-            transformPastedHTML(html) {
-                return html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</p><p>');
-            },
-        },
-        onUpdate: ({ editor }) => {
-            onChange(editor.getJSON());
+        for (const item of items) {
+          if (item.type.startsWith('image/')) {
+            event.preventDefault();
+            const file = item.getAsFile();
+            if (file) handleImageFile(file);
+            return true;
+          }
         }
-    });
+        return false;
+      },
+      // Handle drop for images
+      handleDrop(view, event, slice, moved) {
+        if (moved) return false;
 
-    useTextDirection(editor);
+        const files = event.dataTransfer?.files;
+        if (!files?.length) return false;
 
-    const insertCodeBlock = useCallback(() => {
-        if (!editor) return;
+        const images = Array.from(files).filter((f) =>
+          f.type.startsWith('image/')
+        );
+        if (!images.length) return false;
 
-        const selection = editor.state.selection;
-        if (!selection) return;
+        event.preventDefault();
+        images.forEach(handleImageFile);
+        return true;
+      },
+      // Clean up pasted HTML
+      transformPastedHTML(html) {
+        return html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '</p><p>');
+      },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.getJSON());
+    },
+  });
 
-        const { from, to } = selection;
-        const text = editor.state.doc.textBetween(from, to, ' ');
-        const cleanText = text.replace(/^```(\w+)?\n?/, '').replace(/```$/, '');
-        const language = detectLanguage(cleanText);
+  // Apply text direction detection
+  useTextDirection(editor);
 
-        editor.chain()
-            .focus()
-            .insertContent({
-                type: 'codeBlock',
-                attrs: { language },
-                content: [{ type: 'text', text: cleanText || '' }],
-            })
-            .run();
-    }, [editor, detectLanguage]);
+  // Get editor statistics
+  const stats = useEditorStats(editor);
 
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-        if (e.key === '`' && e.ctrlKey) {
-            e.preventDefault();
-            insertCodeBlock();
-            return;
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => cleanup();
+  }, [cleanup]);
+
+  // Handle image file upload with validation and compression
+  const handleImageFile = useCallback(
+    async (file: File) => {
+      if (!editor) return;
+
+      // Validate image
+      const validation = validateImage(file);
+      if (!validation.valid) {
+        alert(validation.error);
+        return;
+      }
+
+      try {
+        // Compress if needed
+        let processedFile: File | Blob = file;
+        if (file.size > EDITOR_CONFIG.images.compressionThreshold) {
+          processedFile = await compressImage(
+            file,
+            EDITOR_CONFIG.images.maxWidth,
+            EDITOR_CONFIG.images.quality
+          );
         }
 
-        if (e.key === 'Enter' && !e.shiftKey && editor?.state?.selection) {
-            const { $from } = editor.state.selection;
-            const node = $from.parent;
+        const tempUrl = URL.createObjectURL(processedFile);
+        addTempFile(tempUrl, file);
 
-            if (node.type.name === 'paragraph' && !node.textContent) {
-                e.preventDefault();
-                return;
-            }
-        }
-    }, [editor, insertCodeBlock]);
+        editor
+          .chain()
+          .focus()
+          .insertContent({
+            type: 'image',
+            attrs: {
+              src: tempUrl,
+              alt: file.name.replace(/\.[^/.]+$/, ''), // Remove extension for alt
+              'data-temp-file': 'true',
+            },
+          })
+          .run();
+      } catch (error) {
+        console.error('Failed to process image:', error);
+        alert('Failed to process image. Please try again.');
+      }
+    },
+    [editor, addTempFile]
+  );
 
-    const handleInsertImage = useCallback(() => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = (e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (!file || !editor) return;
+  // Handle image button click
+  const handleInsertImage = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = EDITOR_CONFIG.images.allowedTypes.join(',');
+    input.multiple = true;
 
-            const tempUrl = URL.createObjectURL(file);
-            addTempFile(tempUrl, file);
+    input.onchange = async (e) => {
+      const files = (e.target as HTMLInputElement).files;
+      if (!files) return;
 
-            editor.chain().focus().insertContent({
-                type: 'image',
-                attrs: {
-                    src: tempUrl,
-                    alt: file.name,
-                    'data-temp-file': 'true'
-                }
-            }).run();
-        };
-        input.click();
-    }, [editor, addTempFile]);
+      for (const file of Array.from(files)) {
+        await handleImageFile(file);
+      }
+    };
 
-    if (!editor) return null;
+    input.click();
+  }, [handleImageFile]);
 
-    return (
-        <div className="editor-container">
-            <EditorToolbar
-                editor={editor}
-                onInsertCodeBlock={insertCodeBlock}
-                onInsertImage={handleInsertImage}
-            />
-            <EditorContent
-                onKeyDown={handleKeyDown}
-                editor={editor}
-                className="tiptap-editor tiptap-content rounded-md !text-white border border-gray-300 p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-        </div>
-    );
+  // Handle code block insertion
+  const insertCodeBlock = useCallback(
+    (language = 'javascript') => {
+      if (!editor) return;
+
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'codeBlock',
+          attrs: { language },
+        })
+        .run();
+    },
+    [editor]
+  );
+
+  if (!editor) {
+    return <EditorSkeleton />;
+  }
+
+  return (
+    <div className="editor-container rounded-lg border border-border overflow-hidden">
+      <EditorToolbar
+        editor={editor}
+        onInsertCodeBlock={insertCodeBlock}
+        onInsertImage={handleInsertImage}
+      />
+      <EditorContent
+        editor={editor}
+        className="tiptap-editor tiptap-content min-h-[400px] p-4"
+      />
+      <EditorFooter stats={stats} />
+    </div>
+  );
+}
+
+// Loading skeleton
+function EditorSkeleton() {
+  return (
+    <div className="editor-container rounded-lg border border-border overflow-hidden animate-pulse">
+      <div className="h-12 bg-gray-800 border-b border-border" />
+      <div className="min-h-[400px] bg-gray-900 p-4">
+        <div className="h-4 bg-gray-800 rounded w-3/4 mb-3" />
+        <div className="h-4 bg-gray-800 rounded w-1/2 mb-3" />
+        <div className="h-4 bg-gray-800 rounded w-5/6" />
+      </div>
+    </div>
+  );
 }

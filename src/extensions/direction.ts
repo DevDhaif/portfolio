@@ -1,143 +1,190 @@
-import { Extension } from '@tiptap/core'
-import { Node as ProseMirrorNode } from '@tiptap/pm/model'
-import { Plugin, PluginKey } from 'prosemirror-state'
-import { EditorView } from 'prosemirror-view'
+// src/extensions/direction.ts
+import { Extension } from '@tiptap/core';
+import { Plugin, PluginKey } from 'prosemirror-state';
 
+/**
+ * Regex to detect RTL characters (Arabic, Hebrew, Persian, etc.)
+ */
+const RTL_REGEX =
+  /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+
+/**
+ * Check if text should be rendered RTL
+ */
 const isRTL = (text: string): boolean => {
-    if (!text?.trim()) return false;
+  if (!text?.trim()) return false;
 
-    const rtlRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0590-\u05FF]/;
+  const trimmedText = text.trim();
+  const firstChar = trimmedText[0];
 
-    const rtlChars = (text.match(rtlRegex) || []).length;
-    const latinChars = (text.match(/[A-Za-z]/) || []).length;
-    const startsWithRTL = rtlRegex.test(text.trim()[0]);
+  // Check if first character is RTL
+  if (RTL_REGEX.test(firstChar)) {
+    return true;
+  }
 
-    return startsWithRTL || rtlChars > latinChars;
-}
+  // Count RTL vs LTR characters for mixed content
+  const rtlChars = (text.match(RTL_REGEX) || []).length;
+  const latinChars = (text.match(/[A-Za-z]/g) || []).length;
+
+  // If mostly RTL characters, treat as RTL
+  return rtlChars > latinChars && rtlChars > 0;
+};
+
+/**
+ * Node types that support text direction
+ */
+const DIRECTION_TYPES = [
+  'paragraph',
+  'heading',
+  'bulletList',
+  'orderedList',
+  'listItem',
+  'blockquote',
+];
 
 declare module '@tiptap/core' {
-    interface Commands<ReturnType> {
-        textDirection: {
-            setTextDirection: (direction: 'rtl' | 'ltr') => ReturnType,
-            unsetTextDirection: () => ReturnType,
-        }
-    }
+  interface Commands<ReturnType> {
+    textDirection: {
+      /**
+       * Set text direction for current selection
+       */
+      setTextDirection: (direction: 'rtl' | 'ltr') => ReturnType;
+      /**
+       * Remove text direction attribute
+       */
+      unsetTextDirection: () => ReturnType;
+      /**
+       * Toggle text direction
+       */
+      toggleTextDirection: () => ReturnType;
+    };
+  }
 }
 
 export const TextDirection = Extension.create({
-    name: 'textDirection',
+  name: 'textDirection',
 
-    addGlobalAttributes() {
-        return [
-            {
-                types: ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'],
-                attributes: {
-                    dir: {
-                        default: null,
-                        parseHTML: element => {
-                            const content = element.textContent || '';
-                            return isRTL(content) ? 'rtl' : 'ltr';
-                        },
-                        renderHTML: attributes => {
-                            return {
-                                dir: attributes.dir || 'ltr',
-                                class: attributes.dir === 'rtl' ? 'text-right' : 'text-left'
-                            }
-                        },
-                    },
-                },
+  addGlobalAttributes() {
+    return [
+      {
+        types: DIRECTION_TYPES,
+        attributes: {
+          dir: {
+            default: null,
+            parseHTML: (element) => {
+              // Get direction from element or detect from content
+              const explicitDir = element.getAttribute('dir');
+              if (explicitDir) return explicitDir;
+
+              const content = element.textContent || '';
+              return isRTL(content) ? 'rtl' : 'ltr';
             },
-        ]
-    },
-
-    addProseMirrorPlugins() {
-        return [
-            new Plugin({
-                key: new PluginKey(this.name),
-                update: (view: EditorView) => {
-                    // First pass: process paragraphs and headings
-                    view.state.doc.descendants((node: ProseMirrorNode, pos: number) => {
-                        if (node.type.name === 'paragraph' || node.type.name === 'heading') {
-                            const content = node.textContent;
-                            const shouldBeRTL = isRTL(content);
-                            const currentDir = node.attrs.dir;
-
-                            if ((shouldBeRTL && currentDir !== 'rtl') ||
-                                (!shouldBeRTL && currentDir !== 'ltr')) {
-                                view.dispatch(
-                                    view.state.tr.setNodeMarkup(pos, undefined, {
-                                        ...node.attrs,
-                                        dir: shouldBeRTL ? 'rtl' : 'ltr'
-                                    })
-                                );
-                            }
-                        }
-                        return true;
-                    });
-
-                    view.state.doc.descendants((node: ProseMirrorNode, pos: number) => {
-                        if (node.type.name === 'bulletList' || node.type.name === 'orderedList') {
-                            let allListText = '';
-                            node.descendants(child => {
-                                if (child.isText) {
-                                    allListText += child.text || '';
-                                }
-                                return true;
-                            });
-
-                            const shouldBeRTL = isRTL(allListText);
-                            const currentDir = node.attrs.dir;
-
-                            if ((shouldBeRTL && currentDir !== 'rtl') ||
-                                (!shouldBeRTL && currentDir !== 'ltr')) {
-                                view.dispatch(
-                                    view.state.tr.setNodeMarkup(pos, undefined, {
-                                        ...node.attrs,
-                                        dir: shouldBeRTL ? 'rtl' : 'ltr'
-                                    })
-                                );
-                            }
-                        }
-
-                        if (node.type.name === 'listItem') {
-                            let itemText = '';
-                            node.descendants(child => {
-                                if (child.isText) {
-                                    itemText += child.text || '';
-                                }
-                                return true;
-                            });
-
-                            const shouldBeRTL = isRTL(itemText);
-                            const currentDir = node.attrs.dir;
-
-                            if ((shouldBeRTL && currentDir !== 'rtl') ||
-                                (!shouldBeRTL && currentDir !== 'ltr')) {
-                                view.dispatch(
-                                    view.state.tr.setNodeMarkup(pos, undefined, {
-                                        ...node.attrs,
-                                        dir: shouldBeRTL ? 'rtl' : 'ltr'
-                                    })
-                                );
-                            }
-                        }
-                        return true;
-                    });
-                }
-            })
-        ]
-    },
-
-    addCommands() {
-        return {
-            setTextDirection: (direction: 'rtl' | 'ltr') => ({ commands }) => {
-                const nodeTypes = ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'];
-                return nodeTypes.every(type => commands.updateAttributes(type, { dir: direction }));
+            renderHTML: (attributes) => {
+              const dir = attributes.dir || 'ltr';
+              return {
+                dir,
+                class: dir === 'rtl' ? 'text-right' : 'text-left',
+              };
             },
-            unsetTextDirection: () => ({ commands }) => {
-                const nodeTypes = ['paragraph', 'heading', 'bulletList', 'orderedList', 'listItem'];
-                return nodeTypes.every(type => commands.resetAttributes(type, 'dir'));
-            },
-        }
-    },
-})
+          },
+        },
+      },
+    ];
+  },
+
+  addCommands() {
+    return {
+      setTextDirection:
+        (direction: 'rtl' | 'ltr') =>
+        ({ commands }) => {
+          return DIRECTION_TYPES.every((type) =>
+            commands.updateAttributes(type, { dir: direction })
+          );
+        },
+
+      unsetTextDirection:
+        () =>
+        ({ commands }) => {
+          return DIRECTION_TYPES.every((type) =>
+            commands.resetAttributes(type, 'dir')
+          );
+        },
+
+      toggleTextDirection:
+        () =>
+        ({ editor, commands }) => {
+          const { selection } = editor.state;
+          const { $from } = selection;
+          const currentDir = $from.parent.attrs.dir || 'ltr';
+          const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+
+          return commands.setTextDirection(newDir);
+        },
+    };
+  },
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey('textDirectionAutoDetect'),
+
+        appendTransaction: (transactions, oldState, newState) => {
+          // Only process if content changed
+          const docChanged = transactions.some((tr) => tr.docChanged);
+          if (!docChanged) return null;
+
+          const { tr } = newState;
+          let modified = false;
+
+          newState.doc.descendants((node, pos) => {
+            // Skip non-text nodes
+            if (!DIRECTION_TYPES.includes(node.type.name)) {
+              return true;
+            }
+
+            // Get text content
+            let textContent = '';
+            node.descendants((child) => {
+              if (child.isText) {
+                textContent += child.text || '';
+              }
+              return true;
+            });
+
+            // Skip if no text
+            if (!textContent.trim()) {
+              return true;
+            }
+
+            // Detect direction
+            const shouldBeRTL = isRTL(textContent);
+            const currentDir = node.attrs.dir;
+            const targetDir = shouldBeRTL ? 'rtl' : 'ltr';
+
+            // Update if direction changed
+            if (currentDir !== targetDir) {
+              tr.setNodeMarkup(pos, undefined, {
+                ...node.attrs,
+                dir: targetDir,
+              });
+              modified = true;
+            }
+
+            return true;
+          });
+
+          return modified ? tr : null;
+        },
+      }),
+    ];
+  },
+
+  addKeyboardShortcuts() {
+    return {
+      // Ctrl/Cmd + Shift + L for LTR
+      'Mod-Shift-l': () => this.editor.commands.setTextDirection('ltr'),
+      // Ctrl/Cmd + Shift + R for RTL
+      'Mod-Shift-r': () => this.editor.commands.setTextDirection('rtl'),
+    };
+  },
+});
