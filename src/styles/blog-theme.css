@@ -90,19 +90,6 @@
   transform: translateY(-4px);
 }
 
-/* Image loading state */
-.blog-theme img {
-  transition: opacity 0.3s ease;
-}
-
-.blog-theme img[loading='lazy'] {
-  opacity: 0;
-}
-
-.blog-theme img[loading='lazy'].loaded {
-  opacity: 1;
-}
-
 /* Animations */
 @keyframes fadeInUp {
   from {

@@ -185,10 +185,10 @@ export default function BlogPost({
                   day: 'numeric',
                 })}
               </time>
-              <span className="flex items-center gap-2">
+              {/* <span className="flex items-center gap-2">
                 <EyeIcon className="w-5 h-5" />
                 {post?.views_count || 0} views
-              </span>
+              </span> */}
             </div>
             <button
               onClick={handleLike}
