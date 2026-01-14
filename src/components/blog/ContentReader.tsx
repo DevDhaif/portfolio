@@ -105,7 +105,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     editorProps: {
       attributes: {
         class:
-          'prose prose-lg max-w-none focus:outline-none prose-slate prose-headings:text-slate-900 prose-headings:font-bold prose-p:text-slate-800 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-strong:font-bold prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-semibold prose-code:before:content-none prose-code:after:content-none prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-blockquote:border-l-4 prose-blockquote:border-l-blue-600 prose-blockquote:bg-blue-50 prose-blockquote:text-slate-800 prose-blockquote:font-medium prose-img:rounded-xl prose-img:shadow-lg prose-hr:border-slate-300 prose-ul:text-slate-800 prose-ol:text-slate-800 prose-li:text-slate-800 prose-li:text-lg',
+          'prose prose-lg max-w-none focus:outline-none prose-slate prose-headings:text-slate-900 prose-headings:font-bold prose-p:text-slate-900 prose-p:leading-relaxed prose-p:text-lg prose-a:text-blue-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-strong:font-bold prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-semibold prose-code:before:content-none prose-code:after:content-none prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-blockquote:border-l-4 prose-blockquote:border-l-blue-600 prose-blockquote:bg-blue-50 prose-blockquote:text-slate-900 prose-blockquote:font-medium prose-img:rounded-xl prose-img:shadow-lg prose-hr:border-slate-300 prose-ul:text-slate-900 prose-ol:text-slate-900 prose-li:text-slate-900 prose-li:text-lg',
         'aria-label': 'Blog post content',
       },
     },
@@ -132,7 +132,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
                 absolute right-3 top-3 p-2.5 rounded-lg
                 bg-slate-700 hover:bg-slate-600
                 opacity-0 group-hover:opacity-100
-                transition-all duration-200
+                transition-all duration-200 size-8
                 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500
                 shadow-lg
             `;

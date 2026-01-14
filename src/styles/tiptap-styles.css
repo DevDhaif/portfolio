@@ -64,24 +64,24 @@
    ============================================ */
 @layer components {
   .tiptap-content {
-    @apply max-w-none text-gray-200 leading-relaxed;
+    @apply max-w-none text-gray-900 leading-relaxed;
 
     /* Headings */
     & h1 {
-      @apply text-3xl font-bold mb-6 text-gray-50 border-b border-gray-800/50 pb-2 mt-8 first:mt-0;
+      @apply text-3xl font-bold mb-6 text-gray-900 border-b border-gray-300 pb-2 mt-8 first:mt-0;
     }
 
     & h2 {
-      @apply text-2xl font-bold mb-4 text-gray-100 mt-8 first:mt-0;
+      @apply text-2xl font-bold mb-4 text-gray-900 mt-8 first:mt-0;
     }
 
     & h3 {
-      @apply text-xl font-bold mb-3 text-gray-200 mt-6 first:mt-0;
+      @apply text-xl font-bold mb-3 text-gray-900 mt-6 first:mt-0;
     }
 
     /* Paragraphs */
     & p {
-      @apply mb-4 leading-relaxed text-base text-gray-200;
+      @apply mb-4 leading-relaxed text-base text-gray-900;
       line-height: 1.75;
     }
 
@@ -108,7 +108,7 @@
 
     /* List items */
     & li {
-      @apply text-gray-200 pl-1;
+      @apply text-gray-900 pl-1;
     }
 
     & li > p {
@@ -178,7 +178,7 @@
 
     /* Blockquote */
     & blockquote {
-      @apply border-l-4 border-blue-500/50 bg-blue-900/10 pl-6 py-3 pr-4 italic my-6 rounded-r-lg;
+      @apply border-l-4 border-blue-500 bg-blue-50 pl-6 py-3 pr-4 italic my-6 rounded-r-lg text-gray-900;
     }
 
     & blockquote p:last-child {
@@ -187,12 +187,12 @@
 
     /* Horizontal rule */
     & hr {
-      @apply border-gray-700 my-8;
+      @apply border-gray-300 my-8;
     }
 
     /* Links */
     & a {
-      @apply text-blue-400 hover:text-blue-300 underline decoration-blue-500/30 hover:decoration-blue-400 transition-all duration-200;
+      @apply text-blue-600 hover:text-blue-700 underline decoration-blue-500/30 hover:decoration-blue-500 transition-all duration-200;
       text-underline-offset: 2px;
     }
 
@@ -212,7 +212,7 @@
 
     /* Inline code */
     & :not(pre) > code {
-      @apply bg-gray-800 text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono;
+      @apply bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded text-sm font-mono;
     }
 
     /* Images */
@@ -222,15 +222,15 @@
 
     /* Tables */
     & table {
-      @apply w-full my-6 border-collapse overflow-hidden rounded-lg border border-gray-800;
+      @apply w-full my-6 border-collapse overflow-hidden rounded-lg border border-gray-300;
     }
 
     & table th {
-      @apply bg-gray-800 text-gray-200 p-3 text-left font-medium;
+      @apply bg-gray-100 text-gray-900 p-3 text-left font-medium;
     }
 
     & table td {
-      @apply border-t border-gray-800 p-3;
+      @apply border-t border-gray-300 p-3 text-gray-900;
     }
 
     /* Text direction */
@@ -248,12 +248,12 @@
     & s,
     & del,
     & strike {
-      @apply line-through text-gray-400;
+      @apply line-through text-gray-500;
     }
 
     /* Strong/Bold */
     & strong {
-      @apply font-bold text-gray-100;
+      @apply font-bold text-gray-900;
     }
 
     /* Emphasis/Italic */
@@ -311,7 +311,7 @@
        Content Reader Specific Styles
        ============================================ */
   .content-reader {
-    @apply max-w-none text-gray-300;
+    @apply max-w-none text-gray-900;
 
     & img {
       @apply border border-gray-800/30 shadow-lg transition-transform duration-200;
