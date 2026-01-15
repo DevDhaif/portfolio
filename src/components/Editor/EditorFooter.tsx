@@ -17,7 +17,7 @@ interface EditorFooterProps {
 export const EditorFooter = memo(({ stats }: EditorFooterProps) => {
   return (
     <div
-      className="editor-footer flex items-center justify-between px-4 py-2 bg-gray-900/50 border-t border-gray-800 text-xs text-gray-500"
+      className="editor-footer flex items-center justify-between px-4 py-2 bg-gray-50 border-t border-gray-200 text-xs text-gray-600"
       aria-label="Editor statistics"
     >
       <div className="flex items-center gap-4">
@@ -37,7 +37,7 @@ export const EditorFooter = memo(({ stats }: EditorFooterProps) => {
           {stats.readingTime} min read
         </span>
       </div>
-      <div className="text-gray-600">
+      <div className="text-gray-500">
         <span>Tip: Drag & drop images or paste from clipboard</span>
       </div>
     </div>

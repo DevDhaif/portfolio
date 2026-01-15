@@ -315,10 +315,6 @@
 
     & img {
       @apply border border-gray-800/30 shadow-lg transition-transform duration-200;
-
-      &:hover {
-        transform: scale(1.01);
-      }
     }
 
     & pre {

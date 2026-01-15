@@ -28,6 +28,11 @@ export const useTempFiles = (
     onChangeRef.current = onTempFileChange;
   }, [onTempFileChange]);
 
+  // Call the callback when tempFiles changes (after state update)
+  useEffect(() => {
+    onChangeRef.current?.(tempFiles);
+  }, [tempFiles]);
+
   /**
    * Add a temporary file
    */
@@ -36,7 +41,8 @@ export const useTempFiles = (
 
     setTempFiles((prev) => {
       const newFiles = new Map(prev).set(url, file);
-      onChangeRef.current?.(newFiles);
+      // Don't call callback here - causes setState during render
+      // Will be handled by useEffect below
       return newFiles;
     });
 

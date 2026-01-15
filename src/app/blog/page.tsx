@@ -15,15 +15,23 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const search = resolvedParams?.search || '';
 
   return (
-    <div className="min-h-screen py-16 md:py-24 relative overflow-hidden bg-white">
+    <div className="min-h-screen py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-white">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header section */}
         <div className="mb-16 space-y-6 text-center md:text-left">
           <div className="space-y-4">
+            <div className="inline-block">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
+                ✨ Web Development Blog
+              </span>
+            </div>
             <h1 className="text-5xl md:text-6xl font-bold text-slate-900 tracking-tight">
-              Latest <span className="text-blue-600">Insights</span>
+              Latest{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Insights
+              </span>
             </h1>
-            <p className="text-xl text-slate-700 max-w-3xl mx-auto md:mx-0 font-medium">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto md:mx-0 leading-relaxed">
               Thoughts, tutorials, and insights about web development, design
               patterns, and the latest technologies.
             </p>
@@ -331,8 +339,8 @@ async function SearchAndFilterBar({
             href={`/blog?tag=${encodeURIComponent(tag)}`}
             className={`text-sm px-2.5 py-1 rounded-full transition-colors ${
               currentTag === tag
-                ? 'bg-accent-primary/20 text-accent-primary'
-                : 'bg-card text-text-secondary hover:text-text-primary'
+                ? 'bg-card !text-white hover:text-text-primary'
+                : 'bg-accent-primary/20 text-accent-primary'
             }`}
           >
             {tag}

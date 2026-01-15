@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useState, useEffect } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -151,23 +152,51 @@ export default function BlogPost({
     typeof post.content === 'string' ? JSON.parse(post.content) : post.content;
 
   return (
-    <article className="py-12 md:py-20">
+    <article className="py-12 md:py-20 bg-gradient-to-b from-blue-50 via-white to-white">
       <BlogPostJsonLd post={post} />
 
       {/* Hero Section */}
-      <div className="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="space-y-6">
+          {/* Back button */}
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors group"
+          >
+            <svg
+              className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back to Blog
+          </Link>
+
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
             {post?.title}
           </h1>
 
+          {/* Description */}
+          {post.description && (
+            <p className="text-xl text-slate-600 leading-relaxed">
+              {post.description}
+            </p>
+          )}
+
           {/* Meta information */}
-          <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-y-2 border-slate-300">
-            <div className="flex items-center gap-6 text-base text-slate-700 font-semibold">
+          <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-y border-slate-200">
+            <div className="flex items-center gap-6 text-sm text-slate-600">
               <time className="flex items-center gap-2">
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -185,24 +214,20 @@ export default function BlogPost({
                   day: 'numeric',
                 })}
               </time>
-              {/* <span className="flex items-center gap-2">
-                <EyeIcon className="w-5 h-5" />
-                {post?.views_count || 0} views
-              </span> */}
             </div>
             <button
               onClick={handleLike}
               disabled={isLiking || hasLiked}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
                 hasLiked
-                  ? 'bg-red-100 text-red-600 border-2 border-red-600'
-                  : 'bg-slate-900 text-white hover:bg-red-600 border-2 border-slate-900 hover:border-red-600'
+                  ? 'bg-red-50 text-red-600 border border-red-200'
+                  : 'bg-white text-slate-700 hover:bg-red-50 hover:text-red-600 border border-slate-200 hover:border-red-200'
               } ${isLiking ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <HeartIcon
-                className={`w-5 h-5 ${hasLiked ? 'fill-current' : ''}`}
+                className={`w-4 h-4 ${hasLiked ? 'fill-current' : ''}`}
               />
-              {post?.likes_count || 0}
+              {post?.likes_count || 0} {hasLiked ? 'Liked' : 'Like'}
             </button>
           </div>
 
@@ -210,19 +235,20 @@ export default function BlogPost({
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span
+                <Link
                   key={tag}
-                  className="inline-flex items-center rounded-full bg-blue-100 border-2 border-blue-600 px-4 py-2 text-sm font-bold text-blue-700"
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  className="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 hover:border-blue-400 hover:bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 transition-colors"
                 >
-                  {tag}
-                </span>
+                  #{tag}
+                </Link>
               ))}
             </div>
           )}
 
           {/* Cover Image */}
           {coverImageUrl && (
-            <div className="relative aspect-video overflow-hidden rounded-2xl shadow-2xl">
+            <div className="relative aspect-video overflow-hidden rounded-2xl shadow-lg border border-slate-200">
               <Image
                 src={coverImageUrl}
                 alt={post.title}
@@ -236,9 +262,71 @@ export default function BlogPost({
       </div>
 
       {/* Content */}
-      <div className="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-12">
+      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white  border border-slate-200 p-8 md:p-12">
           <ContentRenderer content={formattedContent} />
+        </div>
+
+        {/* Share section */}
+        <div className="mt-12 pt-8 border-t border-slate-200">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-slate-600 font-medium">
+                Share this article:
+              </span>
+              <div className="flex gap-2">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-600 transition-colors"
+                  aria-label="Share on Twitter"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
+                  </svg>
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-600 transition-colors"
+                  aria-label="Share on LinkedIn"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors"
+            >
+              Read More Articles
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
     </article>
