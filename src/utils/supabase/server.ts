@@ -4,8 +4,8 @@ import { cookies } from 'next/headers'
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 import { CookieValue } from '@/types'
 
-export function createClient() {
-    const cookieStore = cookies()
+export async function createClient() {
+    const cookieStore = await cookies()
 
     return createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -15,7 +15,7 @@ export function createClient() {
                 getAll() {
                     try {
 
-                        return (cookieStore as any).getAll().map((cookie: ResponseCookie): CookieValue => ({
+                        return cookieStore.getAll().map((cookie: ResponseCookie): CookieValue => ({
                             name: cookie.name,
                             value: cookie.value
                         }))
@@ -27,7 +27,7 @@ export function createClient() {
                     try {
                         cookiesToSet.forEach((cookie: CookieValue) => {
 
-                            (cookieStore as any).set({
+                            cookieStore.set({
                                 name: cookie.name,
                                 value: cookie.value,
                                 ...cookie.options

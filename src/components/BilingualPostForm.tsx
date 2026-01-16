@@ -34,9 +34,29 @@ export function BilingualPostForm({
   const [activeTab, setActiveTab] = useState<Language>('en');
   const [coverImage, setCoverImage] = useState<File[]>([]);
   const [existingCoverImage, setExistingCoverImage] = useState<string | undefined>(initialData?.cover_image);
-  const [contentEn, setContentEn] = useState(initialData?.content_en || {});
+  
+  // Default empty Tiptap document structure
+  const emptyContent = {
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [],
+      },
+    ],
+  };
+
+  const [contentEn, setContentEn] = useState(
+    initialData?.content_en && Object.keys(initialData.content_en).length > 0
+      ? initialData.content_en
+      : emptyContent
+  );
   const [contentAr, setContentAr] = useState(
-    initialData?.content_ar || initialData?.content_en || {}
+    initialData?.content_ar && Object.keys(initialData.content_ar).length > 0
+      ? initialData.content_ar
+      : initialData?.content_en && Object.keys(initialData.content_en).length > 0
+        ? initialData.content_en
+        : emptyContent
   );
   const [editorImages, setEditorImages] = useState<Map<string, File>>(
     new Map()
@@ -208,7 +228,7 @@ export function BilingualPostForm({
       </div>
 
       {/* English Content */}
-      <div className={activeTab === 'en' ? 'block' : 'hidden'}>
+      <div style={{ display: activeTab === 'en' ? 'block' : 'none' }}>
         <div className="space-y-6">
           <div>
             <label
@@ -258,7 +278,7 @@ export function BilingualPostForm({
       </div>
 
       {/* Arabic Content */}
-      <div className={activeTab === 'ar' ? 'block' : 'hidden'}>
+      <div style={{ display: activeTab === 'ar' ? 'block' : 'none' }}>
         <div className="space-y-6" dir="rtl">
           <div>
             <label

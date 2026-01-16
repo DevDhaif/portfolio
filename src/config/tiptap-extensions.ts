@@ -7,6 +7,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import { createLowlight } from 'lowlight';
 import { TextDirection } from '@/extensions/direction';
+import { ListItemHeading } from '@/extensions/list-item-heading';
 import { EDITOR_CONFIG } from './editor.config';
 
 // Language imports
@@ -59,7 +60,7 @@ export const createEditorLowlight = () => {
 /**
  * Get editor extensions with shared configuration
  * @param lowlight - Lowlight instance for code highlighting
- * @param editable - Whether the editor is editable (false for reader)
+ * @param editable - Whether the editor is editable (vs read-only viewer)
  */
 export const getEditorExtensions = (
   lowlight: ReturnType<typeof createLowlight>,
@@ -69,6 +70,8 @@ export const getEditorExtensions = (
     StarterKit.configure({
       // Disable default code block (we use lowlight version)
       codeBlock: false,
+      // Disable default listItem (we use custom version with heading support)
+      listItem: false,
 
       // Configure bullet list with proper nesting
       bulletList: {
@@ -88,19 +91,12 @@ export const getEditorExtensions = (
         },
       },
 
-      // Configure list items
-      listItem: {
-        HTMLAttributes: {
-          class: 'tiptap-list-item',
-        },
-      },
-
       // Configure headings
       heading: {
         levels: [...EDITOR_CONFIG.headings.levels],
       },
 
-      // Configure history (undo/redo) only for editable
+      // Configure history (undo/redo) only for editable mode
       history: editable
         ? {
             depth: EDITOR_CONFIG.history.depth,
@@ -141,6 +137,9 @@ export const getEditorExtensions = (
 
     // Text direction support (RTL/LTR)
     TextDirection,
+
+    // List item with heading support
+    ListItemHeading,
 
     // Image support
     Image.configure({

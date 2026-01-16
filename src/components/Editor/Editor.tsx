@@ -2,7 +2,7 @@
 'use client';
 
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo, useEffect, useRef, startTransition } from 'react';
 import 'highlight.js/styles/github-dark.css';
 import '../../styles/tiptap-styles.css';
 import { EditorToolbar } from './EditorToolbar';
@@ -22,15 +22,40 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
   // Memoize lowlight to prevent recreation on every render
   const lowlight = useMemo(() => createEditorLowlight(), []);
   const extensions = useMemo(
-    () => getEditorExtensions(lowlight, true),
+    () => getEditorExtensions(lowlight, true), // Enable undo/redo
     [lowlight]
   );
 
   const { addTempFile, cleanup } = useTempFiles(onTempFileChange);
+  
+  // Debounce onChange to prevent UI blocking on large content
+  const timeoutRef = useRef<NodeJS.Timeout>();
+  const lastContentRef = useRef<JSONContent>();
+
+  const debouncedOnChange = useCallback(
+    (newContent: JSONContent) => {
+      // Clear existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Store content immediately for internal consistency
+      lastContentRef.current = newContent;
+
+      // Use startTransition for non-blocking updates with aggressive debounce
+      timeoutRef.current = setTimeout(() => {
+        startTransition(() => {
+          onChange(newContent);
+        });
+      }, 1000); // 1 second - let editor fully settle before parent update
+    },
+    [onChange]
+  );
 
   const editor = useEditor({
     extensions,
     content,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
@@ -76,9 +101,22 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
       },
     },
     onUpdate: ({ editor }) => {
-      onChange(editor.getJSON());
+      debouncedOnChange(editor.getJSON());
     },
   });
+
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      // Save final content before unmount
+      if (lastContentRef.current) {
+        onChange(lastContentRef.current);
+      }
+    };
+  }, [onChange]);
 
   // Apply text direction detection
   useTextDirection(editor);
@@ -178,16 +216,18 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
   }
 
   return (
-    <div className="editor-container rounded-lg border border-border overflow-hidden">
+    <div className="editor-container rounded-lg border border-border overflow-hidden flex flex-col relative">
       <EditorToolbar
         editor={editor}
         onInsertCodeBlock={insertCodeBlock}
         onInsertImage={handleInsertImage}
       />
-      <EditorContent
-        editor={editor}
-        className="tiptap-editor tiptap-content min-h-[400px] p-4"
-      />
+      <div className="overflow-y-auto flex-1">
+        <EditorContent
+          editor={editor}
+          className="tiptap-editor tiptap-content min-h-[400px] max-h-[600px] p-4"
+        />
+      </div>
       <EditorFooter stats={stats} />
     </div>
   );

@@ -96,34 +96,94 @@ export const TextDirection = Extension.create({
     return {
       setTextDirection:
         (direction: 'rtl' | 'ltr') =>
-        ({ commands }) => {
-          return DIRECTION_TYPES.every((type) =>
-            commands.updateAttributes(type, { dir: direction })
-          );
+        ({ state, dispatch }) => {
+          const { selection } = state;
+          const { from, to } = selection;
+
+          if (dispatch) {
+            const tr = state.tr;
+
+            state.doc.nodesBetween(from, to, (node, pos) => {
+              if (DIRECTION_TYPES.includes(node.type.name)) {
+                tr.setNodeMarkup(pos, undefined, {
+                  ...node.attrs,
+                  dir: direction,
+                });
+              }
+            });
+
+            // If no nodes found in selection, update the parent paragraph
+            if (!tr.docChanged) {
+              const $from = selection.$from;
+              for (let depth = $from.depth; depth >= 0; depth--) {
+                const node = $from.node(depth);
+                if (DIRECTION_TYPES.includes(node.type.name)) {
+                  const pos = $from.before(depth);
+                  tr.setNodeMarkup(pos, undefined, {
+                    ...node.attrs,
+                    dir: direction,
+                  });
+                  break;
+                }
+              }
+            }
+
+            dispatch(tr);
+          }
+
+          return true;
         },
 
       unsetTextDirection:
         () =>
-        ({ commands }) => {
-          return DIRECTION_TYPES.every((type) =>
-            commands.resetAttributes(type, 'dir')
-          );
+        ({ state, dispatch }) => {
+          const { selection } = state;
+          const { from, to } = selection;
+
+          if (dispatch) {
+            const tr = state.tr;
+
+            state.doc.nodesBetween(from, to, (node, pos) => {
+              if (DIRECTION_TYPES.includes(node.type.name) && node.attrs.dir) {
+                const { dir, ...restAttrs } = node.attrs;
+                tr.setNodeMarkup(pos, undefined, restAttrs);
+              }
+            });
+
+            dispatch(tr);
+          }
+
+          return true;
         },
 
       toggleTextDirection:
         () =>
-        ({ editor, commands }) => {
-          const { selection } = editor.state;
+        ({ state, dispatch, commands }) => {
+          const { selection } = state;
           const { $from } = selection;
-          const currentDir = $from.parent.attrs.dir || 'ltr';
-          const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
 
+          // Find current direction
+          let currentDir = 'ltr';
+          for (let depth = $from.depth; depth >= 0; depth--) {
+            const node = $from.node(depth);
+            if (DIRECTION_TYPES.includes(node.type.name)) {
+              currentDir = node.attrs.dir || 'ltr';
+              break;
+            }
+          }
+
+          const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
           return commands.setTextDirection(newDir);
         },
     };
   },
 
   addProseMirrorPlugins() {
+    // Auto-detection disabled to allow manual direction control
+    // If you want auto-detection back, uncomment the plugin below
+    return [];
+
+    /*
     return [
       new Plugin({
         key: new PluginKey('textDirectionAutoDetect'),
@@ -177,6 +237,7 @@ export const TextDirection = Extension.create({
         },
       }),
     ];
+    */
   },
 
   addKeyboardShortcuts() {

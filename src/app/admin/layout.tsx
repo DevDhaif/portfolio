@@ -44,7 +44,7 @@ export default async function AdminLayout({
     <SessionProvider>
       <ProtectedRoute>
         <Suspense fallback={<LoadingState />}>
-          <div className="min-h-screen flex bg-gray-50">
+          <div className="min-h-screen flex bg-gray-50 isolate relative z-[100]">
             {/* Sidebar */}
             <div className="w-64 bg-white border-r border-gray-200 text-gray-900 flex flex-col shadow-sm">
               <div className="p-6 border-b border-gray-200">
@@ -67,7 +67,7 @@ export default async function AdminLayout({
 
             {/* Main content */}
             <div className="flex-1 flex flex-col min-h-screen bg-white">
-              <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+              <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
                 <div className="max-w-7xl mx-auto px-6 py-4">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-gray-900">

@@ -3,11 +3,9 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { Noise } from "@/components/ui/noise";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { Toaster } from "@/components/ui/toaster";
+import { ConditionalLayout } from "@/components/ConditionalLayout";
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
 const inter = Inter({
     subsets: ["latin"],
@@ -154,26 +152,7 @@ export default function RootLayout({
         >
             <body className="min-h-screen bg-background font-sans antialiased overflow-x-hidden selection:  selection:text-base">
                 <>
-                    {/* Background Elements */}
-                    <div className="fixed inset-0 -z-10">
-                        <div className="absolute inset-0 bg-background" />
-                        <div className="absolute inset-0 bg-grid-pattern bg-grid opacity-5" />
-                        <Noise />
-
-                        {/* Gradient blob */}
-                        <div className="absolute top-[-50%] left-[-50%] h-[200%] w-[200%] animate-[spin_100s_linear_infinite] bg-[radial-gradient(var(--accent)/4%,transparent_70%)]" />
-
-                        {/* Background glow spots */}
-                        <div className="absolute left-1/4 top-1/4 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full  /10 blur-3xl" />
-                        <div className="absolute right-1/4 bottom-1/4 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-3xl" />
-                    </div>
-
-                    {/* Main Content */}
-                    <div className="relative flex min-h-screen flex-col">
-                        <Header />
-                        <main className="flex-1">{children}</main>
-                        <Footer />
-                    </div>
+                    <ConditionalLayout>{children}</ConditionalLayout>
 
                     {/* UI Components */}
                     <ScrollToTop />

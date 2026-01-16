@@ -24,20 +24,25 @@ export async function createPost(formData: FormData) {
     const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
+    
+    const titleEn = formData.get('title_en') as string;
+    const titleAr = formData.get('title_ar') as string;
+    const descriptionEn = formData.get('description_en') as string;
+    const descriptionAr = formData.get('description_ar') as string;
 
     const { error: insertError } = await supabase
       .from('posts')
       .insert([
         {
-          title_en: formData.get('title_en'),
-          title_ar: formData.get('title_ar'),
-          description_en: formData.get('description_en'),
-          description_ar: formData.get('description_ar'),
+          title_en: titleEn,
+          title_ar: titleAr,
+          description_en: descriptionEn,
+          description_ar: descriptionAr,
           content_en: contentEn,
           content_ar: contentAr,
           cover_image: formData.get('coverImage'),
           tags,
-          slug: generateSlug(formData.get('title_en')?.toString() || ''),
+          slug: generateSlug(titleEn || ''),
           published,
         },
       ])
@@ -66,12 +71,17 @@ export async function updatePost(postId: string, formData: FormData) {
     const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
+    
+    const titleEn = formData.get('title_en') as string;
+    const titleAr = formData.get('title_ar') as string;
+    const descriptionEn = formData.get('description_en') as string;
+    const descriptionAr = formData.get('description_ar') as string;
 
     const updateData: any = {
-      title_en: formData.get('title_en'),
-      title_ar: formData.get('title_ar'),
-      description_en: formData.get('description_en'),
-      description_ar: formData.get('description_ar'),
+      title_en: titleEn,
+      title_ar: titleAr,
+      description_en: descriptionEn,
+      description_ar: descriptionAr,
       content_en: contentEn,
       content_ar: contentAr,
       tags,

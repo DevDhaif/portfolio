@@ -30,6 +30,19 @@ export const useEditorStats = (editor: Editor | null): EditorStats => {
     if (!editor) return;
 
     const text = editor.state.doc.textContent;
+    
+    // Skip heavy calculations for very large documents
+    if (text.length > 50000) {
+      setStats({
+        words: Math.floor(text.length / 5), // Estimate
+        characters: text.length,
+        charactersWithSpaces: text.length,
+        paragraphs: 0,
+        sentences: 0,
+        readingTime: Math.ceil(text.length / 5 / WORDS_PER_MINUTE),
+      });
+      return;
+    }
 
     // Word count (split by whitespace, filter empty)
     const words = text.split(/\s+/).filter((word) => word.length > 0);
@@ -69,16 +82,33 @@ export const useEditorStats = (editor: Editor | null): EditorStats => {
     // Calculate initial stats
     calculateStats();
 
-    // Subscribe to updates
+    // Throttle updates to every 2 seconds
+    let lastUpdate = Date.now();
+    let timeoutId: NodeJS.Timeout;
+
     const handleUpdate = () => {
-      // Debounce stats calculation
-      requestAnimationFrame(calculateStats);
+      const now = Date.now();
+      const timeSinceLastUpdate = now - lastUpdate;
+      
+      if (timeSinceLastUpdate > 2000) {
+        // Update immediately if 2+ seconds passed
+        calculateStats();
+        lastUpdate = now;
+      } else {
+        // Schedule update for later
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          calculateStats();
+          lastUpdate = Date.now();
+        }, 2000 - timeSinceLastUpdate);
+      }
     };
 
     editor.on('update', handleUpdate);
 
     return () => {
       editor.off('update', handleUpdate);
+      clearTimeout(timeoutId);
     };
   }, [editor, calculateStats]);
 
