@@ -23,6 +23,11 @@ export async function generateMetadata({
     };
   }
 
+  // Use bilingual fields with fallback to old schema
+  const title = post.title_en || post.title;
+  const description = post.description_en || post.description;
+  const hasArabic = !!(post.title_ar && post.content_ar);
+
   // Handle cover image URL
   let coverImage = post.cover_image;
   if (coverImage && !coverImage.startsWith('http')) {
@@ -41,10 +46,13 @@ export async function generateMetadata({
     tags = post.tags;
   }
 
+  const baseUrl = 'https://devdhaif.vercel.app';
+  const postUrl = `${baseUrl}/blog/${post.slug}`;
+
   return {
-    metadataBase: new URL('https://devdhaif.vercel.app'),
-    title: post.title,
-    description: post.description,
+    metadataBase: new URL(baseUrl),
+    title: title,
+    description: description,
     keywords: [
       ...tags,
       'Dhaifallah Alfarawi',
@@ -54,17 +62,27 @@ export async function generateMetadata({
       'Programming',
       'Tutorial',
     ],
-    authors: [
-      { name: 'Dhaifallah Alfarawi', url: 'https://devdhaif.vercel.app' },
-    ],
+    authors: [{ name: 'Dhaifallah Alfarawi', url: baseUrl }],
     creator: 'Dhaifallah Alfarawi',
     publisher: 'Dhaifallah Alfarawi',
+    alternates: hasArabic
+      ? {
+          canonical: postUrl,
+          languages: {
+            en: postUrl,
+            ar: `${postUrl}?lang=ar`,
+          },
+        }
+      : {
+          canonical: postUrl,
+        },
     openGraph: {
-      title: post.title,
-      description: post.description,
-      url: `https://devdhaif.vercel.app/blog/${post.slug}`,
+      title: title,
+      description: description,
+      url: postUrl,
       siteName: 'Dhaifallah Alfarawi Blog',
       locale: 'en_US',
+      alternateLocale: hasArabic ? 'ar_SA' : undefined,
       type: 'article',
       publishedTime: post.created_at,
       modifiedTime: post.updated_at || post.created_at,
@@ -76,7 +94,7 @@ export async function generateMetadata({
               url: coverImage,
               width: 1200,
               height: 630,
-              alt: post.title,
+              alt: title,
               type: 'image/png',
             },
           ]
@@ -86,8 +104,8 @@ export async function generateMetadata({
       card: 'summary_large_image',
       site: '@devdhaif',
       creator: '@devdhaif',
-      title: post.title,
-      description: post.description,
+      title: title,
+      description: description,
       images: coverImage ? [coverImage] : [],
     },
     robots: {
@@ -100,9 +118,6 @@ export async function generateMetadata({
         'max-image-preview': 'large',
         'max-snippet': -1,
       },
-    },
-    alternates: {
-      canonical: `https://devdhaif.vercel.app/blog/${post.slug}`,
     },
   };
 }

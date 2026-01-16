@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { ContentRenderer } from '@/components/blog/ContentReader';
 import { incrementViews, toggleLike } from '@/app/admin/blog/actions';
@@ -13,6 +13,8 @@ import { BlogPostJsonLd } from '@/components/JsonLd/schemas';
 import { Post } from '@/types';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
+type Language = 'en' | 'ar';
+
 export default function BlogPost({
   params,
 }: {
@@ -20,14 +22,24 @@ export default function BlogPost({
 }) {
   const { slug: encodedSlug } = use(params);
   const slug = decodeURIComponent(encodedSlug);
+  const searchParams = useSearchParams();
   const { trackBlogPost, trackBlogInteraction } = useAnalytics();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const [isLiking, setIsLiking] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
+  const [language, setLanguage] = useState<Language>('en');
   const router = useRouter();
   const supabase = createClient();
+
+  // Check URL parameter for language
+  useEffect(() => {
+    const lang = searchParams.get('lang');
+    if (lang === 'ar') {
+      setLanguage('ar');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     async function fetchPost() {
@@ -64,13 +76,17 @@ export default function BlogPost({
 
         setHasLiked(hasLikedPost(data.id));
 
-        if (data.cover_image && !data.cover_image.startsWith('http')) {
-          const {
-            data: { publicUrl },
-          } = supabase.storage
-            .from('blog-content')
-            .getPublicUrl(data.cover_image);
-          setCoverImageUrl(publicUrl);
+        if (data.cover_image) {
+          if (data.cover_image.startsWith('http')) {
+            setCoverImageUrl(data.cover_image);
+          } else {
+            const {
+              data: { publicUrl },
+            } = supabase.storage
+              .from('blog-content')
+              .getPublicUrl(data.cover_image);
+            setCoverImageUrl(publicUrl);
+          }
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -148,46 +164,122 @@ export default function BlogPost({
     );
   }
 
+  // Get content based on selected language with fallback
+  const currentTitle =
+    language === 'ar' && post.title_ar
+      ? post.title_ar
+      : post.title_en || post.title;
+  const currentDescription =
+    language === 'ar' && post.description_ar
+      ? post.description_ar
+      : post.description_en || post.description;
+  const currentContent =
+    language === 'ar' && post.content_ar
+      ? post.content_ar
+      : post.content_en || post.content;
+
   const formattedContent =
-    typeof post.content === 'string' ? JSON.parse(post.content) : post.content;
+    typeof currentContent === 'string'
+      ? JSON.parse(currentContent)
+      : currentContent;
+
+  const hasArabic = !!(post.title_ar || post.content_ar);
+  // Calculate reading time
+  const calculateReadingTime = (content: any): number => {
+    const getTextContent = (node: any): string => {
+      if (typeof node === 'string') return node;
+      if (node.text) return node.text;
+      if (node.content && Array.isArray(node.content)) {
+        return node.content.map(getTextContent).join(' ');
+      }
+      return '';
+    };
+    
+    const text = getTextContent(formattedContent);
+    const wordsPerMinute = 200;
+    const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+    return Math.ceil(wordCount / wordsPerMinute) || 1;
+  };
+
+  const readingTime = calculateReadingTime(formattedContent);
+  const switchLanguage = (lang: Language) => {
+    setLanguage(lang);
+    const url = new URL(window.location.href);
+    if (lang === 'ar') {
+      url.searchParams.set('lang', 'ar');
+    } else {
+      url.searchParams.delete('lang');
+    }
+    window.history.pushState({}, '', url.toString());
+  };
 
   return (
-    <article className="py-12 md:py-20 bg-gradient-to-b from-blue-50 via-white to-white">
+    <article
+      className="py-12 md:py-20 bg-gradient-to-b from-blue-50 via-white to-white"
+      dir={language === 'ar' ? 'rtl' : 'ltr'}
+    >
       <BlogPostJsonLd post={post} />
 
       {/* Hero Section */}
       <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="space-y-6">
-          {/* Back button */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors group"
-          >
-            <svg
-              className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Language Switcher & Back Button */}
+          <div className="flex items-center justify-between">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors group"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Blog
-          </Link>
+              <svg
+                className={`w-5 h-5 transform group-hover:${language === 'ar' ? 'translate-x-1' : '-translate-x-1'} transition-transform`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={language === 'ar' ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'}
+                />
+              </svg>
+              {language === 'ar' ? 'العودة إلى المدونة' : 'Back to Blog'}
+            </Link>
+
+            {hasArabic && (
+              <div className="flex gap-2 bg-white border border-gray-200 rounded-lg p-1">
+                <button
+                  onClick={() => switchLanguage('en')}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    language === 'en'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  🇬🇧 English
+                </button>
+                <button
+                  onClick={() => switchLanguage('ar')}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    language === 'ar'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  🇸🇦 العربية
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Title */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
-            {post?.title}
+            {currentTitle}
           </h1>
 
           {/* Description */}
-          {post.description && (
+          {currentDescription && (
             <p className="text-xl text-slate-600 leading-relaxed">
-              {post.description}
+              {currentDescription}
             </p>
           )}
 
@@ -208,12 +300,31 @@ export default function BlogPost({
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                {new Date(post.created_at).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                {new Date(post.created_at).toLocaleDateString(
+                  language === 'ar' ? 'ar-SA' : 'en-US',
+                  {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }
+                )}
               </time>
+              <span className="flex items-center gap-2">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {readingTime} {language === 'ar' ? 'دقيقة قراءة' : 'min read'}
+              </span>
             </div>
             <button
               onClick={handleLike}
@@ -270,13 +381,15 @@ export default function BlogPost({
         {/* Share section */}
         <div className="mt-12 pt-8 border-t border-slate-200">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <span className="text-slate-600 font-medium">
-                Share this article:
+                {language === 'ar'
+                  ? 'شارك هذه المقالة:'
+                  : 'Share this article:'}
               </span>
               <div className="flex gap-2">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentTitle)}&url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-600 transition-colors"
@@ -306,14 +419,14 @@ export default function BlogPost({
                   </svg>
                 </a>
               </div>
-            </div>
+            </div> */}
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 !text-white font-semibold transition-colors"
             >
               Read More Articles
               <svg
-                className="w-4 h-4"
+                className="w-4 h-4 rtl:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

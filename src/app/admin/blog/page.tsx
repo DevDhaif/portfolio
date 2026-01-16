@@ -60,9 +60,11 @@ export default async function BlogPostsPage() {
 
               <div className="flex-1">
                 <div className="flex justify-between items-start">
-                  <div>
+                  <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h2 className="text-xl font-semibold">{post.title}</h2>
+                      <h2 className="text-xl font-semibold">
+                        {post.title_en || post.title}
+                      </h2>
                       <span
                         className={`text-xs px-2 py-1 rounded-full font-medium ${
                           post.published
@@ -73,7 +75,22 @@ export default async function BlogPostsPage() {
                         {post.published ? 'Published' : 'Draft'}
                       </span>
                     </div>
-                    <p className="text-gray-600 mt-1">{post.description}</p>
+                    <p className="text-gray-600 mt-1 text-sm">
+                      {post.description_en || post.description}
+                    </p>
+                    {post.title_ar && (
+                      <div
+                        className="mt-2 pt-2 border-t border-gray-200"
+                        dir="rtl"
+                      >
+                        <p className="text-lg font-semibold text-gray-800">
+                          {post.title_ar}
+                        </p>
+                        <p className="text-gray-600 text-sm mt-1">
+                          {post.description_ar}
+                        </p>
+                      </div>
+                    )}
 
                     {/* Show tags if any */}
                     {post.tags && post.tags.length > 0 && (

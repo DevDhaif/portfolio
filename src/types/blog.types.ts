@@ -1,11 +1,24 @@
 export interface Post {
     id: string
     title: string
+    title_en?: string
+    title_ar?: string
     description: string
+    description_en?: string
+    description_ar?: string
     content: {
         type: string
         content: any[]
     }
+    content_en?: {
+        type: string
+        content: any[]
+    }
+    content_ar?: {
+        type: string
+        content: any[]
+    }
+    published: boolean
     cover_image: string
     tags: string[]
     created_at: string

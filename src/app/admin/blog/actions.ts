@@ -20,7 +20,8 @@ export async function createPost(formData: FormData) {
   try {
     const supabase = await createClient();
 
-    const content = JSON.parse(formData.get('content') as string);
+    const contentEn = JSON.parse(formData.get('content_en') as string);
+    const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
 
@@ -28,12 +29,15 @@ export async function createPost(formData: FormData) {
       .from('posts')
       .insert([
         {
-          title: formData.get('title'),
-          description: formData.get('description'),
-          content,
+          title_en: formData.get('title_en'),
+          title_ar: formData.get('title_ar'),
+          description_en: formData.get('description_en'),
+          description_ar: formData.get('description_ar'),
+          content_en: contentEn,
+          content_ar: contentAr,
           cover_image: formData.get('coverImage'),
           tags,
-          slug: generateSlug(formData.get('title')?.toString() || ''),
+          slug: generateSlug(formData.get('title_en')?.toString() || ''),
           published,
         },
       ])
@@ -58,14 +62,18 @@ export async function updatePost(postId: string, formData: FormData) {
   try {
     const supabase = await createClient();
 
-    const content = JSON.parse(formData.get('content') as string);
+    const contentEn = JSON.parse(formData.get('content_en') as string);
+    const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
 
     const updateData: any = {
-      title: formData.get('title'),
-      description: formData.get('description'),
-      content,
+      title_en: formData.get('title_en'),
+      title_ar: formData.get('title_ar'),
+      description_en: formData.get('description_en'),
+      description_ar: formData.get('description_ar'),
+      content_en: contentEn,
+      content_ar: contentAr,
       tags,
       published,
       updated_at: new Date().toISOString(),
