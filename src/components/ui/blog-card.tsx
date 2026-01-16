@@ -30,7 +30,8 @@ export function BlogCard({
     };
 
     // Estimate read time
-    const estimateReadTime = (text: string) => {
+    const estimateReadTime = (text: string | undefined | null) => {
+        if (!text) return 1;
         const wordsPerMinute = 200;
         const words = text.split(' ').length;
         return Math.ceil(words / wordsPerMinute);

@@ -97,8 +97,8 @@ export function BlogSection() {
                                 >
                                     <BlogCard
                                         id={post.id}
-                                        title={post.title}
-                                        description={post.description}
+                                        title={post.title_en || post.title || ''}
+                                        description={post.description_en || post.description || ''}
                                         date={post.created_at}
                                         coverImage={post.cover_image}
                                         slug={post.slug}
