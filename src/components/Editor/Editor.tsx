@@ -2,7 +2,13 @@
 'use client';
 
 import { useEditor, EditorContent, JSONContent } from '@tiptap/react';
-import { useCallback, useMemo, useEffect, useRef, startTransition } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+  startTransition,
+} from 'react';
 import 'highlight.js/styles/github-dark.css';
 import '../../styles/tiptap-styles.css';
 import { EditorToolbar } from './EditorToolbar';
@@ -27,7 +33,7 @@ export function Editor({ content, onChange, onTempFileChange }: EditorProps) {
   );
 
   const { addTempFile, cleanup } = useTempFiles(onTempFileChange);
-  
+
   // Debounce onChange to prevent UI blocking on large content
   const timeoutRef = useRef<NodeJS.Timeout>();
   const lastContentRef = useRef<JSONContent>();

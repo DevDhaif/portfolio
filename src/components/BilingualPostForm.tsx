@@ -33,8 +33,10 @@ export function BilingualPostForm({
 }: BilingualPostFormProps) {
   const [activeTab, setActiveTab] = useState<Language>('en');
   const [coverImage, setCoverImage] = useState<File[]>([]);
-  const [existingCoverImage, setExistingCoverImage] = useState<string | undefined>(initialData?.cover_image);
-  
+  const [existingCoverImage, setExistingCoverImage] = useState<
+    string | undefined
+  >(initialData?.cover_image);
+
   // Default empty Tiptap document structure
   const emptyContent = {
     type: 'doc',
@@ -54,7 +56,8 @@ export function BilingualPostForm({
   const [contentAr, setContentAr] = useState(
     initialData?.content_ar && Object.keys(initialData.content_ar).length > 0
       ? initialData.content_ar
-      : initialData?.content_en && Object.keys(initialData.content_en).length > 0
+      : initialData?.content_en &&
+          Object.keys(initialData.content_en).length > 0
         ? initialData.content_en
         : emptyContent
   );

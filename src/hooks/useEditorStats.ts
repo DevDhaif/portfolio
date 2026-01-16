@@ -30,7 +30,7 @@ export const useEditorStats = (editor: Editor | null): EditorStats => {
     if (!editor) return;
 
     const text = editor.state.doc.textContent;
-    
+
     // Skip heavy calculations for very large documents
     if (text.length > 50000) {
       setStats({
@@ -89,7 +89,7 @@ export const useEditorStats = (editor: Editor | null): EditorStats => {
     const handleUpdate = () => {
       const now = Date.now();
       const timeSinceLastUpdate = now - lastUpdate;
-      
+
       if (timeSinceLastUpdate > 2000) {
         // Update immediately if 2+ seconds passed
         calculateStats();

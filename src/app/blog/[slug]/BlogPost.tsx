@@ -194,10 +194,12 @@ export default function BlogPost({
       }
       return '';
     };
-    
+
     const text = getTextContent(formattedContent);
     const wordsPerMinute = 200;
-    const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+    const wordCount = text
+      .split(/\s+/)
+      .filter((word) => word.length > 0).length;
     return Math.ceil(wordCount / wordsPerMinute) || 1;
   };
 

@@ -8,17 +8,17 @@ export const ListItemHeading = ListItem.extend({
     return {
       headingLevel: {
         default: null,
-        parseHTML: element => {
+        parseHTML: (element) => {
           const level = element.getAttribute('data-heading-level');
           return level ? parseInt(level, 10) : null;
         },
-        renderHTML: attributes => {
+        renderHTML: (attributes) => {
           if (!attributes.headingLevel) {
             return {
               class: 'tiptap-list-item',
             };
           }
-          
+
           const level = attributes.headingLevel;
           return {
             'data-heading-level': String(level),

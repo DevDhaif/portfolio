@@ -275,7 +275,7 @@ async function SearchAndFilterBar({
   currentTag: string;
   currentSearch: string;
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Fetch tags for the filter
   const { data: posts } = await supabase

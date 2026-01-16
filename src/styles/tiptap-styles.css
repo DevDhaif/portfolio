@@ -183,14 +183,15 @@
     & li[data-heading-level='1'] {
       @apply text-3xl font-bold mt-6 mb-3;
       color: #374151 !important; /* gray-700 */
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;
@@ -203,14 +204,15 @@
     & li[data-heading-level='2'] {
       @apply text-2xl font-bold mt-5 mb-2;
       color: #374151 !important; /* gray-700 */
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;
@@ -223,14 +225,15 @@
     & li[data-heading-level='3'] {
       @apply text-xl font-semibold mt-4 mb-2;
       color: #374151 !important; /* gray-700 */
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;
@@ -347,11 +350,11 @@
     & li {
       color: #374151 !important;
     }
-    
+
     & li::marker {
       color: #374151 !important;
     }
-    
+
     & li > p {
       color: #374151 !important;
     }
@@ -365,14 +368,15 @@
       margin-top: 1.5rem;
       margin-bottom: 0.75rem;
       color: #374151 !important;
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;
@@ -389,14 +393,15 @@
       margin-top: 1.25rem;
       margin-bottom: 0.5rem;
       color: #374151 !important;
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;
@@ -413,14 +418,15 @@
       margin-top: 1rem;
       margin-bottom: 0.5rem;
       color: #374151 !important;
-      
+
       &::marker {
         color: #374151 !important;
         font-size: inherit;
         font-weight: inherit;
       }
-      
-      & > p, & > * {
+
+      & > p,
+      & > * {
         font-size: inherit;
         line-height: inherit;
         font-weight: inherit;

@@ -24,7 +24,7 @@ export async function createPost(formData: FormData) {
     const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
-    
+
     const titleEn = formData.get('title_en') as string;
     const titleAr = formData.get('title_ar') as string;
     const descriptionEn = formData.get('description_en') as string;
@@ -71,7 +71,7 @@ export async function updatePost(postId: string, formData: FormData) {
     const contentAr = JSON.parse(formData.get('content_ar') as string);
     const tags = JSON.parse(formData.get('tags') as string);
     const published = formData.get('status') === 'published';
-    
+
     const titleEn = formData.get('title_en') as string;
     const titleAr = formData.get('title_ar') as string;
     const descriptionEn = formData.get('description_en') as string;

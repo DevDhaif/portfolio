@@ -253,51 +253,90 @@ export const EditorToolbar = memo(
             onClick={() => {
               if (editor.isActive('listItem')) {
                 // Apply heading style to list item
-                const currentLevel = editor.getAttributes('listItem').headingLevel;
+                const currentLevel =
+                  editor.getAttributes('listItem').headingLevel;
                 if (currentLevel === 1) {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: null }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: null })
+                    .run();
                 } else {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: 1 }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: 1 })
+                    .run();
                 }
               } else {
                 editor.chain().focus().toggleHeading({ level: 1 }).run();
               }
             }}
-            isActive={editor.isActive('heading', { level: 1 }) || (editor.isActive('listItem') && editor.getAttributes('listItem').headingLevel === 1)}
+            isActive={
+              editor.isActive('heading', { level: 1 }) ||
+              (editor.isActive('listItem') &&
+                editor.getAttributes('listItem').headingLevel === 1)
+            }
             title="Heading 1 (works with lists)"
           />
           <ToolbarButton
             icon={<Heading2 className="h-4 w-4" />}
             onClick={() => {
               if (editor.isActive('listItem')) {
-                const currentLevel = editor.getAttributes('listItem').headingLevel;
+                const currentLevel =
+                  editor.getAttributes('listItem').headingLevel;
                 if (currentLevel === 2) {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: null }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: null })
+                    .run();
                 } else {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: 2 }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: 2 })
+                    .run();
                 }
               } else {
                 editor.chain().focus().toggleHeading({ level: 2 }).run();
               }
             }}
-            isActive={editor.isActive('heading', { level: 2 }) || (editor.isActive('listItem') && editor.getAttributes('listItem').headingLevel === 2)}
+            isActive={
+              editor.isActive('heading', { level: 2 }) ||
+              (editor.isActive('listItem') &&
+                editor.getAttributes('listItem').headingLevel === 2)
+            }
             title="Heading 2 (works with lists)"
           />
           <ToolbarButton
             icon={<Heading3 className="h-4 w-4" />}
             onClick={() => {
               if (editor.isActive('listItem')) {
-                const currentLevel = editor.getAttributes('listItem').headingLevel;
+                const currentLevel =
+                  editor.getAttributes('listItem').headingLevel;
                 if (currentLevel === 3) {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: null }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: null })
+                    .run();
                 } else {
-                  editor.chain().focus().updateAttributes('listItem', { headingLevel: 3 }).run();
+                  editor
+                    .chain()
+                    .focus()
+                    .updateAttributes('listItem', { headingLevel: 3 })
+                    .run();
                 }
               } else {
                 editor.chain().focus().toggleHeading({ level: 3 }).run();
               }
             }}
-            isActive={editor.isActive('heading', { level: 3 }) || (editor.isActive('listItem') && editor.getAttributes('listItem').headingLevel === 3)}
+            isActive={
+              editor.isActive('heading', { level: 3 }) ||
+              (editor.isActive('listItem') &&
+                editor.getAttributes('listItem').headingLevel === 3)
+            }
             title="Heading 3 (works with lists)"
           />
         </div>
@@ -313,13 +352,21 @@ export const EditorToolbar = memo(
           <ToolbarButton
             icon={<AlignLeft className="h-4 w-4" />}
             onClick={() => editor.chain().focus().setTextDirection('ltr').run()}
-            isActive={editor.getAttributes('paragraph').dir === 'ltr' || editor.getAttributes('listItem').dir === 'ltr' || editor.getAttributes('heading').dir === 'ltr'}
+            isActive={
+              editor.getAttributes('paragraph').dir === 'ltr' ||
+              editor.getAttributes('listItem').dir === 'ltr' ||
+              editor.getAttributes('heading').dir === 'ltr'
+            }
             title="Left to Right"
           />
           <ToolbarButton
             icon={<AlignRight className="h-4 w-4" />}
             onClick={() => editor.chain().focus().setTextDirection('rtl').run()}
-            isActive={editor.getAttributes('paragraph').dir === 'rtl' || editor.getAttributes('listItem').dir === 'rtl' || editor.getAttributes('heading').dir === 'rtl'}
+            isActive={
+              editor.getAttributes('paragraph').dir === 'rtl' ||
+              editor.getAttributes('listItem').dir === 'rtl' ||
+              editor.getAttributes('heading').dir === 'rtl'
+            }
             title="Right to Left"
           />
         </div>

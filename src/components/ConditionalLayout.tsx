@@ -7,12 +7,13 @@ import { Noise } from '@/components/ui/noise';
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  
+
   // Check if current path is admin or auth related
-  const isAdminOrAuth = pathname?.startsWith('/admin') || 
-                        pathname?.startsWith('/login') || 
-                        pathname?.startsWith('/auth') ||
-                        pathname?.startsWith('/private');
+  const isAdminOrAuth =
+    pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/login') ||
+    pathname?.startsWith('/auth') ||
+    pathname?.startsWith('/private');
 
   if (isAdminOrAuth) {
     // Render only children for admin/auth pages (no Header/Footer)
