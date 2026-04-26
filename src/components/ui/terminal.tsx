@@ -10,7 +10,7 @@ export function Terminal({
     typingSpeed = 80,
     delayBetweenCommands = 2500,
     className,
-    prompt = "user@portfolio:~$",
+    prompt = "$ ",
     title = "about.sh",
     showTitle = true,
     height = "h-96",
@@ -34,19 +34,18 @@ export function Terminal({
 
     // Generate appropriate output for a command
     const getCommandOutput = (command: string): string | null => {
-        if (command.startsWith("Skills:")) {
-            return "✓ Loaded developer skillset";
-        } else if (command.startsWith("Experience:")) {
-            return "→ Professional experience verified";
-        } else if (command.startsWith("Projects:")) {
-            return "✓ Project portfolio available";
-        } else if (command.startsWith("Education:")) {
-            return "✓ Academic background confirmed";
-        } else if (command.startsWith("Interests:")) {
-            return "→ Personal interests noted";
-        } else if (command.startsWith("Contact:")) {
-            return "✓ Contact information stored";
-        }
+        const c = command.trim();
+        if (c === "whoami") return "dhaifallah · front-end engineer";
+        if (c.startsWith("cat ~/skills.txt"))
+            return "react · next · typescript · tailwind · node · supabase";
+        if (c.startsWith("ls ./projects")) return "12";
+        if (c.startsWith("echo \"available")) return "available for hire";
+        if (c.startsWith("Skills:")) return "✓ Loaded developer skillset";
+        if (c.startsWith("Experience:")) return "→ Professional experience verified";
+        if (c.startsWith("Projects:")) return "✓ Project portfolio available";
+        if (c.startsWith("Education:")) return "✓ Academic background confirmed";
+        if (c.startsWith("Interests:")) return "→ Personal interests noted";
+        if (c.startsWith("Contact:")) return "✓ Contact information stored";
         return null;
     };
 
@@ -115,25 +114,25 @@ export function Terminal({
     return (
         <div
             className={cn(
-                "rounded-lg overflow-hidden w-full border border-zinc-800 shadow-lg bg-[#0c0c0c]",
-                "hover:border-emerald-500/30 hover:shadow-emerald-500/10 transition-all duration-300",
+                "rounded-lg overflow-hidden w-full border border-rule bg-paper-sunken",
+                "hover:border-signal/40 transition-colors duration-300",
                 className
             )}
         >
             {/* Terminal header */}
             {showTitle && (
-                <div className="bg-[#1a1a1a] border-b border-zinc-800 px-4 py-2 flex items-center justify-between">
+                <div className="bg-paper-raised border-b border-rule px-4 py-2.5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="flex gap-1.5">
-                            <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-                            <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-                            <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
                         </div>
-                        <div className="text-sm font-mono text-zinc-400 ml-3 opacity-80">{title}</div>
+                        <div className="text-xs font-mono text-ink-muted ml-3">{title}</div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <TerminalIcon className="h-3.5 w-3.5 text-emerald-500 mr-1" />
-                        <span className="text-xs font-mono text-zinc-500">bash</span>
+                    <div className="flex items-center gap-1.5">
+                        <TerminalIcon className="h-3 w-3 text-signal" />
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-ink-faint">bash</span>
                     </div>
                 </div>
             )}
@@ -142,7 +141,7 @@ export function Terminal({
             <div
                 ref={terminalRef}
                 className={cn(
-                    "p-4 font-mono text-sm overflow-auto bg-[#0c0c0c]",
+                    "p-4 font-mono text-sm overflow-auto bg-paper-sunken",
                     height
                 )}
                 style={{
@@ -151,16 +150,16 @@ export function Terminal({
             >
                 {/* Command history - Using a trick with css to make wrapped text behave like a real terminal */}
                 {commandHistory.map((entry, index) => (
-                    <div key={index} className="mb-4">
+                    <div key={index} className="mb-3">
                         <div className="terminal-line">
-                            <span className="terminal-prompt text-[#50fa7b] font-medium">{prompt}</span>
-                            <span className="text-gray-300">{entry.command}</span>
+                            <span className="terminal-prompt text-signal font-semibold">{prompt}</span>
+                            <span className="text-ink">{entry.command}</span>
                         </div>
 
                         {/* Command output */}
                         {entry.output && (
-                            <div className="text-cyan-300 mt-1 text-xs">
-                                {entry.output}
+                            <div className="text-ink-muted mt-1 text-xs pl-1">
+                                <span className="text-accent">→</span> {entry.output}
                             </div>
                         )}
                     </div>
@@ -169,12 +168,12 @@ export function Terminal({
                 {/* Current command being typed */}
                 {!isFinished && displayedText && (
                     <div className="terminal-line">
-                        <span className="terminal-prompt text-[#50fa7b] font-medium">{prompt}</span>
-                        <span className="text-gray-300">{displayedText}</span>
+                        <span className="terminal-prompt text-signal font-semibold">{prompt}</span>
+                        <span className="text-ink">{displayedText}</span>
                         <span
                             className={cn(
-                                "inline-block w-2.5 h-4 ml-0.5 align-text-bottom",
-                                cursorVisible ? "bg-gray-300" : "bg-transparent",
+                                "inline-block w-2 h-4 ml-0.5 align-text-bottom",
+                                cursorVisible ? "bg-signal" : "bg-transparent",
                                 "transition-colors duration-100"
                             )}
                         ></span>

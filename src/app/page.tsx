@@ -9,8 +9,9 @@ import { Experience } from "@/components/home/experience";
 import { Certificates } from "@/components/Certificates";
 
 export const metadata: Metadata = {
-    title: "Dhaifallah Alfarawi | Front End Developer",
-    description: "Front End Developer specializing in React, Next.js, Tailwindcss, creating modern web applications.",
+    title: "Dhaifallah Alfarawi (ضيف الله الفروي) | Front End Developer",
+    description: "Dhaifallah Alfarawi — ضيف الله أحمد الفروي — Front End Developer (React, Next.js, TypeScript) based in Riyadh, Saudi Arabia. Available for projects.",
+    alternates: { canonical: "https://devdhaif.vercel.app" },
 };
 
 export default function HomePage() {

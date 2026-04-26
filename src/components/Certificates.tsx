@@ -1,80 +1,65 @@
-// components/home/certificates.tsx
-"use client"
+"use client";
 
-import { motion, useScroll, useTransform } from "framer-motion"
-import { createClient } from "@/utils/supabase/client"
-import { useEffect, useState, useRef } from "react"
-import { Certificate } from "@/types"
-import { Loading } from "@/components/loading"
-import { CertificateCard } from "./certificate-card"
-import { SectionHeading } from "./ui/section-heading"
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { Certificate } from "@/types";
+import { Loading } from "@/components/loading";
+import { CertificateCard } from "./certificate-card";
+import { SectionHeading } from "./ui/section-heading";
 
 export function Certificates() {
-    const [certificates, setCertificates] = useState<Certificate[]>([])
-    const [loading, setLoading] = useState(true)
-    const containerRef = useRef<HTMLElement>(null)
-
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end end"]
-    })
-
-    const opacity = useTransform(scrollYProgress,
-        [0, 0.9, 0.9, 1], [0.8, 1, 1, 1])
-    const y = useTransform(scrollYProgress,
-        [0, 0.8], ["0%", "0%"])
+    const [certificates, setCertificates] = useState<Certificate[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadCertificates() {
-            const supabase = createClient()
+            const supabase = createClient();
             const { data: certificates } = await supabase
                 .from("certificates")
                 .select("*")
-                .order("created_at", { ascending: false })
+                .order("created_at", { ascending: false });
 
             if (certificates) {
-                const certificatesWithUrls = certificates.map(cert => ({
+                const certificatesWithUrls = certificates.map((cert) => ({
                     ...cert,
                     sourceIconUrl: cert.source_icon || "",
                     certificateImageUrl: cert.image || "",
                     urlLink: cert.url_link || "",
-                }))
-                setCertificates(certificatesWithUrls)
+                }));
+                setCertificates(certificatesWithUrls);
             }
-            setLoading(false)
+            setLoading(false);
         }
 
-        loadCertificates()
-    }, [])
+        loadCertificates();
+    }, []);
 
-    if (loading) {
-        return <Loading text="Loading certificates..." />
-    }
+    if (loading) return <Loading text="Loading certificates..." />;
+    if (!certificates.length) return null;
 
     return (
-        <section
-            ref={containerRef}
-            id="certificates"
-            className="relative py-24 sm:py-32 overflow-hidden"
-        >
-            <motion.div
-                className="container relative"
-                style={{ opacity, y }}
-            >
+        <section id="certificates" className="relative py-24 md:py-32">
+            <div aria-hidden className="pointer-events-none absolute inset-0 bg-dot-grid opacity-40" />
+            <div className="container-dev relative">
                 <SectionHeading
-                    title="Certificates"
-                    subtitle="Showcasing my skills and achievements through recognized certifications."
-                    badge={"Awards & Certifications"}
+                    index="06"
+                    eyebrow="awards_certifications"
+                    title={
+                        <>
+                            Recognition <span className="relative inline-block">
+                                in passing
+                                <span aria-hidden className="absolute -bottom-2 left-0 h-2 w-full bg-signal/80" />
+                            </span>.
+                        </>
+                    }
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {certificates.map((cert, index) => (
-                        <div key={cert.id}>
-                            <CertificateCard {...cert} index={index} />
-                        </div>
+                        <CertificateCard key={cert.id} {...cert} index={index} />
                     ))}
                 </div>
-            </motion.div>
+            </div>
         </section>
-    )
+    );
 }

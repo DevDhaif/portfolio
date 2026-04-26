@@ -1,119 +1,172 @@
-
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Eye } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { ArrowUpRight, Github } from "lucide-react";
 import { ProjectCardProps } from "@/types";
 
-export function ProjectCard({ id, title, description, image, tags, githubUrl, liveUrl, index }: ProjectCardProps) {
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+// Map tag names to icon paths from /public/icons.
+const ICON_MAP: Record<string, string> = {
+    "react.js": "/icons/react.svg",
+    react: "/icons/react.svg",
+    "next.js": "/icons/next.svg",
+    next: "/icons/next.svg",
+    "vue.js": "/icons/vue.svg",
+    vue: "/icons/vue.svg",
+    typescript: "/icons/typescript.svg",
+    javascript: "/icons/js.svg",
+    "tailwind css": "/icons/tailwind.svg",
+    tailwindcss: "/icons/tailwind.svg",
+    tailwind: "/icons/tailwind.svg",
+    laravel: "/icons/laravel.svg",
+    php: "/icons/php.svg",
+    mysql: "/icons/sql.svg",
+    sql: "/icons/sql.svg",
+    firebase: "/icons/firebase.svg",
+    supabase: "/icons/supabase.svg",
+    redux: "/icons/redux.svg",
+    zustand: "/icons/zustand.svg",
+    git: "/icons/git.svg",
+    github: "/icons/github.svg",
+    html: "/icons/html.svg",
+    css: "/icons/css.svg",
+    npm: "/icons/npm.svg",
+    vite: "/icons/vite.svg",
+    vercel: "/icons/vercel.svg",
+};
+
+const iconFor = (tag: string): string | null => ICON_MAP[tag.toLowerCase()] || null;
+
+export function ProjectCard({
+    id,
+    title,
+    description,
+    image,
+    tags,
+    githubUrl,
+    liveUrl,
+    index,
+}: ProjectCardProps) {
+    const num = String(index + 1).padStart(2, "0");
+    const visibleTags = tags.slice(0, 5);
 
     return (
-        <div
-            className="group relative h-full rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/80 border border-border hover:border-accent-primary/40 transition-all duration-500 hover:shadow-glow hover:shadow-accent-primary/20"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+        <article
+            className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper-raised shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-signal/50 hover:shadow-card-hover frame-brackets"
         >
-            {/* Image Container with Overlay */}
-            <div className="relative w-full h-52 overflow-hidden">
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent z-20" />
+            {/* Card header bar */}
+            <div className="flex items-center justify-between border-b border-rule bg-paper-sunken px-4 py-2.5">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em]">
+                    <span className="text-ink-muted">PROJ_{num}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                    <span className="dot-light bg-rule-strong group-hover:bg-signal transition-colors" />
+                    <span className="dot-light bg-rule-strong" />
+                    <span className="dot-light bg-rule-strong" />
+                </div>
+            </div>
 
-                {/* Hover overlay */}
-                <div className={cn(
-                    "absolute inset-0 bg-accent-primary/10 z-30 transition-opacity duration-300",
-                    isHovered ? "opacity-100" : "opacity-0"
-                )} />
-
+            {/* Image */}
+            <div
+                className="relative block aspect-[16/10] overflow-hidden bg-paper-sunken"
+                data-cursor="on"
+            >
                 {image && (
                     <Image
                         src={image}
                         alt={title}
                         fill
-                        priority={index < 6}
-                        className={cn(
-                            "object-cover w-full h-full transition-all duration-700",
-                            imageLoaded ? "opacity-100 blur-0 scale-100" : "opacity-0 blur-md scale-110",
-                            "group-hover:scale-105"
-                        )}
-                        onLoad={() => setImageLoaded(true)}
+                        priority={index < 3}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                 )}
+                <div className="absolute inset-0 bg-gradient-to-t from-paper-raised/70 via-transparent to-transparent" />
 
-                {/* Floating action buttons */}
-                <div className={cn(
-                    "absolute top-4 right-4 z-40 flex gap-2 transition-all duration-300",
-                )}>
+                {/* Floating actions */}
+                <div className="absolute right-3 top-3 z-10 flex gap-2">
                     {githubUrl && (
-                        <Button
-                            asChild
-                            variant="outline"
-                            size="icon"
-                            className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-md border-border/50 hover:bg-accent-primary hover:border-accent-primary text-white"
+                        <Link
+                            href={githubUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="grid h-8 w-8 place-items-center rounded-md border border-rule bg-paper/85 text-ink backdrop-blur-md transition-all hover:border-signal hover:text-signal"
+                            aria-label={`${title} on GitHub`}
                         >
-                            <Link href={githubUrl} target="_blank" rel="noreferrer">
-                                <Github className="h-4 w-4" />
-                            </Link>
-                        </Button>
+                            <Github className="h-3.5 w-3.5" />
+                        </Link>
                     )}
                     {liveUrl && (
-                        <Button
-                            asChild
-                            variant="outline"
-                            size="icon"
-                            className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-md border-border/50 hover:bg-accent-primary hover:border-accent-primary text-white"
+                        <Link
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="grid h-8 w-8 place-items-center rounded-md border border-rule bg-paper/85 text-ink backdrop-blur-md transition-all hover:border-signal hover:text-signal"
+                            aria-label={`${title} live site`}
                         >
-                            <Link href={liveUrl} target="_blank" rel="noreferrer">
-                                <ExternalLink className="h-4 w-4" />
-                            </Link>
-                        </Button>
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                        </Link>
                     )}
                 </div>
             </div>
 
-            {/* Content */}
-            <div className="flex flex-col p-6 h-[calc(100%-13rem)]">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-text-primary group-hover:text-accent-primary transition-colors duration-300 line-clamp-1">
+            {/* Body */}
+            <div className="flex flex-1 flex-col p-5">
+                <h3 className="font-display text-xl font-bold tracking-tight text-ink transition-colors group-hover:text-signal">
+                    <Link
+                        href={`/projects/${id}`}
+                        className="before:absolute before:inset-0 before:z-0 before:content-['']"
+                    >
                         {title}
-                    </h3>
-
-                </div>
-
-                {/* Description */}
-                <p className="text-sm text-text-secondary line-clamp-3 mb-4 flex-grow leading-relaxed">
+                    </Link>
+                </h3>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-muted">
                     {description}
                 </p>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                    {tags.map((tag) => (
-                        <span
-                            key={tag}
-                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent-subtle border border-accent-primary/30 text-accent-primary hover:bg-accent-primary/20 transition-colors"
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
+                {/* Tech stack tile row */}
+                <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+                    <div className="flex items-center gap-1.5">
+                        {visibleTags.map((tag, i) => {
+                            const icon = iconFor(tag);
+                            return icon ? (
+                                <span
+                                    key={`${tag}-${i}`}
+                                    title={tag}
+                                    className="grid h-7 w-7 place-items-center rounded-md border border-rule bg-paper-sunken transition-colors group-hover:border-rule-strong"
+                                >
+                                    <Image
+                                        src={icon}
+                                        alt={tag}
+                                        width={14}
+                                        height={14}
+                                        className="h-3.5 w-3.5 object-contain"
+                                    />
+                                </span>
+                            ) : (
+                                <span
+                                    key={`${tag}-${i}`}
+                                    className="grid h-7 px-1.5 place-items-center rounded-md border border-rule bg-paper-sunken font-mono text-[9px] uppercase tracking-wider text-ink-faint"
+                                >
+                                    {tag.slice(0, 3)}
+                                </span>
+                            );
+                        })}
+                        {tags.length > visibleTags.length && (
+                            <span className="font-mono text-[10px] text-ink-faint">
+                                +{tags.length - visibleTags.length}
+                            </span>
+                        )}
+                    </div>
 
-                {/* Action Button */}
-                <Button
-                    asChild
-                    className="w-full bg-teal-700 text-white font-medium rounded-xl h-11 transition-all duration-300"
-                >
-                    <Link href={`/projects/${id}`} className="flex items-center justify-center gap-2">
-                        <Eye className="h-4 w-4" />
-                        View Details
-                    </Link>
-                </Button>
+                    <span
+                        aria-hidden="true"
+                        className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint transition-colors group-hover:text-signal"
+                    >
+                        view →
+                    </span>
+                </div>
             </div>
-        </div>
+        </article>
     );
 }

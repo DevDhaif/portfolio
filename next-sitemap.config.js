@@ -4,11 +4,14 @@ module.exports = {
   generateRobotsTxt: false, // Using app/robots.ts instead
   generateIndexSitemap: false,
   exclude: [
+    '/admin',
     '/admin/*',
     '/login',
     '/private',
+    '/private/*',
     '/api/*',
     '/auth/*',
+    '/robots.txt',
     '/server-sitemap.xml',
   ],
   changefreq: 'weekly',

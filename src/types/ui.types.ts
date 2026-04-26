@@ -35,8 +35,8 @@ export interface ProjectCardProps {
     index: number;
 }
 export interface SectionHeadingProps {
-    title: string;
-    subtitle?: string;
+    title: React.ReactNode;
+    subtitle?: React.ReactNode;
     badge?: string;
     alignment?: "left" | "center";
     className?: string;

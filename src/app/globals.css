@@ -1,45 +1,24 @@
 @import '../styles/base.css';
 @import '../styles/tiptap-styles.css';
 
-.perspective-container {
-    perspective: 1000px;
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
-@keyframes pulse-slow {
-
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.7;
-        transform: scale(1.05);
-    }
+.marquee-track {
+    animation: marquee 50s linear infinite;
 }
 
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(12deg);
-    }
-
-    50% {
-        transform: translateY(-10px) rotate(12deg);
-    }
+.marquee-track:hover {
+    animation-play-state: paused;
 }
 
-.animate-pulse-slow {
-    animation: pulse-slow 7s infinite;
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
 }
 
-.animate-float {
-    animation: float 8s ease-in-out infinite;
-}
-
-.bg-grid-pattern {
-    background-image: radial-gradient(circle, white 1px, transparent 1px);
-    background-size: 30px 30px;
+.animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
 }

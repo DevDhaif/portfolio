@@ -1,13 +1,9 @@
-// components/home/certificate-card.tsx
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from 'next/link'
-import Image from "next/image"
-import { ExternalLink, Calendar, Medal } from "lucide-react"
-import { CertificateCardProps } from "@/types"
-
-
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowUpRight, Award, Calendar } from "lucide-react";
+import { CertificateCardProps } from "@/types";
 
 export function CertificateCard({
     title,
@@ -17,95 +13,79 @@ export function CertificateCard({
     issue_date,
     skills,
     urlLink,
-    index
+    index,
 }: CertificateCardProps) {
-    // Format date nicely
-    const formattedDate = new Date(issue_date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long'
-    })
+    const formattedDate = new Date(issue_date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+    });
+    const num = String(index + 1).padStart(2, "0");
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            whileHover={{ y: -5 }}
-            className="h-full"
-        >
-            <div className="h-full rounded-xl border border-blue-500/30 bg-slate-950 overflow-hidden shadow-md  transition-all duration-300">
-                {/* Image section */}
-                <div className="relative h-48 w-full overflow-hidden">
-                    <Image
-                        src={certificateImageUrl || "/api/placeholder/800/600"}
-                        alt={title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover transition-transform duration-500 hover:scale-105"
-                        priority={index < 2}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent opacity-50" />
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper-raised shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-signal/50 hover:shadow-card-hover frame-brackets">
+            {/* Header bar */}
+            <div className="flex items-center justify-between border-b border-rule bg-paper-sunken px-4 py-2.5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                    CERT_{num}
+                </span>
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                    <Award className="h-3 w-3" />
+                    {source}
+                </span>
+            </div>
 
-                    {/* Certificate source badge */}
-                    <div className="absolute top-4 left-4">
-                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500 backdrop-blur-md border border-blue-400/30">
-                            <Medal className="w-3.5 h-3.5 text-blue-50" />
-                            <p className="text-xs font-medium text-blue-50">{source}</p>
-                        </div>
-                    </div>
+            {/* Image */}
+            <div className="relative aspect-[16/10] overflow-hidden bg-paper-sunken">
+                <Image
+                    src={certificateImageUrl || "/api/placeholder/800/600"}
+                    alt={title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority={index < 2}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-paper-raised/70 via-transparent to-transparent" />
+
+                {/* Hover overlay with description */}
+                <div className="absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="rounded-md border border-rule bg-paper/90 p-3 text-xs leading-relaxed text-ink backdrop-blur-md">
+                        {description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Content section */}
-                <div className="p-5 space-y-3">
-                    {/* Title and description */}
-                    <div>
-                        <h3 className="text-lg font-bold mb-1 text-blue-100">
-                            {title}
-                        </h3>
-                        <p className="text-blue-100/70 text-sm line-clamp-2">
-                            {description}
-                        </p>
-                    </div>
+            {/* Body */}
+            <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
+                    <Calendar className="h-3 w-3" />
+                    {formattedDate}
+                </div>
+                <h3 className="mt-2.5 font-display text-lg font-bold tracking-tight text-ink transition-colors group-hover:text-signal">
+                    {title}
+                </h3>
 
-                    {/* Issue date */}
-                    <div className="flex items-center gap-2 text-sm text-blue-300">
-                        <Calendar className="w-4 h-4 text-blue-400" />
-                        <p>{formattedDate}</p>
-                    </div>
-
-                    {/* Skills */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                        {skills.map((skill) => (
-                            <span
-                                key={skill}
-                                className="px-2 py-1 text-xs rounded-full 
-                                bg-blue-500/10 border border-blue-500/20 
-                                text-blue-200"
-                            >
-                                {skill}
+                <div className="mt-auto pt-4">
+                    <div className="mb-4 flex flex-wrap gap-1.5">
+                        {skills.slice(0, 4).map((s) => (
+                            <span key={s} className="chip">
+                                {s}
                             </span>
                         ))}
                     </div>
 
-                    {/* View certificate link */}
                     {urlLink && (
-                        <div className="pt-3 mt-3 border-t border-blue-500/20">
-                            <Link
-                                href={urlLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg
-                                        bg-blue-500/10 text-blue-200 text-sm 
-                                        transition-colors border border-blue-500/30"
-                            >
-                                View Certificate
-                                <ExternalLink className="w-4 h-4" />
-                            </Link>
-                        </div>
+                        <Link
+                            href={urlLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-ink transition-colors hover:text-signal"
+                        >
+                            view certificate
+                            <ArrowUpRight className="h-3 w-3" />
+                        </Link>
                     )}
                 </div>
             </div>
-        </motion.div>
-    )
+        </article>
+    );
 }

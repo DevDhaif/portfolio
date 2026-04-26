@@ -1,454 +1,514 @@
 import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Tag, Calendar } from 'lucide-react';
 import { Suspense } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { ArrowUpRight, Calendar, Clock, Hash, Search, Terminal as TerminalIcon, X } from 'lucide-react';
 import { BlogPageProps, Post, ProcessedPost } from '@/types';
 
-// Main page component with search params
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const resolvedParams = await searchParams;
+    const resolvedParams = await searchParams;
+    const tag = resolvedParams?.tag || '';
+    const search = resolvedParams?.search || '';
 
-  const tag = resolvedParams?.tag || '';
-  const search = resolvedParams?.search || '';
+    return (
+        <section className="relative py-24 md:py-32">
+            <div aria-hidden className="pointer-events-none absolute inset-0 bg-dot-grid opacity-40" />
+            <div aria-hidden className="pointer-events-none absolute inset-0 bg-scanline" />
+            <div aria-hidden className="pointer-events-none absolute -top-20 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-signal/[0.06] blur-3xl" />
 
-  return (
-    <div className="min-h-screen py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-white">
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header section */}
-        <div className="mb-16 space-y-6 text-center md:text-left">
-          <div className="space-y-4">
-            <div className="inline-block">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-4">
-                ✨ Web Development Blog
-              </span>
+            <div className="container-dev relative">
+                {/* Page anchor */}
+                <header className="relative">
+                    <div aria-hidden className="section-numeral select-none">
+                        ##
+                    </div>
+                    <div className="mt-2 flex items-baseline gap-3">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">
+                            {'// ~/journal'}
+                        </span>
+                        <span className="h-px flex-1 bg-rule" />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+                            read · think · ship
+                        </span>
+                    </div>
+
+                    <h1 className="stencil mt-7 text-balance text-4xl leading-[0.95] text-ink sm:text-5xl md:text-6xl lg:text-7xl">
+                        Field notes on{' '}
+                        <span className="relative inline-block">
+                            shipping
+                            <span aria-hidden className="absolute -bottom-2 left-0 h-2 w-full bg-signal/80" />
+                        </span>{' '}
+                        the web.
+                    </h1>
+
+                    <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-ink-muted md:text-lg">
+                        Practical write-ups on React, Next.js, TypeScript, and the
+                        small details that turn a UI from working into{' '}
+                        <span className="font-mono text-ink">{`<good/>`}</span>.
+                    </p>
+                </header>
+
+                {/* Search + tag rail */}
+                <Suspense fallback={<SearchBarSkeleton />}>
+                    <SearchAndFilterBar currentTag={tag} currentSearch={search} />
+                </Suspense>
+
+                {/* Posts grid */}
+                <Suspense fallback={<PostsGridSkeleton />}>
+                    <PostsGrid tag={tag} search={search} />
+                </Suspense>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 tracking-tight">
-              Latest{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Insights
-              </span>
-            </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto md:mx-0 leading-relaxed">
-              Thoughts, tutorials, and insights about web development, design
-              patterns, and the latest technologies.
-            </p>
-          </div>
-
-          <Suspense fallback={<SearchBarSkeleton />}>
-            <SearchAndFilterBar currentTag={tag} currentSearch={search} />
-          </Suspense>
-        </div>
-
-        {/* Posts grid */}
-        <Suspense fallback={<PostsGridSkeleton />}>
-          <PostsGrid tag={tag} search={search} />
-        </Suspense>
-      </div>
-    </div>
-  );
+        </section>
+    );
 }
 
-// Component to fetch and display posts
 async function PostsGrid({ tag, search }: { tag: string; search: string }) {
-  const supabase = await createClient();
+    const supabase = await createClient();
 
-  // Fetch posts
-  let query = supabase
-    .from('posts')
-    .select('*')
-    .eq('published', true)
-    .order('created_at', { ascending: false });
+    let query = supabase
+        .from('posts')
+        .select('*')
+        .eq('published', true)
+        .order('created_at', { ascending: false });
 
-  // Apply search filter if provided
-  if (search) {
-    query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
-  }
-
-  const { data: posts, error } = await query;
-
-  if (error) {
-    // console.error('Error fetching posts:', error);
-    return <BlogError message="Failed to load blog posts" />;
-  }
-
-  if (!posts || posts.length === 0) {
-    return <NoPostsFound search={search} tag={tag} />;
-  }
-
-  // Process posts
-  const processedPosts: ProcessedPost[] = posts.map((post: Post) => {
-    // Process cover image
-    let coverImageUrl = post.cover_image;
-    if (post.cover_image && !post.cover_image.startsWith('http')) {
-      coverImageUrl = supabase.storage
-        .from('blog-content')
-        .getPublicUrl(post.cover_image).data.publicUrl;
+    if (search) {
+        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
     }
 
-    // Process tags
-    let processedTags: string[] = [];
-    if (typeof post.tags === 'string') {
-      try {
-        const parsedTags = JSON.parse(post.tags);
-        processedTags = Array.isArray(parsedTags) ? parsedTags : [parsedTags];
-      } catch {
-        processedTags = post.tags;
-        String(post.tags)
-          .replace(/[\[\]"]/g, '')
-          .split(',')
-          .map((tag) => tag.trim());
-      }
-    } else if (Array.isArray(post.tags)) {
-      processedTags = post.tags;
+    const { data: posts, error } = await query;
+
+    if (error) {
+        return <BlogError message="Failed to load blog posts" />;
     }
 
-    return {
-      ...post,
-      cover_image: coverImageUrl,
-      tags: processedTags.filter((tag) => tag),
-    };
-  });
+    if (!posts || posts.length === 0) {
+        return <NoPostsFound search={search} tag={tag} />;
+    }
 
-  // Filter by tag if provided
-  const filteredPosts = tag
-    ? processedPosts.filter((post) =>
-        post.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
-      )
-    : processedPosts;
-
-  if (filteredPosts.length === 0) {
-    return <NoPostsFound search={search} tag={tag} />;
-  }
-
-  // Get all unique tags for the tag cloud
-  const allTags = Array.from(
-    new Set(processedPosts.flatMap((post) => post.tags))
-  ).sort();
-
-  return (
-    <div className="space-y-10">
-      {/* Display the tag filter if a tag is selected */}
-      {tag && (
-        <div className="flex items-center justify-between bg-blue-50 border-2 border-blue-200 p-4 rounded-xl">
-          <div className="flex items-center gap-2">
-            <Tag className="h-5 w-5 text-blue-600" />
-            <span className="text-slate-900 font-medium">
-              Filtered by tag:{' '}
-            </span>
-            <span className="font-bold text-blue-600">{tag}</span>
-          </div>
-          <Link href="/blog">
-            <Button
-              variant="outline"
-              className="text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white border-blue-200 hover:border-blue-600"
-              size="sm"
-            >
-              Clear Filter
-            </Button>
-          </Link>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {filteredPosts.map((post) => (
-          <BlogPostCard key={post.id} post={post} />
-        ))}
-      </div>
-
-      {/* Tag cloud */}
-      {!tag && allTags.length > 0 && (
-        <div className="mt-16 pt-8 border-t-2 border-slate-300">
-          <h2 className="text-3xl font-bold mb-6 text-slate-900">
-            Browse by Topic
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {allTags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/blog?tag=${encodeURIComponent(tag)}`}
-                className="inline-flex items-center rounded-full bg-slate-100 border-2 border-slate-300 hover:border-blue-600 hover:bg-blue-600 px-5 py-2.5 text-sm font-bold transition-all duration-200 text-slate-900 hover:text-white"
-              >
-                <Tag className="mr-2 h-4 w-4" />
-                {tag}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// BlogPostCard component
-function BlogPostCard({ post }: { post: ProcessedPost }) {
-  // Format date
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
-
-  return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <div className="h-full rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xl shadow-sm transition-all duration-300 overflow-hidden flex flex-col">
-        {/* Image */}
-        <div className="relative h-48 w-full overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-slate-900/20 to-transparent z-10" />
-          {post.cover_image ? (
-            <Image
-              src={post.cover_image}
-              alt={post.title}
-              fill
-              className="object-cover transform transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-              <span className="text-blue-300 text-lg font-medium">
-                No image
-              </span>
-            </div>
-          )}
-
-          {/* Tags overlay */}
-          {post.tags && post.tags.length > 0 && (
-            <div className="absolute top-3 right-3 z-20 flex flex-wrap gap-1.5 justify-end max-w-[70%]">
-              {post.tags.slice(0, 2).map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-full bg-white/90 backdrop-blur-md px-2.5 py-1 text-xs font-semibold text-blue-600 border border-blue-200 shadow-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-              {post.tags.length > 2 && (
-                <span className="inline-flex items-center rounded-full bg-slate-100/90 backdrop-blur-md px-2.5 py-1 text-xs font-semibold text-slate-600">
-                  +{post.tags.length - 2}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-col p-6 flex-grow">
-          {/* Date */}
-          <div className="flex items-center gap-1.5 mb-3 text-sm text-slate-600 font-semibold">
-            <Calendar className="h-4 w-4" />
-            <time dateTime={post.created_at}>
-              {formatDate(post.created_at)}
-            </time>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-3 leading-snug">
-            {post.title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-base text-slate-700 line-clamp-3 mb-4 leading-relaxed">
-            {post.description}
-          </p>
-
-          {/* Read more */}
-          <div className="mt-auto pt-2 text-sm font-semibold text-blue-600 flex items-center opacity-0 transform translate-x-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
-            Read more
-            <span className="ml-1 text-xs">→</span>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-// Search and filter component
-async function SearchAndFilterBar({
-  currentTag,
-  currentSearch,
-}: {
-  currentTag: string;
-  currentSearch: string;
-}) {
-  const supabase = await createClient();
-
-  // Fetch tags for the filter
-  const { data: posts } = await supabase
-    .from('posts')
-    .select('tags')
-    .eq('published', true);
-
-  // Process all tags
-  const allTags = new Set<string>();
-
-  if (posts) {
-    posts.forEach((post: { tags: string | string[] }) => {
-      let tags: string[] = [];
-
-      if (typeof post.tags === 'string') {
-        try {
-          const parsedTags = JSON.parse(post.tags);
-          tags = Array.isArray(parsedTags) ? parsedTags : [parsedTags];
-        } catch {
-          tags = post.tags
-            .replace(/[\[\]"]/g, '')
-            .split(',')
-            .map((tag) => tag.trim());
+    const processedPosts: ProcessedPost[] = posts.map((post: Post) => {
+        let coverImageUrl = post.cover_image;
+        if (post.cover_image && !post.cover_image.startsWith('http')) {
+            coverImageUrl = supabase.storage
+                .from('blog-content')
+                .getPublicUrl(post.cover_image).data.publicUrl;
         }
-      } else if (Array.isArray(post.tags)) {
-        tags = post.tags;
-      }
 
-      tags.filter(Boolean).forEach((tag) => allTags.add(tag));
+        let processedTags: string[] = [];
+        if (typeof post.tags === 'string') {
+            try {
+                const parsedTags = JSON.parse(post.tags);
+                processedTags = Array.isArray(parsedTags) ? parsedTags : [parsedTags];
+            } catch {
+                processedTags = String(post.tags)
+                    .replace(/[\[\]"]/g, '')
+                    .split(',')
+                    .map((t) => t.trim());
+            }
+        } else if (Array.isArray(post.tags)) {
+            processedTags = post.tags;
+        }
+
+        return {
+            ...post,
+            cover_image: coverImageUrl,
+            tags: processedTags.filter(Boolean),
+        };
     });
-  }
 
-  // Popular tags (limited to 5)
-  const popularTags = Array.from(allTags).slice(0, 5);
+    const filteredPosts = tag
+        ? processedPosts.filter((post) =>
+            post.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
+        )
+        : processedPosts;
 
-  return (
-    <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-      {/* Search form */}
-      <div className="flex-1 max-w-md">
-        <form className="relative group" action="/blog">
-          <Input
-            type="text"
-            name="search"
-            placeholder="Search articles..."
-            defaultValue={currentSearch}
-            className="pl-12 pr-4 py-3 bg-white border-2 border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-slate-900 placeholder:text-slate-500 rounded-xl font-medium"
-          />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-600 group-focus-within:text-blue-600 transition-colors" />
-          {currentSearch && (
-            <input type="hidden" name="tag" value={currentTag} />
-          )}
-        </form>
-      </div>
+    if (filteredPosts.length === 0) {
+        return <NoPostsFound search={search} tag={tag} />;
+    }
 
-      {/* Popular tags */}
-      <div className="flex flex-wrap gap-2 items-center">
-        <span className="text-sm text-text-secondary">Popular:</span>
-        {popularTags.map((tag) => (
-          <Link
-            key={tag}
-            href={`/blog?tag=${encodeURIComponent(tag)}`}
-            className={`text-sm px-2.5 py-1 rounded-full transition-colors ${
-              currentTag === tag
-                ? 'bg-card !text-white hover:text-text-primary'
-                : 'bg-accent-primary/20 text-accent-primary'
-            }`}
-          >
-            {tag}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
+    const allTags = Array.from(
+        new Set(processedPosts.flatMap((post) => post.tags))
+    ).sort();
+
+    return (
+        <div className="mt-10 space-y-12">
+            {/* Filter readout */}
+            {tag && (
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-rule bg-paper-raised px-4 py-3">
+                    <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <span className="text-ink-faint">filter</span>
+                        <span className="text-ink-muted">/</span>
+                        <span className="inline-flex items-center gap-1.5 rounded-md border border-signal/40 bg-signal/10 px-2 py-1 text-signal">
+                            <Hash className="h-3 w-3" />
+                            {tag}
+                        </span>
+                        <span className="text-ink-faint">
+                            ({String(filteredPosts.length).padStart(2, '0')}{' '}
+                            {filteredPosts.length === 1 ? 'match' : 'matches'})
+                        </span>
+                    </div>
+                    <Link href="/blog" className="btn-ghost py-2 text-[10px]">
+                        <X className="h-3 w-3" />
+                        clear filter
+                    </Link>
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredPosts.map((post, i) => (
+                    <PostCard key={post.id} post={post} index={i} />
+                ))}
+            </div>
+
+            {/* Tag cloud */}
+            {!tag && allTags.length > 0 && (
+                <div className="mt-16 border-t border-rule pt-10">
+                    <div className="mb-6 flex items-baseline gap-3">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">
+                            {'// tags'}
+                        </span>
+                        <span className="h-px flex-1 bg-rule" />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+                            {String(allTags.length).padStart(2, '0')} entries
+                        </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {allTags.map((t) => (
+                            <Link
+                                key={t}
+                                href={`/blog?tag=${encodeURIComponent(t)}`}
+                                className="chip transition-colors hover:border-signal/40 hover:bg-signal/10 hover:text-signal"
+                            >
+                                <Hash className="h-3 w-3" />
+                                {t}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
-// Loading skeletons
+function PostCard({ post, index }: { post: ProcessedPost; index: number }) {
+    const num = String(index + 1).padStart(2, '0');
+    const date = new Date(post.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+    const readMins = estimateReadingMinutes(post);
+
+    return (
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-rule bg-paper-raised shadow-card transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-signal/50 hover:shadow-card-hover frame-brackets">
+            {/* Header bar */}
+            <div className="flex items-center justify-between border-b border-rule bg-paper-sunken px-4 py-2.5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-muted">
+                    POST_{num}
+                </span>
+                <div className="flex items-center gap-1.5">
+                    <span className="dot-light bg-rule-strong group-hover:bg-signal transition-colors" />
+                    <span className="dot-light bg-rule-strong" />
+                    <span className="dot-light bg-rule-strong" />
+                </div>
+            </div>
+
+            {/* Image */}
+            <div className="relative block aspect-[16/10] overflow-hidden bg-paper-sunken" data-cursor="on">
+                {post.cover_image ? (
+                    <Image
+                        src={post.cover_image}
+                        alt={post.title || 'Blog post cover'}
+                        fill
+                        priority={index < 3}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-paper-sunken">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-faint">
+                            {'// no preview'}
+                        </span>
+                    </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-paper-raised/80 via-transparent to-transparent" />
+
+                {post.tags && post.tags.length > 0 && (
+                    <div className="absolute right-3 top-3 z-10 flex flex-wrap justify-end gap-1.5">
+                        {post.tags.slice(0, 2).map((t) => (
+                            <span
+                                key={t}
+                                className="rounded-md border border-rule bg-paper/85 px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-ink backdrop-blur-md"
+                            >
+                                {t}
+                            </span>
+                        ))}
+                        {post.tags.length > 2 && (
+                            <span className="rounded-md border border-rule bg-paper/85 px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-ink-muted backdrop-blur-md">
+                                +{post.tags.length - 2}
+                            </span>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* Body */}
+            <div className="flex flex-1 flex-col p-5">
+                <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
+                    <span className="inline-flex items-center gap-1.5">
+                        <Calendar className="h-3 w-3" />
+                        <time dateTime={post.created_at}>{date}</time>
+                    </span>
+                    <span>·</span>
+                    <span className="inline-flex items-center gap-1.5">
+                        <Clock className="h-3 w-3" />
+                        {readMins} min
+                    </span>
+                </div>
+
+                <h3 className="mt-3 font-display text-xl font-bold leading-snug tracking-tight text-ink transition-colors group-hover:text-signal">
+                    <Link
+                        href={`/blog/${post.slug}`}
+                        className="before:absolute before:inset-0 before:z-0 before:content-['']"
+                    >
+                        {post.title}
+                    </Link>
+                </h3>
+
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-muted">
+                    {post.description}
+                </p>
+
+                <div className="mt-auto flex items-center justify-between gap-3 pt-5 font-mono text-[10px] uppercase tracking-[0.18em]">
+                    <span className="text-ink-faint">
+                        {`> read post`}
+                    </span>
+                    <span
+                        aria-hidden
+                        className="inline-flex items-center gap-1 text-ink-faint transition-colors group-hover:text-signal"
+                    >
+                        open
+                        <ArrowUpRight className="h-3 w-3" />
+                    </span>
+                </div>
+            </div>
+        </article>
+    );
+}
+
+async function SearchAndFilterBar({
+    currentTag,
+    currentSearch,
+}: {
+    currentTag: string;
+    currentSearch: string;
+}) {
+    const supabase = await createClient();
+
+    const { data: posts } = await supabase
+        .from('posts')
+        .select('tags')
+        .eq('published', true);
+
+    const allTags = new Set<string>();
+    if (posts) {
+        posts.forEach((post: { tags: string | string[] }) => {
+            let tags: string[] = [];
+            if (typeof post.tags === 'string') {
+                try {
+                    const parsedTags = JSON.parse(post.tags);
+                    tags = Array.isArray(parsedTags) ? parsedTags : [parsedTags];
+                } catch {
+                    tags = post.tags
+                        .replace(/[\[\]"]/g, '')
+                        .split(',')
+                        .map((t) => t.trim());
+                }
+            } else if (Array.isArray(post.tags)) {
+                tags = post.tags;
+            }
+            tags.filter(Boolean).forEach((t) => allTags.add(t));
+        });
+    }
+
+    const popularTags = Array.from(allTags).slice(0, 6);
+
+    return (
+        <div className="mt-12 overflow-hidden rounded-lg border border-rule bg-paper-raised">
+            {/* Window header */}
+            <div className="flex items-center gap-2 border-b border-rule bg-paper-sunken px-3.5 py-2.5">
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="ml-2 font-mono text-xs text-ink-muted">
+                    blog/search
+                </span>
+                <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
+                    GET /posts
+                </span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-0 lg:grid-cols-[1.2fr_1fr]">
+                {/* Search input */}
+                <form action="/blog" className="relative border-b border-rule lg:border-b-0 lg:border-r">
+                    <label htmlFor="blog-search" className="sr-only">
+                        Search articles
+                    </label>
+                    <div className="flex items-center gap-3 px-4 py-4">
+                        <TerminalIcon className="h-4 w-4 shrink-0 text-signal" />
+                        <span className="font-mono text-xs text-ink-faint">~/blog $</span>
+                        <input
+                            id="blog-search"
+                            type="text"
+                            name="search"
+                            placeholder="grep --posts ..."
+                            defaultValue={currentSearch}
+                            className="flex-1 bg-transparent font-mono text-sm text-ink outline-none placeholder:text-ink-faint focus:placeholder:text-ink-muted"
+                            autoComplete="off"
+                        />
+                        <Search className="h-4 w-4 shrink-0 text-ink-faint" />
+                    </div>
+                    {currentTag && (
+                        <input type="hidden" name="tag" value={currentTag} />
+                    )}
+                </form>
+
+                {/* Popular tags */}
+                <div className="flex flex-wrap items-center gap-2 px-4 py-4">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+                        popular:
+                    </span>
+                    {popularTags.length === 0 && (
+                        <span className="font-mono text-[11px] text-ink-faint">— none yet —</span>
+                    )}
+                    {popularTags.map((t) => (
+                        <Link
+                            key={t}
+                            href={`/blog?tag=${encodeURIComponent(t)}`}
+                            className={
+                                currentTag === t
+                                    ? 'inline-flex items-center gap-1 rounded-md border border-signal/40 bg-signal/10 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-signal'
+                                    : 'inline-flex items-center gap-1 rounded-md border border-rule bg-paper-sunken px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-ink-muted transition-colors hover:border-signal/40 hover:text-signal'
+                            }
+                        >
+                            <Hash className="h-3 w-3" />
+                            {t}
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function estimateReadingMinutes(post: ProcessedPost): number {
+    const txt = (post.description || '') + ' ' + (post.title || '');
+    const words = txt.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 60));
+}
+
 function SearchBarSkeleton() {
-  return (
-    <div className="flex flex-col md:flex-row gap-4 animate-pulse">
-      <div className="flex-1 max-w-md h-12 bg-slate-100 rounded-xl"></div>
-      <div className="flex gap-2 items-center">
-        <div className="w-16 h-4 bg-slate-100 rounded"></div>
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-8 w-16 bg-slate-100 rounded-full"></div>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div className="mt-12 overflow-hidden rounded-lg border border-rule bg-paper-raised">
+            <div className="flex items-center gap-2 border-b border-rule bg-paper-sunken px-3.5 py-2.5">
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr]">
+                <div className="h-14 animate-pulse border-b border-rule bg-paper-sunken/40 lg:border-b-0 lg:border-r" />
+                <div className="h-14 animate-pulse bg-paper-sunken/30" />
+            </div>
+        </div>
+    );
 }
 
 function PostsGridSkeleton() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-      {[...Array(6)].map((_, i) => (
-        <div
-          key={i}
-          className="rounded-xl border border-slate-200 bg-white overflow-hidden animate-pulse shadow-sm"
-        >
-          <div className="h-48 bg-slate-100"></div>
-          <div className="p-6 space-y-4">
-            <div className="h-4 w-24 bg-slate-100 rounded"></div>
-            <div className="h-6 w-3/4 bg-slate-100 rounded"></div>
-            <div className="space-y-2">
-              <div className="h-4 w-full bg-slate-100 rounded"></div>
-              <div className="h-4 w-full bg-slate-100 rounded"></div>
-              <div className="h-4 w-2/3 bg-slate-100 rounded"></div>
-            </div>
-          </div>
+    return (
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="overflow-hidden rounded-lg border border-rule bg-paper-raised"
+                >
+                    <div className="flex items-center justify-between border-b border-rule bg-paper-sunken px-4 py-2.5">
+                        <span className="h-3 w-16 animate-pulse rounded bg-rule" />
+                        <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-rule" />
+                    </div>
+                    <div className="aspect-[16/10] animate-pulse bg-paper-sunken/50" />
+                    <div className="space-y-3 p-5">
+                        <div className="h-3 w-24 animate-pulse rounded bg-rule" />
+                        <div className="h-5 w-3/4 animate-pulse rounded bg-rule" />
+                        <div className="space-y-2">
+                            <div className="h-3 w-full animate-pulse rounded bg-rule" />
+                            <div className="h-3 w-5/6 animate-pulse rounded bg-rule" />
+                        </div>
+                    </div>
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
+    );
 }
 
-// No posts found component
 function NoPostsFound({ search, tag }: { search: string; tag: string }) {
-  return (
-    <div className="text-center py-20 space-y-4">
-      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-50 text-blue-600 mb-4">
-        <Search className="h-10 w-10" />
-      </div>
-      <h2 className="text-3xl font-bold text-slate-900">No posts found</h2>
-      <p className="text-slate-600 max-w-md mx-auto text-lg">
-        {search && tag
-          ? `No articles matching "${search}" with tag "${tag}"`
-          : search
-            ? `No articles matching "${search}"`
-            : tag
-              ? `No articles with tag "${tag}"`
-              : 'No articles published yet. Check back soon!'}
-      </p>
-      <div className="pt-4">
-        <Link href="/blog">
-          <Button variant="outline">View all posts</Button>
-        </Link>
-      </div>
-    </div>
-  );
+    const lines: string[] = [];
+    if (search && tag) lines.push(`grep "${search}" --tag="${tag}" → 0 matches`);
+    else if (search) lines.push(`grep "${search}" → 0 matches`);
+    else if (tag) lines.push(`filter --tag="${tag}" → 0 matches`);
+    else lines.push('ls ./posts → empty');
+    lines.push('hint: try clearing filters or different keywords');
+
+    return (
+        <div className="mt-12 overflow-hidden rounded-lg border border-rule bg-paper-raised frame-brackets">
+            <div className="flex items-center gap-2 border-b border-rule bg-paper-sunken px-3.5 py-2.5">
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="ml-2 font-mono text-xs text-ink-muted">
+                    blog/empty
+                </span>
+            </div>
+            <div className="space-y-2 p-6 font-mono text-sm text-ink">
+                {lines.map((l, i) => (
+                    <div key={i} className="flex gap-3">
+                        <span className="select-none text-ink-faint">{`>`}</span>
+                        <span>{l}</span>
+                    </div>
+                ))}
+                <div className="pt-3">
+                    <Link href="/blog" className="btn-ghost">
+                        <ArrowUpRight className="h-3 w-3" />
+                        view all posts
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-// Error component
 function BlogError({ message }: { message: string }) {
-  return (
-    <div className="text-center py-20 space-y-4">
-      <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-50 text-red-600 mb-4">
-        <AlertTriangle className="h-10 w-10" />
-      </div>
-      <h2 className="text-3xl font-bold text-slate-900">
-        Something went wrong
-      </h2>
-      <p className="text-slate-600 text-lg">{message}</p>
-    </div>
-  );
-}
-
-// Alert Triangle icon
-function AlertTriangle(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-      <path d="M12 9v4" />
-      <path d="M12 17h.01" />
-    </svg>
-  );
+    return (
+        <div className="mt-12 overflow-hidden rounded-lg border border-rule bg-paper-raised frame-brackets">
+            <div className="flex items-center gap-2 border-b border-rule bg-paper-sunken px-3.5 py-2.5">
+                <span className="dot-light bg-danger/80" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="dot-light bg-rule-strong" />
+                <span className="ml-2 font-mono text-xs text-ink-muted">
+                    blog/error
+                </span>
+                <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.18em] text-danger">
+                    500
+                </span>
+            </div>
+            <div className="space-y-2 p-6 font-mono text-sm">
+                <div className="flex gap-3">
+                    <span className="select-none text-ink-faint">{`>`}</span>
+                    <span className="text-danger">{message}</span>
+                </div>
+                <div className="flex gap-3">
+                    <span className="select-none text-ink-faint">{`>`}</span>
+                    <span className="text-ink-muted">try refreshing the page</span>
+                </div>
+            </div>
+        </div>
+    );
 }

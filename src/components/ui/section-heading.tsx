@@ -4,80 +4,84 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SectionHeadingProps } from "@/types";
 
+interface Props extends SectionHeadingProps {
+    index?: string;
+    eyebrow?: string;
+    align?: "left" | "center";
+}
+
 export function SectionHeading({
     title,
     subtitle,
     badge,
-    alignment = "center",
+    index,
+    eyebrow,
+    alignment,
+    align,
     className,
-}: SectionHeadingProps) {
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.5,
-            },
-        },
-    };
+}: Props) {
+    const sectionNumber = index ?? "";
+    const sectionEyebrow = eyebrow ?? badge ?? "";
+    const a = align ?? alignment ?? "left";
 
     return (
-        <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={containerVariants}
+        <motion.header
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
             className={cn(
-                "relative space-y-8",
-                alignment === "center" ? "text-center mx-auto" : "text-left",
-                alignment === "center" ? "max-w-2xl" : "max-w-none",
+                "relative",
+                a === "center" ? "text-center" : "text-left",
                 className
             )}
         >
-            {badge && (
-                <motion.div
-                    variants={itemVariants}
+            {/* Oversized stencil numeral ,  the typographic anchor */}
+            {sectionNumber && (
+                <div
+                    aria-hidden="true"
                     className={cn(
-                        "inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium",
-                        "bg-card text-text-primary border border-accent-primary",
-                        alignment === "center" ? "mx-auto" : ""
+                        "section-numeral select-none",
+                        a === "center" ? "mx-auto inline-block" : ""
                     )}
                 >
-                    {badge}
-                </motion.div>
+                    {sectionNumber}
+                </div>
             )}
 
-            <motion.h2
-                variants={itemVariants}
-                className="text-3xl sm:text-4xl md:text-5xl font-display font-bold tracking-tight"
+            {/* Compact meta row */}
+            <div
+                className={cn(
+                    "mt-2 flex items-baseline gap-3",
+                    a === "center" ? "justify-center" : ""
+                )}
             >
-                <span className="relative">
-                    <span className="bg-gradient-to-r from-gray-100 via-cyan-200 to-gray-200 bg-clip-text text-transparent">
-                        {title}
-                    </span>
-                    <span className="absolute -bottom-2 left-0 h-[2px] w-full rounded-full bg-gradient-to-r from-accent-primary to-primary/0" />
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-muted">
+                    {sectionEyebrow ? `// ${sectionEyebrow}` : ""}
                 </span>
-            </motion.h2>
+                <span className="h-px flex-1 bg-rule" />
+            </div>
+
+            {/* Title */}
+            <h2
+                className={cn(
+                    "stencil mt-7 text-balance text-4xl leading-[0.95] text-ink",
+                    "sm:text-5xl md:text-6xl lg:text-7xl"
+                )}
+            >
+                {title}
+            </h2>
 
             {subtitle && (
-                <motion.p
-                    variants={itemVariants}
-                    className="text-base sm:text-lg  text-gray-300 max-w-prose"
+                <p
+                    className={cn(
+                        "mt-5 max-w-2xl text-pretty text-base leading-relaxed text-ink-muted md:text-lg",
+                        a === "center" && "mx-auto"
+                    )}
                 >
                     {subtitle}
-                </motion.p>
+                </p>
             )}
-        </motion.div>
+        </motion.header>
     );
 }

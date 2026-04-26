@@ -468,39 +468,170 @@
 
   /* ============================================
        Content Reader Specific Styles
+       Dark, dev-bold theme. Overrides .tiptap-content
+       defaults for the public reading view.
        ============================================ */
   .content-reader {
-    @apply max-w-none text-gray-900;
+    @apply max-w-none;
+    color: hsl(var(--ink));
 
-    & img {
-      @apply border border-gray-800/30 shadow-lg transition-transform duration-200;
+    /* Headings */
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: hsl(var(--ink));
+      font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+      letter-spacing: -0.02em;
     }
 
+    & h1 {
+      @apply pb-3 mt-10 mb-6;
+      border-bottom-color: hsl(var(--rule));
+      font-size: 2rem;
+    }
+
+    & h2 {
+      @apply mt-10 mb-4;
+      font-size: 1.6rem;
+    }
+
+    & h2::before {
+      content: '##  ';
+      color: hsl(var(--ink-faint));
+      font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+      font-weight: 500;
+      font-size: 0.85em;
+    }
+
+    & h3 {
+      @apply mt-8 mb-3;
+      font-size: 1.3rem;
+    }
+
+    & h3::before {
+      content: '###  ';
+      color: hsl(var(--ink-faint));
+      font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+      font-weight: 500;
+      font-size: 0.8em;
+    }
+
+    /* Paragraphs */
+    & p {
+      color: hsl(var(--ink));
+      font-size: 1.0625rem;
+      line-height: 1.8;
+    }
+
+    /* Lists */
+    & ul,
+    & ol {
+      color: hsl(var(--ink));
+    }
+
+    & li,
+    & li > p {
+      color: hsl(var(--ink)) !important;
+    }
+
+    & li::marker {
+      color: hsl(var(--signal)) !important;
+    }
+
+    /* Strong / emphasis */
+    & strong {
+      color: hsl(var(--ink));
+    }
+
+    /* Links */
+    & a {
+      color: hsl(var(--signal));
+      text-decoration: underline;
+      text-decoration-color: hsl(var(--signal) / 0.35);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 200ms;
+    }
+
+    & a:hover {
+      text-decoration-color: hsl(var(--signal));
+    }
+
+    /* Blockquote */
+    & blockquote {
+      @apply rounded-md my-6 py-3 pl-5 pr-4;
+      background-color: hsl(var(--paper-sunken));
+      border-left: 3px solid hsl(var(--signal));
+      color: hsl(var(--ink));
+      font-style: normal;
+    }
+
+    & blockquote p {
+      color: hsl(var(--ink-muted));
+    }
+
+    /* HR */
+    & hr {
+      border-color: hsl(var(--rule));
+      @apply my-10;
+    }
+
+    /* Inline code */
+    & :not(pre) > code {
+      background-color: hsl(var(--paper-sunken));
+      color: hsl(var(--signal));
+      border: 1px solid hsl(var(--rule));
+      @apply rounded px-1.5 py-0.5 text-[0.875em] font-mono;
+    }
+
+    /* Code blocks — keep dark, lift the chrome */
     & pre {
-      @apply shadow-lg;
+      background-color: hsl(var(--paper-sunken));
+      border: 1px solid hsl(var(--rule));
+      @apply rounded-lg my-6 p-4 shadow-card;
     }
 
-    /* Code block language label */
+    & pre code {
+      color: hsl(var(--ink));
+    }
+
     & pre[data-language]::before {
       content: attr(data-language);
-      @apply absolute right-12 top-2 text-xs px-2 py-1 rounded bg-gray-800/80 text-gray-400 uppercase tracking-wide;
+      @apply absolute right-12 top-2.5 text-[10px] px-2 py-0.5 rounded uppercase tracking-[0.18em];
+      background-color: hsl(var(--paper-raised));
+      color: hsl(var(--ink-faint));
+      font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
     }
 
-    & a {
-      @apply relative;
-
-      &::after {
-        content: '';
-        @apply absolute bottom-0 left-0 w-full h-0.5 bg-blue-500/0 transition-all;
-      }
-
-      &:hover::after {
-        @apply bg-blue-500/30;
-      }
+    /* Images */
+    & img {
+      border: 1px solid hsl(var(--rule));
+      @apply rounded-md shadow-card;
     }
 
-    & blockquote {
-      @apply rounded-r-lg shadow-sm;
+    /* Tables */
+    & table {
+      border-color: hsl(var(--rule));
+    }
+
+    & table th {
+      background-color: hsl(var(--paper-sunken));
+      color: hsl(var(--ink));
+      border-color: hsl(var(--rule));
+    }
+
+    & table td {
+      color: hsl(var(--ink));
+      border-color: hsl(var(--rule));
+    }
+
+    /* Strikethrough */
+    & s,
+    & del,
+    & strike {
+      color: hsl(var(--ink-faint));
     }
   }
 

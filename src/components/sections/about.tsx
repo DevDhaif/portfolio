@@ -1,290 +1,292 @@
-
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Code, LayoutGrid, Search, FileCode, ChevronRight, Github, ArrowRight, Linkedin, Sparkles, Target, Users, Timer, Book } from "lucide-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CVButton } from "../home/cv-button";
+import { ArrowUpRight, Code2, Layers, FileCode, Search, Briefcase, Server, MapPin } from "lucide-react";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { RiyadhClock } from "@/components/ui/riyadh-clock";
 import { PostsResponse } from "@/types";
-import CountUp from '../bits/CountUp'
+import CountUp from "../bits/CountUp";
+import { Magnetic } from "../ui/magnetic";
+
+const services = [
+    { icon: Code2, title: "Front-end engineering", description: "React, Next.js, TypeScript, Tailwind." },
+    { icon: Server, title: "Full-stack work", description: "Laravel, PHP, MySQL, Supabase." },
+    { icon: FileCode, title: "Design implementation", description: "Pixel-true designs in clean code." },
+    { icon: Layers, title: "System & UI architecture", description: "Component systems, render strategy." },
+    { icon: Briefcase, title: "Product ownership", description: "Requirements, analysis, UML, scope." },
+    { icon: Search, title: "SEO & performance", description: "Schemas, Core Web Vitals, ranking." },
+];
+
+const principlesLines = [
+    { kw: "ship", val: "small · often · honest" },
+    { kw: "owns", val: "ui · api · scope" },
+    { kw: "values", val: "clarity · perf · a11y" },
+    { kw: "rejects", val: "scope creep · magic · ceremony" },
+    { kw: "tests", val: "real db · real users" },
+    { kw: "writes", val: "diffs > docs" },
+];
+
 export function AboutSection() {
-    const containerRef = useRef<HTMLElement>(null);
-    const [postsCount, setPostsCount] = useState("0")
-    const [isLoadingPosts, setIsLoadingPosts] = useState(true)
+    const [postsCount, setPostsCount] = useState("0");
+    const [isLoadingPosts, setIsLoadingPosts] = useState(true);
 
-    const services = [
-        {
-            icon: <LayoutGrid className="h-6 w-6" />,
-            title: "UI/UX Design",
-            description: "Creating intuitive, beautiful interfaces focused on user experience",
-            color: "from-blue-500/20 to-cyan-500/20",
-            iconBg: "bg-blue-500/10 border-blue-500/20 text-blue-400"
-        },
-        {
-            icon: <Code className="h-6 w-6" />,
-            title: "Front-End Development",
-            description: "Building responsive web applications with React & Next.js",
-            color: "from-emerald-500/20 to-green-500/20",
-            iconBg: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-        },
-        {
-            icon: <Search className="h-6 w-6" />,
-            title: "SEO Optimization",
-            description: "Improving website visibility for better search rankings",
-            color: "from-purple-500/20 to-violet-500/20",
-            iconBg: "bg-purple-500/10 border-purple-500/20 text-purple-400"
-        },
-        {
-            icon: <FileCode className="h-6 w-6" />,
-            title: "System Design",
-            description: "UML, requirements engineering, and software architecture",
-            color: "from-orange-500/20 to-red-500/20",
-            iconBg: "bg-orange-500/10 border-orange-500/20 text-orange-400"
-        }
-    ];
     useEffect(() => {
-
-
         async function fetchPostsCount() {
             try {
-                const response = await fetch('/api/posts/count')
-                if (!response.ok) throw new Error('Failed to fetch posts count')
-
-                const data: PostsResponse = await response.json()
-                setPostsCount(`${data.count}`)
+                const response = await fetch("/api/posts/count");
+                if (!response.ok) throw new Error("Failed to fetch posts count");
+                const data: PostsResponse = await response.json();
+                setPostsCount(`${data.count}`);
             } catch (error) {
-                console.error('Error fetching posts count:', error)
-                setPostsCount("0")
+                console.error("Error fetching posts count:", error);
+                setPostsCount("0");
             } finally {
-                setIsLoadingPosts(false)
+                setIsLoadingPosts(false);
             }
         }
-
-        fetchPostsCount()
-    }, [])
-    const stats = [
-        { icon: <Timer className="h-5 w-5" />, label: "Years Experience", value: "5+" },
-        { icon: <Target className="h-5 w-5" />, label: "Projects Completed", value: "12+" },
-        { icon: <Users className="h-5 w-5" />, label: "Happy Clients", value: "30+" },
-        { icon: <Book className="h-5 w-5" />, label: "Blog Posts", value: postsCount, isLoading: isLoadingPosts },
-    ];
+        fetchPostsCount();
+    }, []);
 
     return (
-        <section
-            id="about"
-            ref={containerRef}
-            className="py-20 md:py-32 relative overflow-hidden"
-        >
-            {/* Enhanced background elements */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-gradient-to-br from-accent-primary/10 to-accent-secondary/5 blur-3xl opacity-50" />
-                <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-gradient-to-tr from-accent-tertiary/10 to-accent-primary/5 blur-3xl opacity-30" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-accent-primary/5 to-accent-secondary/5 blur-3xl opacity-20" />
-            </div>
+        <section id="about" className="relative bg-paper-panel py-24 md:py-32">
+            <div className="container-dev">
+                <SectionHeading
+                    index="01"
+                    eyebrow="about_me"
+                    title={
+                        <>
+                            I build interfaces<br />
+                            that <span className="relative inline-block">
+                                hold up
+                                <span aria-hidden className="absolute -bottom-2 left-0 h-2 w-full bg-signal/80" />
+                            </span>.
+                        </>
+                    }
+                />
 
-            <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                {/* Hero Section */}
-                <div className="text-center mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-subtle border border-accent-primary/20 text-accent-primary text-sm font-medium mb-6"
-                    >
-                        <Sparkles className="h-4 w-4" />
-                        About Me
-                    </motion.div>
-
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
-                    >
-                        <span className="bg-gradient-to-r from-text-primary via-accent-primary to-accent-secondary bg-clip-text text-transparent">
-                            Crafting Digital
-                        </span>
-                        <br />
-                        <span className="text-text-primary">Experiences</span>
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="max-w-3xl mx-auto text-xl text-text-secondary leading-relaxed mb-8"
-                    >
-                        Specializing in modern web development with React, Next.js, and Tailwind CSS.
-                        Building exceptional digital experiences with clean, maintainable code and user-centered design.
-                    </motion.p>
-
-                    {/* Action Buttons */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.3 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-                    >
-                        <Link href="#projects">
-                            <Button
-                                size="lg"
-                                className="group px-8 py-6 text-lg rounded-2xl bg-accent-subtle border border-accent-primary text-white font-medium transition-all duration-300 shadow-lg  hover:bg-accent-primary  "
-                            >
-                                <span>View My Work</span>
-                                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                            </Button>
-                        </Link>
-
-                        <CVButton className="px-8 py-6 text-lg rounded-2xl border-2 border-accent-primary text-accent-primary font-medium hover:bg-accent-primary hover:text-white transition-all duration-300" />
-                    </motion.div>
-
-                    {/* Social Links */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                        className="flex items-center justify-center gap-6"
-                    >
-                        <Link
-                            href="https://github.com/devdhaif"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group p-3 rounded-full bg-card border border-border hover:border-accent-primary hover:bg-accent-primary/10 transition-all duration-300"
-                        >
-                            <Github className="h-6 w-6 text-text-secondary group-hover:text-accent-primary transition-colors" />
-                        </Link>
-                        <Link
-                            href="https://linkedin.com/in/devdhaif"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group p-3 rounded-full bg-card border border-border hover:border-accent-primary hover:bg-accent-primary/10 transition-all duration-300"
-                        >
-                            <Linkedin className="h-6 w-6 text-text-secondary group-hover:text-accent-primary transition-colors" />
-                        </Link>
-                    </motion.div>
-                </div>
-
-                {/* Stats Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
-                >
-                    {stats.map((stat, index) => (
-                        <div key={index} className="text-center p-6 rounded-2xl bg-card/50 border border-border hover:border-accent-primary/30 hover:bg-card transition-all duration-300">
-                            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent-subtle border border-accent-primary/20 text-accent-primary mb-4">
-                                {stat.icon}
-                            </div>
-                            <div className="text-2xl font-bold text-text-primary mb-1">
-                                {stat.isLoading ? (
-                                    <div className="animate-pulse w-8 h-8 bg-gray-200/20 mx-auto rounded-full" />
-                                ) : (
-
-                                    <CountUp
-                                        from={0}
-                                        to={stat.value}
-                                        separator=","
-                                        direction="up"
-                                        duration={3}
-                                        className="count-up-text" onStart={undefined} onEnd={undefined} />
-
-                                )}
-                            </div>
-                            <div className="text-sm text-text-secondary">{stat.label}</div>
-                        </div>
-                    ))}
-                </motion.div>
-
-                {/* Services Section */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="relative z-10"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="text-center mb-16"
-                    >
-                        <h3 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-text-primary to-text-primary/80 bg-clip-text text-transparent">
-                            What I Do Best
-                        </h3>
-                        <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-                            Transforming ideas into beautiful, functional, and user-friendly digital solutions
+                {/* Bento — tighter on desktop, no oversize gaps */}
+                <div className="mt-14 grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-3 lg:auto-rows-[92px]">
+                    {/* Tile A: bio + CTA — 4col x 4row (compact) */}
+                    <BentoTile className="md:col-span-4 lg:row-span-4 p-6 md:p-7 flex flex-col">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-faint">
+                            {`// bio`}
                         </p>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        {services.map((service, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                whileHover={{ y: -8 }}
-                                className="group relative p-8 rounded-3xl bg-gradient-to-br from-card to-card/80 border border-border hover:border-accent-primary/30 hover:shadow-glow hover:shadow-accent-primary/10 transition-all duration-500"
-                            >
-                                {/* Background gradient */}
-                                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                                {/* Content */}
-                                <div className="relative">
-                                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl border ${service.iconBg} mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                                        {service.icon}
-                                    </div>
-
-                                    <h4 className="text-2xl font-bold text-text-primary mb-4 group-hover:text-accent-primary transition-colors duration-300">
-                                        {service.title}
-                                    </h4>
-
-                                    <p className="text-text-secondary leading-relaxed">
-                                        {service.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* CTA Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="text-center mt-20 pt-16 border-t border-border/50"
-                >
-                    <h3 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
-                        Ready to bring your ideas to life?
-                    </h3>
-                    <p className="text-lg text-text-secondary mb-8 max-w-2xl mx-auto">
-                        Let&apos;s collaborate and create something amazing together. I&apos;m always excited to work on new projects and challenges.
-                    </p>
-                    <Link href="#contact">
-                        <Button
-                            size="lg"
-                            className="group px-8 py-6 text-lg rounded-2xl bg-gradient-to-r from-accent-primary to-accent-secondary hover:from-accent-primary/90 hover:to-accent-secondary/90 text-white font-medium transition-all duration-300 shadow-lg shadow-accent-primary/20"
+                        <p className="mt-4 text-lg leading-relaxed text-ink md:text-xl">
+                            Front-end engineer with 5+ years of React. I build
+                            accessible bilingual RTL/LTR interfaces, ship 90+
+                            Lighthouse scores, and reach for Laravel when the backend
+                            needs me.
+                        </p>
+                        <p
+                            lang="ar"
+                            dir="rtl"
+                            className="mt-3 text-sm leading-relaxed text-ink-muted"
                         >
-                            <span>Get In Touch</span>
-                            <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                    </Link>
-                </motion.div>
+                            ضيف الله أحمد الفروي — مطور واجهات أمامية،
+                            متخصص في React و Next.js و TypeScript و Laravel.
+                        </p>
+
+                        <div className="mt-auto flex flex-wrap gap-3 pt-6">
+                            <Magnetic>
+                                <Link href="#projects" className="btn-signal press">
+                                    view work
+                                    <ArrowUpRight className="h-3.5 w-3.5" />
+                                </Link>
+                            </Magnetic>
+                            <Magnetic>
+                                <Link href="#contact" className="btn-ghost press">
+                                    start a brief
+                                </Link>
+                            </Magnetic>
+                        </div>
+                    </BentoTile>
+
+                    {/* Tile B: location — 2col x 2row */}
+                    <BentoTile className="md:col-span-2 lg:row-span-2 p-5">
+                        <div className="flex h-full flex-col justify-between">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-faint">
+                                {`// location`}
+                            </p>
+                            <p className="inline-flex items-center gap-2 font-display text-2xl font-bold leading-tight tracking-tight text-ink md:text-3xl">
+                                <MapPin className="h-5 w-5 shrink-0 text-ink-muted" />
+                                Riyadh, Saudi Arabia
+                            </p>
+                        </div>
+                    </BentoTile>
+
+                    {/* Tile C: clock — 2col x 2row */}
+                    <BentoTile className="md:col-span-2 lg:row-span-2 p-5">
+                        <RiyadhClock />
+                    </BentoTile>
+
+                    {/* Stats — one full-width tile, 4 cells inside */}
+                    <BentoTile className="md:col-span-6 lg:row-span-1 p-0 overflow-hidden">
+                        <div className="grid h-full grid-cols-2 gap-px bg-rule sm:grid-cols-4">
+                            <div className="bg-paper-raised p-5">
+                                <Stat label="years" value="5+" small />
+                            </div>
+                            <div className="bg-paper-raised p-5">
+                                <Stat label="projects" value="12+" small />
+                            </div>
+                            <div className="bg-paper-raised p-5">
+                                <Stat label="clients" value="10+" small />
+                            </div>
+                            <div className="bg-paper-raised p-5">
+                                <Stat
+                                    label="posts"
+                                    value={isLoadingPosts ? null : postsCount}
+                                    small
+                                />
+                            </div>
+                        </div>
+                    </BentoTile>
+
+                    {/* Tile H: principles code window — half width on lg */}
+                    <BentoTile className="md:col-span-6 lg:col-span-3 lg:row-span-4 p-0 overflow-hidden">
+                        <div className="code-window-header">
+                            <span className="dot-light bg-rule-strong" />
+                            <span className="dot-light bg-rule-strong" />
+                            <span className="dot-light bg-rule-strong" />
+                            <span className="ml-2 font-mono text-xs text-ink-muted">
+                                ~/principles.json
+                            </span>
+                            <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
+                                json
+                            </span>
+                        </div>
+                        <pre className="overflow-x-auto p-4 font-mono text-[11.5px] leading-[1.6] text-ink">
+                            <code>
+                                <div>
+                                    <Gutter n={1} />
+                                    <Bracket>{"{"}</Bracket>
+                                </div>
+                                {principlesLines.map((line, i) => (
+                                    <div key={line.kw}>
+                                        <Gutter n={i + 2} />
+                                        <span className="pl-3">
+                                            <Key>{line.kw}</Key>
+                                            <Punc>: </Punc>
+                                            <Bracket>[</Bracket>
+                                            {line.val.split(" · ").map((v, j, arr) => (
+                                                <span key={v}>
+                                                    <Str>{v}</Str>
+                                                    {j < arr.length - 1 && <Punc>, </Punc>}
+                                                </span>
+                                            ))}
+                                            <Bracket>]</Bracket>
+                                            {i < principlesLines.length - 1 && <Punc>,</Punc>}
+                                        </span>
+                                    </div>
+                                ))}
+                                <div>
+                                    <Gutter n={principlesLines.length + 2} />
+                                    <Bracket>{"}"}</Bracket>
+                                </div>
+                            </code>
+                        </pre>
+                    </BentoTile>
+
+                    {/* Services — half width on lg, sits next to principles.json */}
+                    <BentoTile className="md:col-span-6 lg:col-span-3 lg:row-span-4 p-0 overflow-hidden flex flex-col">
+                        <div className="border-b border-rule px-5 py-3">
+                            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-faint">
+                                {`// services`}
+                            </p>
+                        </div>
+                        <ul className="grid flex-1 grid-cols-1 gap-px bg-rule sm:grid-cols-2">
+                            {services.map((s) => (
+                                <li
+                                    key={s.title}
+                                    className="group bg-paper-raised p-4 transition-colors hover:bg-paper"
+                                >
+                                    <s.icon className="h-4 w-4 text-ink-muted transition-colors group-hover:text-signal" />
+                                    <h3 className="mt-2.5 font-display text-sm font-bold tracking-tight text-ink">
+                                        {s.title}
+                                    </h3>
+                                    <p className="mt-1 text-[12px] leading-relaxed text-ink-muted">
+                                        {s.description}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </BentoTile>
+                </div>
             </div>
         </section>
+    );
+}
+
+function BentoTile({
+    children,
+    className = "",
+}: {
+    children: React.ReactNode;
+    className?: string;
+}) {
+    return (
+        <div
+            className={`group relative rounded-lg border border-rule bg-paper-raised transition-colors hover:border-rule-strong ${className}`}
+        >
+            {children}
+        </div>
+    );
+}
+
+// JSON syntax tokens — colorize ~/principles.json like a real editor.
+function Key({ children }: { children: React.ReactNode }) {
+    return <span className="text-[#7DD3FC]">&quot;{children}&quot;</span>;
+}
+function Str({ children }: { children: React.ReactNode }) {
+    return <span className="text-[#A7F3A0]">&quot;{children}&quot;</span>;
+}
+function Punc({ children }: { children: React.ReactNode }) {
+    return <span className="text-ink-faint">{children}</span>;
+}
+function Bracket({ children }: { children: React.ReactNode }) {
+    return <span className="text-[#F0ABFC]">{children}</span>;
+}
+function Gutter({ n }: { n: number }) {
+    return (
+        <span className="select-none mr-3 inline-block w-5 text-right text-ink-faint/70">
+            {n}
+        </span>
+    );
+}
+
+function Stat({
+    label,
+    value,
+    small,
+}: {
+    label: string;
+    value: string | null;
+    small?: boolean;
+}) {
+    return (
+        <div className="flex h-full flex-col justify-between">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-faint">
+                {`// ${label}`}
+            </p>
+            <p
+                className={`font-display font-bold tracking-tight text-ink tabular-nums ${small ? "text-3xl md:text-4xl" : "text-5xl md:text-6xl"
+                    }`}
+            >
+                {value === null ? (
+                    <span className="inline-block h-8 w-12 animate-pulse rounded bg-rule" />
+                ) : (
+                    <CountUp
+                        from={0}
+                        to={value}
+                        separator=","
+                        direction="up"
+                        duration={2}
+                        className="count-up-text"
+                        onStart={undefined}
+                        onEnd={undefined}
+                    />
+                )}
+            </p>
+        </div>
     );
 }

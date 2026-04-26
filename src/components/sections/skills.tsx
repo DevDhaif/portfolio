@@ -1,150 +1,156 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { SkillCard } from "../ui/skill-card";
-import { Code, Server, Wrench, Layers } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-// Skills data
-const skillsData = {
-    frontend: [
-        { name: "HTML", icon: "/icons/html.svg" },
-        { name: "CSS", icon: "/icons/css.svg" },
-        { name: "JavaScript", icon: "/icons/js.svg" },
-        { name: "TypeScript", icon: "/icons/typescript.svg" },
-        { name: "React.js", icon: "/icons/react.svg" },
-        { name: "Next.js", icon: "/icons/next.svg" },
-        { name: "Vue.js", icon: "/icons/vue.svg" },
-        { name: "Tailwind CSS", icon: "/icons/tailwind.svg" },
-        { name: "Redux", icon: "/icons/redux.svg" },
-        { name: "Zustand", icon: "/icons/zustand.svg" },
-    ],
-    backend: [
-        { name: "PHP", icon: "/icons/php.svg" },
-        { name: "Laravel", icon: "/icons/laravel.svg" },
-        { name: "MySQL", icon: "/icons/sql.svg" },
-        { name: "Firebase", icon: "/icons/firebase.svg" },
-        { name: "Supabase", icon: "/icons/supabase.svg" },
-    ],
-    tools: [
-        { name: "Git", icon: "/icons/git.svg" },
-        { name: "GitHub", icon: "/icons/github.svg" },
-        { name: "VS Code", icon: "/icons/vscode.svg" },
-        { name: "Vercel", icon: "/icons/vercel.svg" },
-        { name: "npm", icon: "/icons/npm.svg" },
-        { name: "Vite", icon: "/icons/vite.svg" },
-    ],
-};
+// Featured (large tiles) + secondary (small tiles).
+const featured = [
+    { name: "React", icon: "/icons/react.svg", note: "primary frontend lib" },
+    { name: "Next.js", icon: "/icons/next.svg", note: "app router, RSC" },
+    { name: "TypeScript", icon: "/icons/typescript.svg", note: "default language" },
+    { name: "Tailwind CSS", icon: "/icons/tailwind.svg", note: "design system" },
+];
 
-// Icons for each category
-const categoryIcons = {
-    all: <Layers className="h-4 w-4" />,
-    frontend: <Code className="h-4 w-4" />,
-    backend: <Server className="h-4 w-4" />,
-    tools: <Wrench className="h-4 w-4" />,
-};
+const groups: { label: string; items: { name: string; icon: string }[] }[] = [
+    {
+        label: "frontend",
+        items: [
+            { name: "HTML", icon: "/icons/html.svg" },
+            { name: "CSS", icon: "/icons/css.svg" },
+            { name: "JavaScript", icon: "/icons/js.svg" },
+            { name: "Vue.js", icon: "/icons/vue.svg" },
+            { name: "React Query", icon: "/icons/react-query.svg" },
+            { name: "Zustand", icon: "/icons/zustand.svg" },
+        ],
+    },
+    {
+        label: "backend",
+        items: [
+            { name: "PHP", icon: "/icons/php.svg" },
+            { name: "Laravel", icon: "/icons/laravel.svg" },
+            { name: "MySQL", icon: "/icons/sql.svg" },
+            { name: "Firebase", icon: "/icons/firebase.svg" },
+            { name: "Supabase", icon: "/icons/supabase.svg" },
+        ],
+    },
+    {
+        label: "tools",
+        items: [
+            { name: "Git", icon: "/icons/git.svg" },
+            { name: "GitHub", icon: "/icons/github.svg" },
+            { name: "VS Code", icon: "/icons/vscode.svg" },
+            { name: "Postman", icon: "/icons/postman.svg" },
+            { name: "Vercel", icon: "/icons/vercel.svg" },
+            { name: "npm", icon: "/icons/npm.svg" },
+            { name: "Vite", icon: "/icons/vite.svg" },
+        ],
+    },
+];
 
 export function SkillsSection() {
-    const containerRef = useRef<HTMLElement>(null);
-    const [activeTab, setActiveTab] = useState("all");
-
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"],
-    });
-
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-    const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [50, 0, 0, 50]);
-
     const allSkills = [
-        ...skillsData.frontend.map(skill => ({ ...skill, category: "frontend" })),
-        ...skillsData.backend.map(skill => ({ ...skill, category: "backend" })),
-        ...skillsData.tools.map(skill => ({ ...skill, category: "tools" })),
+        ...featured.map((f) => ({ name: f.name, icon: f.icon })),
+        ...groups.flatMap((g) => g.items),
     ];
 
-    const getFilteredSkills = () => {
-        if (activeTab === "all") return allSkills;
-        return skillsData[activeTab as keyof typeof skillsData].map(skill => ({
-            ...skill,
-            category: activeTab,
-        }));
-    };
-
-    const filteredSkills = getFilteredSkills();
-
     return (
-        <section
-            id="skills"
-            ref={containerRef}
-            className="py-24 md:py-32 relative overflow-hidden bg-background"
-        >
-            <motion.div
-                style={{ opacity, y }}
-                className="container max-w-6xl mx-auto px-4"
-            >
+        <section id="skills" className="relative py-24 md:py-32">
+            <div className="container-dev">
                 <SectionHeading
-                    title="Skills & Expertise"
-                    subtitle="Technologies and tools I work with"
-                    badge="Tech Stack"
+                    index="03"
+                    eyebrow="tech_stack"
+                    title={
+                        <>
+                            The tools I <span className="relative inline-block">
+                                reach for
+                                <span aria-hidden className="absolute -bottom-2 left-0 h-2 w-full bg-signal/80" />
+                            </span>.
+                        </>
+                    }
+                    subtitle="Featured day-to-day, plus the rest of the kit."
                 />
 
-                <div className="mt-12">
-                    {/* Custom Tabs */}
-                    <div className="flex flex-wrap justify-center mb-12 gap-2">
-                        {Object.keys(categoryIcons).map((category) => (
-                            <button
-                                key={category}
-                                onClick={() => setActiveTab(category)}
-                                className={cn(
-                                    "flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300",
-                                    "border text-text-primary",
-                                    activeTab === category
-                                        ? "bg-accent-subtle border-accent-primary/30 text-accent-primary"
-                                        : "bg-card border-border hover:border-border-hover"
-                                )}
+                {/* Featured row ,  large tiles */}
+                <div className="mt-14 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+                    {featured.map((s) => (
+                        <article
+                            key={s.name}
+                            className="group relative flex flex-col justify-between rounded-lg border border-rule bg-paper-raised p-5 transition-colors hover:border-signal/50 frame-brackets aspect-[5/4]"
+                        >
+                            <Image
+                                src={s.icon}
+                                alt={s.name}
+                                width={36}
+                                height={36}
+                                className="h-9 w-9 object-contain transition-transform group-hover:scale-110"
+                            />
+                            <div>
+                                <h3 className="font-display text-2xl font-bold tracking-tight text-ink transition-colors group-hover:text-signal">
+                                    {s.name}
+                                </h3>
+                                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
+                                    {s.note}
+                                </p>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+
+                {/* Grouped list */}
+                <div className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-rule bg-rule lg:grid-cols-3">
+                    {groups.map((group) => (
+                        <div key={group.label} className="bg-paper-raised p-5">
+                            <div className="flex items-baseline justify-between border-b border-rule pb-3">
+                                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-muted">
+                                    {`// ${group.label}`}
+                                </p>
+                                <span className="font-mono text-[10px] text-ink-faint">
+                                    {String(group.items.length).padStart(2, "0")}
+                                </span>
+                            </div>
+                            <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
+                                {group.items.map((skill) => (
+                                    <li
+                                        key={skill.name}
+                                        className="group/tile flex items-center gap-2 rounded-md border border-rule bg-paper-sunken p-2.5 transition-colors hover:border-signal/40"
+                                    >
+                                        <Image
+                                            src={skill.icon}
+                                            alt=""
+                                            width={18}
+                                            height={18}
+                                            className="h-[18px] w-[18px] object-contain"
+                                        />
+                                        <span className="text-sm text-ink">{skill.name}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Marquee */}
+                <div className="relative mt-12 overflow-hidden border-y border-rule bg-paper-panel py-5">
+                    <div className="marquee-track flex w-max items-center gap-12 whitespace-nowrap">
+                        {[...allSkills, ...allSkills].map((s, i) => (
+                            <span
+                                key={`${s.name}-${i}`}
+                                className="flex items-center gap-3 font-display text-2xl font-bold tracking-tight text-ink-muted md:text-3xl"
                             >
-                                {categoryIcons[category as keyof typeof categoryIcons]}
-                                <span className="capitalize">{category}</span>
-                            </button>
+                                <Image
+                                    src={s.icon}
+                                    alt=""
+                                    width={24}
+                                    height={24}
+                                    className="h-6 w-6 object-contain opacity-80"
+                                />
+                                {s.name}
+                                <span className="text-ink-faint text-base">●</span>
+                            </span>
                         ))}
                     </div>
-
-                    {/* Skills Grid with Animation Container */}
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }} key={activeTab} className="relative overflow-hidden rounded-xl border border-border bg-card/50 p-6">
-                        <SkillGrid skills={filteredSkills} />
-                    </motion.div>
                 </div>
-            </motion.div>
+            </div>
         </section>
-    );
-}
-
-type Skill = {
-    name: string;
-    icon: string;
-    category: string;
-};
-
-function SkillGrid({ skills }: { skills: Skill[] }) {
-    return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {skills.map((skill, index) => (
-                <motion.div
-                    key={`${skill.category}-${skill.name}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
-                    className="flex w-full"
-                >
-                    <SkillCard
-                        name={skill.name}
-                        icon={skill.icon}
-                        category={skill.category}
-                    />
-                </motion.div>
-            ))}
-        </div>
     );
 }

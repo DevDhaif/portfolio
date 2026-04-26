@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Bricolage_Grotesque } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -7,10 +7,18 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { Toaster } from '@/components/ui/toaster';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
+
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-geist-sans',
   display: 'swap',
+});
+
+const display = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['600', '700', '800'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -18,13 +26,6 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
   display: 'swap',
 });
-
-// Use Cabinet Grotesk for headings
-// const cabinetGrotesk = localFont({
-//     src: "../fonts/CabinetGrotesk-Variable.woff2",
-//     variable: "--font-cabinet-grotesk",
-//     display: "swap",
-// });
 
 export function generateMetadata() {
   return {
@@ -34,48 +35,7 @@ export function generateMetadata() {
       template: '%s | Dhaifallah Alfarawi',
     },
     description:
-      'Expert Front End Developer specializing in React, Next.js, TypeScript, and Laravel. Building modern, responsive web applications with exceptional UI/UX. Available for freelance projects.',
-    keywords: [
-      'Dhaifallah Alfarawi',
-      'Devdhaif',
-      'Front End Developer',
-      'Next.js Developer',
-      'React Developer',
-      'Laravel Developer',
-      'Saudi Arabia Developer',
-      'Yemen Developer',
-      'Web Developer',
-      'JavaScript Developer',
-      'TypeScript Developer',
-      'Tailwind CSS',
-      'Full Stack Developer',
-      'UI/UX Developer',
-      'Responsive Web Design',
-      'Freelance Web Developer',
-      'Modern Web Applications',
-      'Web Development Saudi Arabia',
-      'Software Engineer',
-      'Portfolio Website',
-      'مطور واجهات أمامية',
-      'مطور ويب',
-      'مطور جافا سكريبت',
-      'مطور تايلويند',
-      'مطور رياكت',
-      'مطور لارافيل',
-      'مطور نكست جي اس',
-      'مطور ويب السعودية',
-      'مطور ويب سعودي',
-      'مطور ويب الرياض',
-      'مطور واجهات أمامية الرياض',
-      'مطور واجهات أمامية السعودية',
-      'مطور واجهات أمامية اليمن',
-      'مطور ويب اليمن',
-      'مطور ويب صنعاء',
-      'مطور واجهات أمامية صنعاء',
-      'مطور واجهات أمامية البيضاء',
-      'ضيف الله الفروي',
-      'ضيف الله أحمد الفروي',
-    ],
+      'Dhaifallah Alfarawi — ضيف الله أحمد الفروي — Front End Developer specializing in React, Next.js, TypeScript, and Laravel. Building modern, responsive web applications with exceptional UI/UX. Available for freelance projects.',
     authors: [
       { name: 'Dhaifallah Alfarawi', url: 'https://devdhaif.vercel.app' },
     ],
@@ -150,12 +110,12 @@ export default function RootLayout({
       className={cn(
         'dark',
         inter.variable,
+        display.variable,
         jetbrainsMono.variable
-        // cabinetGrotesk.variable
       )}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background font-sans antialiased overflow-x-hidden selection:  selection:text-base">
+      <body className="min-h-screen bg-paper font-sans text-ink antialiased overflow-x-hidden">
         <>
           <ConditionalLayout>{children}</ConditionalLayout>
 
