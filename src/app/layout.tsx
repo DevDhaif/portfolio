@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { Toaster } from '@/components/ui/toaster';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
+import { ThemeSwitcherPill } from '@/components/ThemeSwitcherPill';
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
 import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
 
@@ -119,6 +120,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-paper font-sans text-ink antialiased overflow-x-hidden">
         <>
           <ConditionalLayout>{children}</ConditionalLayout>
+
+          {/* Persistent picker entry — hidden on /select itself */}
+          <ThemeSwitcherPill />
 
           {/* UI Components */}
           <ScrollToTop />

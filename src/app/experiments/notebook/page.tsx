@@ -29,7 +29,7 @@ export default function NotebookPage() {
             <Link href="/experiments/notebook" className={`${s.langBtn} ${s.langBtnActive}`}>EN</Link>
             <Link href="/experiments/notebook/ar" className={s.langBtn}>ع</Link>
           </div>
-          <Link href="/" className={s.exitLink}>← exit experiment</Link>
+          <Link href="/select" className={s.exitLink}>← switch theme</Link>
         </header>
 
         {/* Floating margin doodles */}

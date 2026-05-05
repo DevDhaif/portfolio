@@ -1,10 +1,24 @@
 import Link from 'next/link';
-import { Fragment } from 'react';
+import Image from 'next/image';
+import { loadExperimentData, getMonogram } from '@/lib/experiments-data';
+import { SOCIAL_LINKS, AUTHOR } from '@/lib/constants';
 import s from './qamariya.module.css';
+import {
+  ArchDivider,
+  ArchDividerLight,
+  BrandMark,
+  Qamariya,
+  SanaaSkyline,
+} from './svg';
 
-type Segment = string | { em: string };
+export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
-export default function QamariyaPage() {
+const PROJECT_TINTS = ['projectCobalt', 'projectRuby', 'projectEmerald', 'projectAmber'] as const;
+
+export default async function QamariyaPage() {
+  const { projects, certificates, posts, postsCount } = await loadExperimentData();
+
   return (
     <div className={s.root}>
       <div className={s.plasterTexture} />
@@ -15,7 +29,9 @@ export default function QamariyaPage() {
           <div className={s.brand}>
             <BrandMark className={s.brandMark} />
             <span>
-              Dhaifallah <em style={{ fontStyle: 'normal', color: 'var(--ruby)' }}>·</em> Alfarawi
+              Dhaifallah{' '}
+              <em style={{ fontStyle: 'normal', color: 'var(--ruby)' }}>·</em>{' '}
+              Alfarawi
             </span>
           </div>
           <nav className={s.nav}>
@@ -27,45 +43,90 @@ export default function QamariyaPage() {
             <a href="#words" className={s.navLink}>Words</a>
             <a href="#contact" className={s.navLink}>Contact</a>
           </nav>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className={s.topBarActions}>
             <div className={s.langToggle}>
-              <Link href="/experiments/qamariya" className={`${s.langBtn} ${s.langBtnActive}`}>EN</Link>
-              <Link href="/experiments/qamariya/ar" className={s.langBtn}>ع</Link>
+              <Link
+                href="/experiments/qamariya"
+                className={`${s.langBtn} ${s.langBtnActive}`}
+              >
+                EN
+              </Link>
+              <Link href="/experiments/qamariya/ar" className={s.langBtn}>
+                ع
+              </Link>
             </div>
-            <Link href="/" className={s.exitLink}>← Exit</Link>
+            <Link href="/select" className={s.exitLink}>← Switch theme</Link>
           </div>
         </header>
 
         {/* ==================== HERO ==================== */}
         <section className={s.hero}>
           <div>
-            <div className={`${s.heroLabel} ${s.animFadeUp}`} style={{ animationDelay: '0.05s' }}>
-              Sana&apos;a · Yemen · 1996 —
+            <div
+              className={`${s.heroLabel} ${s.animFadeUp}`}
+              style={{ animationDelay: '0.05s' }}
+            >
+              Al-Bayda&apos; · Yemen · 1996 —
             </div>
-            <h1 className={`${s.heroName} ${s.animFadeUp}`} style={{ animationDelay: '0.15s' }}>
+            <h1
+              className={`${s.heroName} ${s.animFadeUp}`}
+              style={{ animationDelay: '0.15s' }}
+            >
               Dhaifallah,
               <br />
-              <span className={s.heroNameItalic}>building </span>
-              quiet&nbsp;tools
+              <span className={s.heroNameItalic}>software </span>
+              engineer
               <span className={s.heroNameArabic}>ضيف الله أحمد الفروي</span>
             </h1>
-            <p className={`${s.heroLead} ${s.animFadeUp}`} style={{ animationDelay: '0.3s' }}>
-              Front-end engineer who treats interfaces like <em>stained glass</em> —
-              every pane intentional, every line load-bearing.
+            <p
+              className={`${s.heroLead} ${s.animFadeUp}`}
+              style={{ animationDelay: '0.3s' }}
+            >
+              <em>Every line earns its keep,</em> every interface ships clean
+              and stays clean.
             </p>
-            <p className={`${s.heroBody} ${s.animFadeUp}`} style={{ animationDelay: '0.45s' }}>
-              I ship production React, Next.js, and TypeScript by day, and obsess over
-              the seams of the craft by night. The portfolio you&apos;re reading is one
-              of three experiments — the others are loud television and a school
-              notebook. This one is the courtyard.
+            <p
+              className={`${s.heroBody} ${s.animFadeUp}`}
+              style={{ animationDelay: '0.45s' }}
+            >
+              5+ years in React, Next.js, TypeScript, and Laravel. I care about
+              Arabic / RTL support and performance from day one. Based in
+              Riyadh, open to roles.
             </p>
-            <div className={`${s.heroCta} ${s.animFadeUp}`} style={{ animationDelay: '0.6s' }}>
+            <div
+              className={`${s.heroCta} ${s.animFadeUp}`}
+              style={{ animationDelay: '0.6s' }}
+            >
               <a className={s.btn} href="#work">See the work →</a>
-              <a className={`${s.btn} ${s.btnGhost}`} href="#contact">Open a channel</a>
+              <a className={`${s.btn} ${s.btnGhost}`} href="#contact">
+                Open a channel
+              </a>
+            </div>
+
+            <div className={s.heroStats}>
+              <div className={s.heroStat}>
+                <span className={s.heroStatValue}>5+</span>
+                <span className={s.heroStatLabel}>Years</span>
+              </div>
+              <div className={s.heroStat}>
+                <span className={s.heroStatValue}>{Math.max(projects.length, 12)}+</span>
+                <span className={s.heroStatLabel}>Projects</span>
+              </div>
+              <div className={s.heroStat}>
+                <span className={s.heroStatValue}>{postsCount}</span>
+                <span className={s.heroStatLabel}>Posts</span>
+              </div>
+              <div className={s.heroStat}>
+                <span className={s.heroStatValue}>{certificates.length}</span>
+                <span className={s.heroStatLabel}>Certs</span>
+              </div>
             </div>
           </div>
 
-          <div className={`${s.qamariyaFrame} ${s.animFadeIn}`} style={{ animationDelay: '0.4s' }}>
+          <div
+            className={`${s.qamariyaFrame} ${s.animFadeIn}`}
+            style={{ animationDelay: '0.4s' }}
+          >
             <Qamariya className={`${s.qamariyaSvg} ${s.animGlow}`} />
             <div className={s.lightBeam} />
             <div className={s.halftoneOverlay} />
@@ -79,55 +140,92 @@ export default function QamariyaPage() {
           A handful of things, <em>built to last.</em>
         </h2>
 
-        <section className={s.projectsGrid}>
-          {PROJECTS.map((p, i) => (
-            <a key={p.title} href="#" className={`${s.project} ${s[p.tint]}`}>
-              <span className={s.projectNumber}>№ {String(i + 1).padStart(2, '0')}</span>
-              <h3 className={s.projectTitle}>{p.title}</h3>
-              <div className={s.projectMeta}>
-                {p.tags.map((t) => <span key={t}>{t}</span>)}
-              </div>
-              <p className={s.projectBlurb}>{p.blurb}</p>
-              <div className={s.projectArrow}>
-                <span style={{ fontFamily: 'var(--qm-mono)', fontSize: 11 }}>{p.year}</span>
-                <span>visit ↗</span>
-              </div>
-            </a>
-          ))}
-        </section>
+        {projects.length === 0 ? (
+          <p className={s.emptyNote}>No projects published yet.</p>
+        ) : (
+          <section className={s.projectsGrid}>
+            {projects.map((p, i) => {
+              const tint = PROJECT_TINTS[i % PROJECT_TINTS.length];
+              const year = p.createdAt
+                ? new Date(p.createdAt).getFullYear()
+                : '';
+              return (
+                <Link
+                  key={p.id}
+                  href={`/projects/${p.id}`}
+                  className={`${s.project} ${s[tint]}`}
+                >
+                  {p.mainImage ? (
+                    <div className={s.projectImage}>
+                      <Image
+                        src={p.mainImage}
+                        alt={p.name}
+                        fill
+                        sizes="(max-width: 700px) 90vw, 360px"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className={s.projectImage}>
+                      <span className={s.projectMonogram}>{getMonogram(p.name)}</span>
+                    </div>
+                  )}
+                  <span className={s.projectNumber}>
+                    № {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className={s.projectTitle}>{p.name}</h3>
+                  <div className={s.projectMeta}>
+                    {(p.skills ?? []).slice(0, 4).map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
+                  <p className={s.projectBlurb}>{p.description}</p>
+                  <div className={s.projectArrow}>
+                    <span style={{ fontFamily: 'var(--qm-mono)', fontSize: 11 }}>
+                      {year}
+                    </span>
+                    <span>visit ↗</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </section>
+        )}
 
         {/* ==================== ABOUT ==================== */}
         <ArchDivider />
-        <div id="about" className={s.sectionLabel}>The Story</div>
+        <div id="about" className={s.sectionLabel}>About</div>
         <h2 className={s.sectionTitle}>
-          Born <em>nineteen-ninety-six</em>, raised on light and static.
+          The short version: <em>who I am</em>, what I do, what I care about.
         </h2>
 
         <section className={s.aboutLayout}>
           <div className={s.aboutProse}>
             <p>
-              I grew up between qamariya windows and CRT static. My afternoons
-              belonged to Spacetoon — Romeo on the mountain, Sebastian and Belle
-              in the alps, Captain Tsubasa drawing impossible arcs in the sky.
-              Mornings belonged to a courtyard, a kite, and seven stones stacked
-              in the dirt.
+              I&apos;m <strong>Dhaifallah Ahmed Alfarawi</strong>, a software
+              engineer from Yemen, based in Riyadh. My day-to-day is React,
+              Next.js, TypeScript, and Tailwind. When a project needs me to
+              own the backend too, I reach for <em>Laravel</em>.
             </p>
             <p>
-              Somewhere between those two channels — the imported anime and the
-              very local sky — I picked up a way of seeing: <em>that pattern is
-              meaning, and meaning is craft.</em> I write code the same way the
-              old plasterers cut a qamariya: a few colors, repeated lines, light
-              behind it doing most of the work.
+              I care about performance, accessibility, and Arabic / RTL
+              support from day one — not as a retrofit. That&apos;s the
+              difference between an interface that survives its first year
+              and one that gets rewritten.
             </p>
             <p>
-              Today that looks like React, Next.js, TypeScript, and a quiet but
-              stubborn opinion about how the seams of a system should feel.
+              I believe clear code and good documentation matter equally, and
+              that small continuous updates beat the big rewrite that never
+              ships.
             </p>
           </div>
 
           <div className={s.timeline}>
-            {TIMELINE.map((t) => (
-              <div key={t.year} className={`${s.timelineItem} ${t.active ? s.active : ''}`}>
+            {TIMELINE_EN.map((t) => (
+              <div
+                key={t.year}
+                className={`${s.timelineItem} ${t.active ? s.active : ''}`}
+              >
                 <div className={s.timelineYear}>{t.year}</div>
                 <div className={s.timelineTitle}>{t.title}</div>
                 <div className={s.timelineBlurb}>{t.blurb}</div>
@@ -144,15 +242,17 @@ export default function QamariyaPage() {
           <ArchDividerLight />
           <div className={s.sectionLabel}>The Toolbelt</div>
           <h2 className={s.sectionTitle}>
-            What I reach for <em>without thinking.</em>
+            The tools I <em>actually use</em>, every day.
           </h2>
 
           <div className={s.skillCols}>
-            {SKILLS.map((col) => (
+            {SKILLS_EN.map((col) => (
               <div key={col.heading} className={s.skillCol}>
                 <h3>{col.heading}</h3>
                 <ul>
-                  {col.items.map((it) => <li key={it}>{it}</li>)}
+                  {col.items.map((it) => (
+                    <li key={it}>{it}</li>
+                  ))}
                 </ul>
               </div>
             ))}
@@ -163,19 +263,32 @@ export default function QamariyaPage() {
       <div className={s.shell}>
         {/* ==================== EXPERIENCE ==================== */}
         <ArchDivider />
-        <div id="experience" className={s.sectionLabel}>The Reruns</div>
+        <div id="experience" className={s.sectionLabel}>Experience</div>
         <h2 className={s.sectionTitle}>
-          Where I&apos;ve <em>broadcast from.</em>
+          Where I&apos;ve <em>worked</em>, and what I shipped.
         </h2>
 
         <section className={s.experienceList}>
-          {EXPERIENCE.map((j) => (
+          {EXPERIENCE_EN.map((j) => (
             <article key={j.role + j.period} className={s.expRow}>
-              <div className={s.expPeriod}>{j.period}</div>
+              <div className={s.expPeriod}>
+                {j.period}
+                {j.current && <span className={s.currentChip}>Now</span>}
+              </div>
               <div className={s.expBody}>
                 <h3 className={s.expRole}>{j.role}</h3>
                 <div className={s.expCompany}>{j.company}</div>
                 <p className={s.expBlurb}>{j.blurb}</p>
+                <ul className={s.expHighlights}>
+                  {j.highlights.map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
+                </ul>
+                <div className={s.expChips}>
+                  {j.stack.map((t) => (
+                    <span key={t}>{t}</span>
+                  ))}
+                </div>
               </div>
             </article>
           ))}
@@ -188,59 +301,117 @@ export default function QamariyaPage() {
           Stamps and seals, <em>earned along the way.</em>
         </h2>
 
-        <section className={s.certGrid}>
-          {CERTIFICATES.map((c) => (
-            <div key={c.name} className={s.certCard}>
-              <div className={s.certSeal} aria-hidden>
-                <svg viewBox="0 0 60 60" fill="none">
-                  <circle cx="30" cy="30" r="26" stroke="currentColor" strokeWidth="1.5" />
-                  <circle cx="30" cy="30" r="20" stroke="currentColor" strokeWidth="0.8" />
-                  <path d="M30 14 L33 26 L46 26 L36 33 L40 46 L30 38 L20 46 L24 33 L14 26 L27 26 Z"
-                    fill="currentColor" opacity="0.85" />
-                </svg>
-              </div>
-              <div className={s.certIssuer}>{c.issuer}</div>
-              <div className={s.certName}>{c.name}</div>
-              <div className={s.certYear}>{c.year}</div>
-            </div>
-          ))}
-        </section>
+        {certificates.length === 0 ? (
+          <p className={s.emptyNote}>No certificates published yet.</p>
+        ) : (
+          <section className={s.certGrid}>
+            {certificates.map((c) => {
+              const year = c.issueDate
+                ? new Date(c.issueDate).getFullYear()
+                : '';
+              return (
+                <a
+                  key={c.id}
+                  href={c.urlLink || '#'}
+                  target={c.urlLink ? '_blank' : undefined}
+                  rel={c.urlLink ? 'noreferrer' : undefined}
+                  className={s.certCard}
+                >
+                  <div className={s.certSeal} aria-hidden>
+                    <svg viewBox="0 0 60 60" fill="none">
+                      <circle cx="30" cy="30" r="26" stroke="currentColor" strokeWidth="1.5" />
+                      <circle cx="30" cy="30" r="20" stroke="currentColor" strokeWidth="0.8" />
+                      <path
+                        d="M30 14 L33 26 L46 26 L36 33 L40 46 L30 38 L20 46 L24 33 L14 26 L27 26 Z"
+                        fill="currentColor"
+                        opacity="0.85"
+                      />
+                    </svg>
+                  </div>
+                  <div className={s.certIssuer}>{c.source}</div>
+                  <div className={s.certName}>{c.title}</div>
+                  <div className={s.certYear}>{year}</div>
+                </a>
+              );
+            })}
+          </section>
+        )}
 
         {/* ==================== WRITING ==================== */}
         <ArchDivider />
         <div id="words" className={s.sectionLabel}>Field Notes</div>
         <h2 className={s.sectionTitle}>
-          Posts, sometimes <em>mostly opinionated.</em>
+          Posts, sometimes <em>opinionated.</em>
         </h2>
 
-        <section className={s.writingList}>
-          {WRITING.map((w, idx) => (
-            <a key={idx} href="#" className={s.writingItem}>
-              <span className={s.writingDate}>{w.date}</span>
-              <span className={s.writingTitle}>
-                {w.title.map((seg, i) =>
-                  typeof seg === 'string'
-                    ? <Fragment key={i}>{seg}</Fragment>
-                    : <em key={i}>{seg.em}</em>
-                )}
-              </span>
-              <span className={s.writingArrow}>→</span>
-            </a>
-          ))}
-        </section>
+        {posts.length === 0 ? (
+          <p className={s.emptyNote}>No posts published yet.</p>
+        ) : (
+          <section className={s.writingList}>
+            {posts.map((p) => {
+              const d = new Date(p.created_at);
+              const date = `${d.getFullYear()} · ${String(d.getMonth() + 1).padStart(2, '0')}`;
+              const title = p.title_en || p.title || p.title_ar || '';
+              return (
+                <Link
+                  key={p.id}
+                  href={`/blog/${p.slug}`}
+                  className={s.writingItem}
+                >
+                  <span className={s.writingDate}>{date}</span>
+                  <span className={s.writingTitle}>{title}</span>
+                  <span className={s.writingArrow}>→</span>
+                </Link>
+              );
+            })}
+          </section>
+        )}
+
+        <div className={s.writingFooter}>
+          <Link href="/blog" className={s.btn}>
+            See all writing →
+          </Link>
+        </div>
 
         {/* ==================== CONTACT ==================== */}
         <ArchDivider />
         <section id="contact" className={s.contact}>
-          <div className={s.sectionLabel}>The Doorway</div>
+          <div className={s.sectionLabel}>Contact</div>
           <p className={s.contactQuote}>
-            If anything here resonated — or you just want to argue about CSS —
-            <em> drop a note.</em>
+            Open to roles and collaborations. <em>Pick whichever channel
+            suits you</em> — I reply within 24 hours.
           </p>
           <div className={s.contactRow}>
-            <a className={s.btn} href="mailto:devdhaif@gmail.com">devdhaif@gmail.com</a>
-            <a className={`${s.btn} ${s.btnGhost}`} href="https://github.com/DevDhaif">GitHub ↗</a>
-            <a className={`${s.btn} ${s.btnGhost}`} href="https://linkedin.com/in/devdhaif">LinkedIn ↗</a>
+            <a className={s.btn} href={`mailto:${SOCIAL_LINKS.EMAIL}`}>
+              {SOCIAL_LINKS.EMAIL}
+            </a>
+            <a className={`${s.btn} ${s.btnGhost}`} href={`tel:${AUTHOR.phone}`}>
+              <bdi dir="ltr">{AUTHOR.phone}</bdi>
+            </a>
+            <a
+              className={`${s.btn} ${s.btnGhost}`}
+              href={SOCIAL_LINKS.GITHUB}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub ↗
+            </a>
+            <a
+              className={`${s.btn} ${s.btnGhost}`}
+              href={SOCIAL_LINKS.LINKEDIN}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn ↗
+            </a>
+            <a
+              className={`${s.btn} ${s.btnGhost}`}
+              href={SOCIAL_LINKS.TWITTER}
+              target="_blank"
+              rel="noreferrer"
+            >
+              X / Twitter ↗
+            </a>
           </div>
         </section>
       </div>
@@ -253,7 +424,7 @@ export default function QamariyaPage() {
       <div className={s.shell}>
         <footer className={s.footer}>
           <span>© 2026 · Dhaifallah Alfarawi</span>
-          <span><em>Sana&apos;a → the world.</em></span>
+          <span><em>Al-Bayda&apos; → the world.</em></span>
         </footer>
       </div>
     </div>
@@ -261,390 +432,83 @@ export default function QamariyaPage() {
 }
 
 /* ===========================================================
-   DATA
+   Static EN data
    =========================================================== */
 
-const PROJECTS = [
-  {
-    title: "Mawqif — civic mapping for transit",
-    blurb: "A Next.js platform that maps Sana'a's informal bus stops; commuter-driven data, designed for low bandwidth.",
-    tags: ['Next.js', 'Supabase', 'Mapbox'],
-    year: '2025',
-    tint: 'projectCobalt' as const,
-  },
-  {
-    title: 'Halaqa — circles for serious learners',
-    blurb: 'Real-time discussion rooms for Arabic-speaking study circles; e2e session state, presence, and recall.',
-    tags: ['React', 'Liveblocks', 'Edge'],
-    year: '2025',
-    tint: 'projectRuby' as const,
-  },
-  {
-    title: 'Qishr — a coffee co-op dashboard',
-    blurb: 'Internal ops UI for a Yemeni-coffee cooperative; inventory, lots, cupping notes, exporter handoffs.',
-    tags: ['Laravel', 'TS', 'shadcn'],
-    year: '2024',
-    tint: 'projectEmerald' as const,
-  },
-  {
-    title: 'Saraya — patterns for prayer times',
-    blurb: 'A tiny utility that draws geometric prayer-time clocks for any latitude. WebGL, generative.',
-    tags: ['R3F', 'Three.js'],
-    year: '2024',
-    tint: 'projectAmber' as const,
-  },
-] as const;
-
-const TIMELINE = [
-  { year: '1996', title: 'Born in Yemen.', blurb: 'A house with a qamariya in every room.', active: false },
-  { year: '2008', title: 'First HTML.', blurb: 'Saved the source of a forum theme; the rest is history.', active: false },
-  { year: '2018', title: 'Shipped first React app.', blurb: 'Two client repos, no idea what state was, learned anyway.', active: false },
-  { year: '2022', title: 'Went full-time front-end.', blurb: 'React, Next.js, TypeScript — and the rabbit hole opened.', active: false },
-  { year: '2026', title: 'Architect-in-training.', blurb: 'Studying the seams. Trying not to be agreeable.', active: true },
+const TIMELINE_EN = [
+  { year: '1996', title: 'The start.',                    blurb: 'Born in Yemen.',                                                          active: false },
+  { year: '2008', title: 'First computer.',               blurb: 'Where my obsession with computers — and everything around them — began.', active: false },
+  { year: '2018', title: 'Started freelancing.',          blurb: 'First real clients — full-stack web apps in Laravel and React. Still freelancing in parallel today.', active: false },
+  { year: '2020', title: 'Meraki UI Lab.',                blurb: 'Worked on a reusable component system with a unified visual identity.',                                  active: false },
+  { year: '2024', title: 'Moved to Riyadh — joined ADX.', blurb: 'Front-end engineer on a full digital-signage platform.',                  active: false },
+  { year: '2026', title: 'Today.',                        blurb: 'Focused on performance, accessibility, and front-end architecture.',     active: true },
 ];
 
-const SKILLS = [
+const SKILLS_EN = [
   {
     heading: 'Foundation',
-    items: ['HTML, semantically', 'CSS, including the hard parts', 'TypeScript, daily', 'Accessibility, by default'],
+    items: ['HTML', 'CSS', 'TypeScript', 'Accessibility · WCAG', 'RTL / LTR support'],
   },
   {
     heading: 'Frameworks',
-    items: ['React 18 / 19', 'Next.js 15', 'Tailwind + tokens', 'Framer Motion'],
+    items: ['React 18 / 19', 'Next.js 15 + RSC', 'Tailwind + tokens', 'Vue.js', 'React Query · Zustand', 'Framer Motion · GSAP', 'dnd-kit · i18next'],
   },
   {
     heading: 'Backend & data',
-    items: ['Node, Express', 'Laravel, PHP', 'Postgres, Supabase', 'tRPC, REST, RSC'],
+    items: ['Laravel / PHP', 'MySQL', 'Supabase', 'Firebase', 'REST · RSC'],
   },
   {
     heading: 'Operating',
-    items: ['Vercel, Cloudflare', 'Edge & serverless', 'Caching strategy', 'Observability'],
+    items: ['Vercel · Cloudflare', 'Git · GitHub', 'Vite · npm · pnpm', 'Caching strategy', 'Core Web Vitals', 'NestJS (learning)'],
   },
 ];
 
-const EXPERIENCE = [
-  { period: '2024 — Now',  role: 'Senior Front-End Engineer', company: 'Independent · Riyadh',     blurb: 'Production React, Next.js, and TypeScript for SaaS clients across MENA. Architecture, performance, and the boring-but-load-bearing details.' },
-  { period: '2022 — 2024', role: 'Front-End Engineer',        company: 'Vyrlo Tech · Remote',      blurb: 'Built the front-end for a multi-tenant analytics platform. Owned the design system and motion library; led the migration from CRA to Next.' },
-  { period: '2020 — 2022', role: 'Full-Stack Developer',      company: "Local Agency · Sana'a",    blurb: 'Laravel + Vue/React for a stream of MENA clients. Picked up the discipline of shipping under constraints — slow networks, low specs, real users.' },
-  { period: '2018 — 2020', role: 'Junior Web Developer',      company: 'Freelance',                blurb: 'Cut my teeth on WordPress, then jQuery, then React. The order was correct.' },
-] as const;
-
-const CERTIFICATES = [
-  { issuer: 'Meta',             name: 'Front-End Developer Professional',  year: '2024' },
-  { issuer: 'Vercel',           name: 'Next.js App Router Mastery',        year: '2024' },
-  { issuer: 'Frontend Masters', name: 'Production-Grade Patterns',         year: '2023' },
-  { issuer: 'AWS',              name: 'Cloud Practitioner',                year: '2023' },
-  { issuer: 'Google',           name: 'UX Design Specialization',          year: '2022' },
-  { issuer: 'edX · MIT',        name: 'Intro to Computational Thinking',   year: '2022' },
-] as const;
-
-const WRITING: { date: string; title: Segment[] }[] = [
-  { date: '2026 · 04', title: ["A senior engineer's guide to ", { em: 'saying no' }, '.'] },
-  { date: '2026 · 03', title: ['Why I stopped writing ', { em: 'useEffect' }, ' first.'] },
-  { date: '2026 · 02', title: ['Tailwind, tokens, and the ', { em: 'discipline tax' }, '.'] },
-  { date: '2026 · 01', title: ['Server components are ', { em: 'not the goal' }, '.'] },
-  { date: '2025 · 12', title: ['Designing around ', { em: 'network latency' }, '.'] },
+const EXPERIENCE_EN = [
+  {
+    period: '11/2024 — Now',
+    role: 'Front-End Developer',
+    company: 'ADX · Riyadh',
+    current: true,
+    blurb:
+      'Building a full digital-signage platform end-to-end — campaign simulator, drag-and-drop playlist tool, in-browser image editor, admin console with RBAC.',
+    highlights: [
+      "Built 'Try ADx' — a client-side campaign simulator that detects aspect-ratio and previews media instantly over custom graphics.",
+      'Shipped a drag-and-drop playlist + media tool with in-browser image editing and template builder via dnd-kit.',
+      'Wired the web signage player to 6 micro-service APIs (content, scheduling, analytics, devices, users, media) with sync + recovery.',
+      'Owned the admin console with RBAC across 8+ roles tied to per-site permissions.',
+      'AR (RTL) + EN (LTR) support via i18next, semantic HTML, WCAG-compliant throughout.',
+    ],
+    stack: ['React', 'Next.js', 'TypeScript', 'Zustand', 'React Query', 'Tailwind CSS', 'dnd-kit', 'i18next'],
+  },
+  {
+    period: '01/2018 — Now',
+    role: 'Full-Stack Developer (Freelance)',
+    company: 'Independent',
+    current: true,
+    blurb:
+      'End-to-end web apps across domains. Front-end-led, extends into backend. Deployed on Vercel and Digital Ocean.',
+    highlights: [
+      'Delivered 5+ full web apps from idea to deployment.',
+      'Hit Lighthouse 90+ (e.g. Miyar Capital) via dynamic imports, code-splitting, image optimization, DevTools profiling.',
+      'Cut page load 30–40% via Core Web Vitals work; search rankings improved.',
+      'RESTful APIs in Laravel + MySQL with 99.5% uptime.',
+      'Shipped motion + micro-interactions with CSS animations, Framer Motion, and GSAP.',
+    ],
+    stack: ['React', 'Next.js', 'TypeScript', 'Laravel', 'MySQL', 'Supabase', 'Framer Motion', 'GSAP'],
+  },
+  {
+    period: '05/2020 — 11/2024',
+    role: 'Front-End Developer',
+    company: 'Meraki UI Lab',
+    current: false,
+    blurb:
+      'Reusable, accessible component systems with consistent visual identity for cross-functional product teams.',
+    highlights: [
+      'Lifted site visits 20% in 6 months via load speed + content clarity.',
+      'Shipped 150+ reusable components in a unified system; dev time fell 35%.',
+      '100% RTL coverage with semantic HTML and ARIA; Arabic-user engagement +27%.',
+      'Delivered interfaces with 95% client satisfaction in a 4-person cross-functional team.',
+    ],
+    stack: ['React.js', 'TailwindCSS', 'JavaScript', 'HTML5', 'CSS3', 'WCAG'],
+  },
 ];
-
-/* ===========================================================
-   SVG: Brand mark — small qamariya glyph
-   =========================================================== */
-function BrandMark({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 40 40" fill="none">
-      <path
-        d="M20 4 L34 18 L34 36 L6 36 L6 18 Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <circle cx="20" cy="20" r="2" fill="var(--ruby)" />
-      <path d="M20 12 L20 20 M20 20 L26 22 M20 20 L14 22 M20 20 L24 28 M20 20 L16 28"
-        stroke="currentColor" strokeWidth="1" />
-      <path d="M6 36 L34 36" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-
-/* ===========================================================
-   SVG: Qamariya stained glass window
-   =========================================================== */
-function Qamariya({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 300 400"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="Qamariya stained-glass window"
-    >
-      <defs>
-        <radialGradient id="cobaltGlass" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#3a6fd0" />
-          <stop offset="100%" stopColor="#0e2a66" />
-        </radialGradient>
-        <radialGradient id="rubyGlass" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#e0454f" />
-          <stop offset="100%" stopColor="#7d1219" />
-        </radialGradient>
-        <radialGradient id="emeraldGlass" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#3fb27d" />
-          <stop offset="100%" stopColor="#0e5436" />
-        </radialGradient>
-        <radialGradient id="amberGlass" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#f5c54d" />
-          <stop offset="100%" stopColor="#a76f12" />
-        </radialGradient>
-        <radialGradient id="ivoryGlass" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#fff7e1" />
-          <stop offset="100%" stopColor="#e6d4a8" />
-        </radialGradient>
-
-        <linearGradient id="plasterFrame" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f3ead9" />
-          <stop offset="100%" stopColor="#c9b89a" />
-        </linearGradient>
-      </defs>
-
-      {/* Outer plaster frame — pointed arch */}
-      <path
-        d="M30 400 L30 200 Q30 30 150 30 Q270 30 270 200 L270 400 Z"
-        fill="url(#plasterFrame)"
-        stroke="#2a1f10"
-        strokeWidth="3"
-      />
-
-      {/* Inner well */}
-      <path
-        d="M50 380 L50 200 Q50 50 150 50 Q250 50 250 200 L250 380 Z"
-        fill="#2a1f10"
-      />
-
-      {/* === FAN OF GLASS PETALS (top arch) === */}
-      <g transform="translate(150 220)">
-        <circle r="22" fill="url(#amberGlass)" stroke="#2a1f10" strokeWidth="2" />
-        <circle r="8" fill="url(#ivoryGlass)" stroke="#2a1f10" strokeWidth="1.2" />
-
-        {petalPaths.map((p, i) => (
-          <path
-            key={i}
-            d={p.d}
-            fill={`url(#${p.fill})`}
-            stroke="#2a1f10"
-            strokeWidth="2"
-          />
-        ))}
-
-        {diamondPositions.map((d, i) => (
-          <g key={i} transform={`rotate(${d.r}) translate(0 -160)`}>
-            <path
-              d="M0 -8 L8 0 L0 8 L-8 0 Z"
-              fill={d.fill === 'cobalt' ? 'url(#cobaltGlass)'
-                  : d.fill === 'ruby' ? 'url(#rubyGlass)'
-                  : d.fill === 'emerald' ? 'url(#emeraldGlass)'
-                  : 'url(#amberGlass)'}
-              stroke="#2a1f10"
-              strokeWidth="1.5"
-            />
-          </g>
-        ))}
-      </g>
-
-      {/* === LOWER LATTICE === */}
-      <g>
-        <line x1="50" y1="225" x2="250" y2="225" stroke="#2a1f10" strokeWidth="3" />
-
-        {gridCells.map((c, i) => (
-          <g key={i}>
-            <rect
-              x={c.x}
-              y={c.y}
-              width="44"
-              height="44"
-              fill={`url(#${c.fill})`}
-              stroke="#2a1f10"
-              strokeWidth="1.5"
-            />
-            <circle cx={c.x + 22} cy={c.y + 22} r="3" fill="#2a1f10" opacity="0.4" />
-          </g>
-        ))}
-
-        <rect x="50" y="370" width="200" height="10" fill="url(#plasterFrame)" stroke="#2a1f10" strokeWidth="2" />
-      </g>
-    </svg>
-  );
-}
-
-const petalPaths = (() => {
-  const petals = 12;
-  const innerR = 22;
-  const outerR = 110;
-  const colors = ['cobaltGlass', 'rubyGlass', 'emeraldGlass', 'amberGlass'];
-  const out: { d: string; fill: string }[] = [];
-  for (let i = 0; i < petals; i++) {
-    const a1 = (i / petals) * Math.PI * 2 - Math.PI / 2;
-    const a2 = ((i + 1) / petals) * Math.PI * 2 - Math.PI / 2;
-    const x1 = Math.cos(a1) * innerR, y1 = Math.sin(a1) * innerR;
-    const x2 = Math.cos(a1) * outerR, y2 = Math.sin(a1) * outerR;
-    const x3 = Math.cos(a2) * outerR, y3 = Math.sin(a2) * outerR;
-    const x4 = Math.cos(a2) * innerR, y4 = Math.sin(a2) * innerR;
-    if (y2 > 50 && y3 > 50) continue;
-    out.push({
-      d: `M${x1.toFixed(2)} ${y1.toFixed(2)} L${x2.toFixed(2)} ${y2.toFixed(2)} A${outerR} ${outerR} 0 0 1 ${x3.toFixed(2)} ${y3.toFixed(2)} L${x4.toFixed(2)} ${y4.toFixed(2)} A${innerR} ${innerR} 0 0 0 ${x1.toFixed(2)} ${y1.toFixed(2)} Z`,
-      fill: colors[i % colors.length],
-    });
-  }
-  return out;
-})();
-
-const diamondPositions = (() => {
-  const out: { r: number; fill: string }[] = [];
-  const colors = ['cobalt', 'ruby', 'emerald', 'amber'];
-  for (let i = 0; i < 9; i++) {
-    const r = -90 + (i / 8) * 180;
-    out.push({ r, fill: colors[i % colors.length] });
-  }
-  return out;
-})();
-
-const gridCells = (() => {
-  const cells: { x: number; y: number; fill: string }[] = [];
-  const startX = 60;
-  const startY = 235;
-  const colors = ['cobaltGlass', 'rubyGlass', 'emeraldGlass', 'amberGlass', 'ivoryGlass'];
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 4; col++) {
-      const idx = (row * 4 + col + row) % colors.length;
-      cells.push({
-        x: startX + col * 46,
-        y: startY + row * 46,
-        fill: colors[idx],
-      });
-    }
-  }
-  return cells;
-})();
-
-/* ===========================================================
-   SVG: Arch divider
-   =========================================================== */
-function ArchDivider() {
-  return (
-    <div className={s.archDivider} aria-hidden>
-      <svg viewBox="0 0 200 80" fill="none">
-        <path d="M2 78 L2 40 Q2 4 100 4 Q198 4 198 40 L198 78"
-          stroke="currentColor" strokeWidth="1.5" fill="none" />
-        <path d="M22 78 L22 42 Q22 22 100 22 Q178 22 178 42 L178 78"
-          stroke="currentColor" strokeWidth="1" fill="none" opacity="0.6" />
-        <circle cx="100" cy="40" r="3" fill="currentColor" />
-        <circle cx="100" cy="40" r="10" stroke="currentColor" strokeWidth="1" fill="none" />
-        <line x1="0" y1="78" x2="200" y2="78" stroke="currentColor" strokeWidth="1" />
-        <line x1="40" y1="60" x2="60" y2="60" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-        <line x1="140" y1="60" x2="160" y2="60" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-      </svg>
-    </div>
-  );
-}
-
-function ArchDividerLight() {
-  return (
-    <div className={s.archDivider} style={{ color: 'var(--amber)' }} aria-hidden>
-      <svg viewBox="0 0 200 80" fill="none">
-        <path d="M2 78 L2 40 Q2 4 100 4 Q198 4 198 40 L198 78"
-          stroke="currentColor" strokeWidth="1.5" fill="none" />
-        <circle cx="100" cy="40" r="3" fill="currentColor" />
-        <circle cx="100" cy="40" r="10" stroke="currentColor" strokeWidth="1" fill="none" />
-        <line x1="0" y1="78" x2="200" y2="78" stroke="currentColor" strokeWidth="1" />
-      </svg>
-    </div>
-  );
-}
-
-/* ===========================================================
-   SVG: Sana'a tower-house skyline (deterministic)
-   =========================================================== */
-function SanaaSkyline() {
-  return (
-    <svg viewBox="0 0 1600 220" preserveAspectRatio="xMidYEnd slice" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="160" width="1600" height="60" fill="#1a140d" opacity="0.22" />
-      {towerHouses.map((t, i) => (
-        <TowerHouse key={i} {...t} />
-      ))}
-      <rect x="0" y="218" width="1600" height="2" fill="#1a140d" />
-    </svg>
-  );
-}
-
-function TowerHouse({ x, w, h, stories }: { x: number; w: number; h: number; stories: number }) {
-  const baseY = 220 - h;
-  return (
-    <g>
-      <rect x={x} y={baseY} width={w} height={h} fill="#1a140d" />
-
-      {/* crenellations */}
-      {Array.from({ length: Math.floor(w / 8) }).map((_, i) => (
-        i % 2 === 0 ? (
-          <rect
-            key={i}
-            x={x + i * 8}
-            y={baseY - 6}
-            width="8"
-            height="6"
-            fill="#1a140d"
-          />
-        ) : null
-      ))}
-
-      {/* horizontal white bands between stories */}
-      {Array.from({ length: stories }).map((_, i) => {
-        const sy = baseY + 12 + i * (h / stories);
-        return (
-          <g key={i}>
-            <line x1={x + 4} y1={sy} x2={x + w - 4} y2={sy}
-              stroke="#f3ead9" strokeWidth="1" opacity="0.55" />
-            <line x1={x + 4} y1={sy + 3} x2={x + w - 4} y2={sy + 3}
-              stroke="#f3ead9" strokeWidth="0.5" opacity="0.35" />
-          </g>
-        );
-      })}
-
-      {/* arched windows */}
-      {Array.from({ length: stories }).map((_, i) => {
-        const wy = baseY + 18 + i * (h / stories);
-        const ww = Math.min(8, w * 0.18);
-        const wx = x + w / 2 - ww / 2;
-        return (
-          <path
-            key={`w${i}`}
-            d={`M${wx} ${wy + ww * 1.3} L${wx} ${wy + ww * 0.6} Q${wx} ${wy} ${wx + ww / 2} ${wy} Q${wx + ww} ${wy} ${wx + ww} ${wy + ww * 0.6} L${wx + ww} ${wy + ww * 1.3} Z`}
-            fill="#e9a82a"
-            opacity="0.5"
-          />
-        );
-      })}
-
-      {/* crowning qamariya at the top */}
-      <path
-        d={`M${x + w / 2 - 8} ${baseY + 6} L${x + w / 2 - 8} ${baseY + 2} Q${x + w / 2 - 8} ${baseY - 6} ${x + w / 2} ${baseY - 6} Q${x + w / 2 + 8} ${baseY - 6} ${x + w / 2 + 8} ${baseY + 2} L${x + w / 2 + 8} ${baseY + 6} Z`}
-        fill="#1f4ea8"
-        opacity="0.6"
-      />
-    </g>
-  );
-}
-
-/* Deterministic skyline (no Math.random — would cause hydration mismatch). */
-const towerHouses: { x: number; w: number; h: number; stories: number }[] = (() => {
-  const out: { x: number; w: number; h: number; stories: number }[] = [];
-  const widths = [62, 78, 54, 70, 60, 84, 52, 68, 76, 58, 64, 80, 56, 72, 66, 82, 50, 74, 60, 78, 54, 70];
-  const heights = [180, 142, 168, 196, 130, 156, 188, 144, 172, 158, 182, 134, 168, 192, 150, 174, 138, 164, 196, 152, 168, 144];
-  const storyList = [6, 5, 6, 7, 4, 5, 6, 5, 6, 5, 7, 4, 5, 7, 5, 6, 4, 6, 7, 5, 6, 5];
-  let x = 0;
-  let i = 0;
-  while (x < 1600 && i < widths.length) {
-    out.push({ x, w: widths[i], h: heights[i], stories: storyList[i] });
-    x += widths[i] + 4;
-    i++;
-  }
-  return out;
-})();

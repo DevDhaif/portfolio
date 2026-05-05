@@ -149,10 +149,10 @@
   pointer-events: none;
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.32) 0px,
-    rgba(0, 0, 0, 0.32) 1px,
+    rgba(0, 0, 0, 0.16) 0px,
+    rgba(0, 0, 0, 0.16) 1px,
     transparent 1px,
-    transparent 3px
+    transparent 4px
   );
   mix-blend-mode: multiply;
   z-index: 40;
@@ -178,26 +178,26 @@
   z-index: 42;
   mix-blend-mode: screen;
   background:
-    radial-gradient(ellipse 100% 100% at 0% 50%, rgba(255, 0, 0, 0.05), transparent 30%),
-    radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0, 200, 255, 0.05), transparent 30%);
+    radial-gradient(ellipse 100% 100% at 0% 50%, rgba(255, 0, 0, 0.025), transparent 30%),
+    radial-gradient(ellipse 100% 100% at 100% 50%, rgba(0, 200, 255, 0.025), transparent 30%);
 }
 
+/* Flicker: kept very subtle so it reads as "old TV" without being distracting.
+   Was previously toggling 0.0–0.6 every 90ms — fatiguing and unreadable. */
 .flicker {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 43;
-  background: rgba(255, 255, 255, 0.02);
-  animation: flicker 0.18s infinite alternate;
+  background: rgba(255, 255, 255, 0.015);
+  animation: flicker 4s ease-in-out infinite;
 }
 
 @keyframes flicker {
-  0%   { opacity: 0.0; }
-  20%  { opacity: 0.4; }
-  40%  { opacity: 0.05; }
-  60%  { opacity: 0.6; }
-  80%  { opacity: 0.1; }
-  100% { opacity: 0.3; }
+  0%, 100% { opacity: 0.3; }
+  48%      { opacity: 0.5; }
+  50%      { opacity: 0.15; }
+  52%      { opacity: 0.5; }
 }
 
 /* ============== STATIC NOISE TRANSITION ============== */
@@ -267,8 +267,8 @@
   z-index: 30;
   font-family: var(--st-mono), monospace;
   color: var(--c-text);
-  font-size: clamp(12px, 1.2vw, 18px);
-  line-height: 1;
+  font-size: clamp(13px, 1.2vw, 17px);
+  line-height: 1.1;
   letter-spacing: 0.04em;
 }
 
@@ -326,11 +326,23 @@
   position: absolute;
   inset: 0;
   z-index: 10;
-  padding: clamp(48px, 6vw, 88px) clamp(28px, 4vw, 60px);
-  overflow: hidden;
+  padding: clamp(56px, 6vw, 96px) clamp(24px, 3.6vw, 56px) clamp(20px, 2vw, 32px);
+  /* Allow vertical scrolling within the channel — content can be taller than the screen. */
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-primary) transparent;
+  -webkit-overflow-scrolling: touch;
 }
+
+.channel::-webkit-scrollbar { width: 8px; }
+.channel::-webkit-scrollbar-thumb {
+  background: var(--c-primary);
+  border-radius: 4px;
+}
+.channel::-webkit-scrollbar-track { background: transparent; }
 
 .channelBg {
   position: absolute;
@@ -349,7 +361,7 @@
     );
 }
 
-/* Halftone dots layer that scrolls slowly */
+/* Halftone dots — subtle texture, no animation (was distracting). */
 .halftone {
   position: absolute;
   inset: -10%;
@@ -359,10 +371,10 @@
     color-mix(in srgb, var(--c-primary) 60%, transparent) 1px,
     transparent 1.6px
   );
-  background-size: 14px 14px;
-  opacity: 0.18;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 90%);
-  animation: drift 18s linear infinite;
+  background-size: 18px 18px;
+  opacity: 0.08;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+  pointer-events: none;
 }
 
 @keyframes drift {
@@ -370,16 +382,16 @@
   100% { background-position: 14px 14px; }
 }
 
-/* Speed lines for the hero */
+/* Speed lines for the hero — kept very faint */
 .speedLines {
   position: absolute;
   inset: 0;
   z-index: 2;
   background-image: repeating-linear-gradient(
     100deg,
-    transparent 0 24px,
-    rgba(255, 255, 255, 0.06) 24px 25px,
-    transparent 25px 60px
+    transparent 0 28px,
+    rgba(255, 255, 255, 0.025) 28px 29px,
+    transparent 29px 70px
   );
   mask-image: linear-gradient(90deg, black 0%, transparent 60%);
   pointer-events: none;
@@ -388,9 +400,10 @@
 .channelInner {
   position: relative;
   z-index: 5;
-  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: clamp(16px, 2vw, 28px);
+  /* Don't constrain height — let content flow and let .channel scroll. */
 }
 
 /* ============== HERO TITLE CARD (anime-OP) ============== */
@@ -402,7 +415,6 @@
   grid-template-columns: 1fr 1.1fr;
   gap: clamp(20px, 3vw, 48px);
   align-items: center;
-  flex: 1;
 }
 
 @media (max-width: 800px) {
@@ -419,18 +431,18 @@
 .heroKicker {
   font-family: var(--st-mono), monospace;
   text-transform: uppercase;
-  letter-spacing: 0.32em;
-  font-size: clamp(11px, 1vw, 14px);
+  letter-spacing: 0.28em;
+  font-size: clamp(14px, 1.2vw, 17px);
   color: var(--c-secondary);
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .heroName {
   font-family: var(--st-display), sans-serif;
-  font-size: clamp(48px, 7vw, 110px);
-  line-height: 0.9;
+  font-size: clamp(40px, 5.6vw, 84px);
+  line-height: 0.95;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: white;
@@ -451,8 +463,8 @@
 
 .heroSub {
   font-family: var(--st-fat), serif;
-  font-size: clamp(18px, 2vw, 30px);
-  line-height: 1.1;
+  font-size: clamp(20px, 2.2vw, 32px);
+  line-height: 1.15;
   text-transform: uppercase;
   color: white;
   max-width: 28ch;
@@ -460,10 +472,10 @@
 
 .heroLead {
   font-family: var(--st-body), sans-serif;
-  font-size: clamp(13px, 1.1vw, 17px);
-  line-height: 1.55;
-  max-width: 44ch;
-  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(15px, 1.25vw, 19px);
+  line-height: 1.6;
+  max-width: 48ch;
+  color: rgba(255, 255, 255, 0.9);
   text-transform: none;
   letter-spacing: 0;
 }
@@ -530,8 +542,8 @@
 
 .sectionTitle {
   font-family: var(--st-display), sans-serif;
-  font-size: clamp(28px, 3.4vw, 56px);
-  line-height: 1;
+  font-size: clamp(36px, 4vw, 64px);
+  line-height: 1.05;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: white;
@@ -541,28 +553,17 @@
 
 .sectionLead {
   font-family: var(--st-body), sans-serif;
-  font-size: clamp(13px, 1.05vw, 16px);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.82);
-  max-width: 60ch;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.86);
+  max-width: 64ch;
   margin-bottom: clamp(20px, 2.4vw, 36px);
 }
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: clamp(12px, 1.4vw, 18px);
-  overflow-y: auto;
-  padding-right: 8px;
-  flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: var(--c-primary) transparent;
-}
-
-.cardGrid::-webkit-scrollbar { width: 8px; }
-.cardGrid::-webkit-scrollbar-thumb {
-  background: var(--c-primary);
-  border-radius: 4px;
 }
 
 .card {
@@ -585,24 +586,24 @@
 
 .cardLabel {
   font-family: var(--st-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--c-secondary);
 }
 
 .cardTitle {
   font-family: var(--st-display), sans-serif;
-  font-size: clamp(15px, 1.3vw, 19px);
+  font-size: clamp(17px, 1.5vw, 22px);
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.1;
   color: white;
 }
 
 .cardBody {
-  font-size: 13px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 /* ============== REMOTE / NAV ============== */
@@ -637,16 +638,16 @@
   background: linear-gradient(180deg, #3a3a3e 0%, #1a1a1c 100%);
   color: white;
   font-family: var(--st-mono), monospace;
-  font-size: clamp(10px, 0.95vw, 13px);
+  font-size: clamp(12px, 1vw, 14px);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: clamp(10px, 1vw, 14px) 8px;
+  padding: clamp(12px, 1.1vw, 16px) 10px;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 2px 4px rgba(0, 0, 0, 0.4);
@@ -675,13 +676,17 @@
 
 .btnNumber {
   font-family: var(--st-display), sans-serif;
-  font-size: clamp(14px, 1.4vw, 20px);
+  font-size: clamp(16px, 1.6vw, 22px);
   line-height: 1;
 }
 
 .btnLabel {
-  font-size: clamp(8px, 0.7vw, 10px);
-  opacity: 0.85;
+  font-size: clamp(11px, 0.95vw, 13px);
+  opacity: 0.9;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: center;
+  line-height: 1.1;
 }
 
 .btnPlanet {
@@ -783,12 +788,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: rgba(0, 0, 0, 0.4);
   border-left: 3px solid var(--c-primary);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  /* Skill names are dominantly latin tokens — pin LTR even in AR layout
+     so bullets/bars stay on the same side as the name. */
+  direction: ltr;
+  text-align: left;
 }
 
 .skillBar {
@@ -804,6 +813,70 @@
   height: 100%;
   background: var(--c-primary);
   box-shadow: 0 0 8px var(--c-primary);
+}
+
+/* ============== SKILLS — categorized chip groups (no progress bars) ============== */
+
+.skillsGroups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  /* Latin-token dominant — keep LTR even inside AR layout. */
+  direction: ltr;
+}
+
+.skillGroup {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #000;
+  border-left: 3px solid var(--c-primary);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skillGroupHeading {
+  font-family: var(--st-display), sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-secondary);
+  margin: 0;
+}
+
+.skillChipList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skillChip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--st-mono), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid color-mix(in srgb, var(--c-primary) 60%, transparent);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+[dir='rtl'] .skillGroup {
+  border-left: 3px solid var(--c-primary);
+  border-right: 2px solid #000;
+  /* Heading and bullets stay LTR with the groups container — most tokens are latin. */
+}
+
+[dir='rtl'] .skillGroupHeading {
+  /* Allow the heading to read in its native direction (often Arabic). */
+  direction: rtl;
+  text-align: right;
 }
 
 /* ============== ACTION CHANNEL specific ============== */
@@ -838,8 +911,8 @@
 
 .contactLabel {
   font-family: var(--st-mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--c-secondary);
   margin-bottom: 6px;
@@ -847,9 +920,11 @@
 
 .contactValue {
   font-family: var(--st-display);
-  font-size: clamp(16px, 1.4vw, 22px);
+  font-size: clamp(18px, 1.6vw, 24px);
   text-transform: uppercase;
   color: white;
+  line-height: 1.1;
+  word-break: break-word;
 }
 
 /* ============== ZOMORRODA CHANNEL specific ============== */
@@ -879,16 +954,17 @@
 
 .writingDate {
   font-family: var(--st-mono);
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.1em;
 }
 
 .writingTitle {
   font-family: var(--st-display);
-  font-size: clamp(14px, 1.2vw, 18px);
+  font-size: clamp(16px, 1.4vw, 21px);
   text-transform: uppercase;
   color: white;
+  line-height: 1.15;
 }
 
 .writingArrow {
@@ -902,8 +978,6 @@
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: clamp(20px, 3vw, 40px);
-  flex: 1;
-  overflow: hidden;
 }
 
 @media (max-width: 800px) {
@@ -912,14 +986,12 @@
 
 .aboutText {
   font-family: var(--st-body);
-  font-size: clamp(13px, 1.1vw, 16px);
+  font-size: clamp(14px, 1.15vw, 17px);
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(255, 255, 255, 0.88);
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow-y: auto;
-  padding-right: 8px;
 }
 
 .aboutText p::first-letter {
@@ -958,18 +1030,19 @@
 
 .factLabel {
   font-family: var(--st-mono);
-  font-size: 10px;
-  letter-spacing: 0.24em;
+  font-size: 13px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--c-secondary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .factValue {
   font-family: var(--st-display);
-  font-size: clamp(15px, 1.3vw, 19px);
+  font-size: clamp(17px, 1.5vw, 22px);
   color: white;
   text-transform: uppercase;
+  line-height: 1.1;
 }
 
 /* ============== ENTRANCE ANIMATIONS ============== */
@@ -999,22 +1072,25 @@
 .linkBtn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-family: var(--st-display);
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   background: var(--c-secondary);
   color: #000;
-  padding: 10px 18px;
+  padding: 14px 24px;
   border: 2px solid #000;
-  box-shadow: 4px 4px 0 #000;
+  box-shadow: 5px 5px 0 #000;
   cursor: pointer;
+  text-decoration: none;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .linkBtn:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 #000;
+  box-shadow: 8px 8px 0 #000;
 }
 
 .linkBtn:active {
@@ -1040,13 +1116,13 @@
 
 .exitLink {
   font-family: var(--st-mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
-  padding: 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -1068,12 +1144,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  padding: 6px 12px;
+  min-width: 40px;
+  padding: 8px 14px;
   font-family: var(--st-mono);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -1092,17 +1169,6 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow-y: auto;
-  padding-right: 8px;
-  flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: var(--c-primary) transparent;
-}
-
-.timelineList::-webkit-scrollbar { width: 8px; }
-.timelineList::-webkit-scrollbar-thumb {
-  background: var(--c-primary);
-  border-radius: 4px;
 }
 
 .timelineCard {
@@ -1124,12 +1190,12 @@
 
 .timelinePeriod {
   font-family: var(--st-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-size: 13px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--c-secondary);
   border-right: 1px solid rgba(255, 255, 255, 0.15);
-  padding-right: 12px;
+  padding-right: 14px;
   align-self: stretch;
   display: flex;
   align-items: center;
@@ -1142,10 +1208,10 @@
 .timelineRole {
   grid-column: 2;
   font-family: var(--st-display);
-  font-size: clamp(14px, 1.3vw, 18px);
+  font-size: clamp(17px, 1.5vw, 22px);
   text-transform: uppercase;
   color: white;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 @media (max-width: 700px) {
@@ -1155,10 +1221,10 @@
 .timelineCompany {
   grid-column: 2;
   font-family: var(--st-mono);
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--c-secondary);
-  margin-top: -8px;
+  margin-top: -4px;
 }
 
 @media (max-width: 700px) {
@@ -1167,10 +1233,10 @@
 
 .timelineBlurb {
   grid-column: 2;
-  font-size: 13px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.78);
-  margin-top: 4px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.84);
+  margin-top: 6px;
 }
 
 @media (max-width: 700px) {
@@ -1183,17 +1249,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
-  overflow-y: auto;
-  padding-right: 8px;
-  flex: 1;
-  scrollbar-width: thin;
-  scrollbar-color: var(--c-primary) transparent;
-}
-
-.trophyGrid::-webkit-scrollbar { width: 8px; }
-.trophyGrid::-webkit-scrollbar-thumb {
-  background: var(--c-primary);
-  border-radius: 4px;
 }
 
 .trophyCard {
@@ -1230,26 +1285,26 @@
 
 .trophyIssuer {
   font-family: var(--st-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 13px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--c-secondary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .trophyName {
   font-family: var(--st-display);
-  font-size: clamp(13px, 1.1vw, 16px);
+  font-size: clamp(15px, 1.3vw, 19px);
   text-transform: uppercase;
   color: white;
-  line-height: 1;
+  line-height: 1.15;
 }
 
 .trophyYear {
   font-family: var(--st-mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
-  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: 8px;
 }
 
 /* ============== ARABIC / RTL OVERRIDES ============== */
@@ -1281,3 +1336,412 @@
   border-right: 3px solid var(--c-primary);
 }
 [dir='rtl'] .writingArrow { transform: scaleX(-1); }
+
+[dir='rtl'] .heroPortraitTag,
+[dir='rtl'] .cardLabel,
+[dir='rtl'] .cardChips,
+[dir='rtl'] .factLabel,
+[dir='rtl'] .timelinePeriod,
+[dir='rtl'] .trophyIssuer,
+[dir='rtl'] .contactLabel,
+[dir='rtl'] .remoteBrand,
+[dir='rtl'] .skipHint {
+  letter-spacing: 0;
+}
+
+[dir='rtl'] .factCard::before {
+  right: auto;
+  left: -2px;
+  border-left: 16px solid transparent;
+  border-right: none;
+  border-top: 16px solid var(--c-secondary);
+}
+
+[dir='rtl'] .contactCard::before {
+  right: auto;
+  left: -20%;
+}
+
+[dir='rtl'] .skillRow,
+[dir='rtl'] .writingRow {
+  direction: rtl;
+}
+
+[dir='rtl'] .writingRow:hover { transform: translateX(-4px); }
+
+[dir='rtl'] .sportReel,
+[dir='rtl'] .heroBlurb {
+  text-align: right;
+}
+
+/* ============== SPORT CHANNEL — hero + projects reel ============== */
+
+.sportLayout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.4vw, 36px);
+}
+
+.sportReel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sportReelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  padding-top: 14px;
+}
+
+.sportReelTitle {
+  font-family: var(--st-display), sans-serif;
+  font-size: clamp(18px, 1.6vw, 24px);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: white;
+  margin: 0;
+}
+
+.sportReelLead {
+  font-family: var(--st-body), sans-serif;
+  font-size: clamp(11px, 0.95vw, 14px);
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 60ch;
+  margin: 0;
+}
+
+.projectCard {
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.cardImage {
+  position: relative;
+  width: calc(100% + 32px);
+  aspect-ratio: 16 / 9;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid var(--c-primary);
+  margin: -14px -16px 4px;
+  overflow: hidden;
+}
+
+.cardChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: var(--st-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cardChips span {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+}
+
+.cardFoot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  font-family: var(--st-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-secondary);
+}
+
+.emptyNote {
+  font-family: var(--st-mono), monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.04em;
+  padding: 24px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+/* ============== RESPONSIVE BREAKPOINTS ============== */
+
+@media (max-width: 900px) {
+  /* On phones/tablets: TV is the size of the available viewport, no padding
+     dead-space, screen takes most of the room and remote sits as a compact
+     row below it. The full set fits in 100dvh without forcing scroll. */
+  .tvStage {
+    padding: 8px;
+    align-items: stretch;
+  }
+  .tv {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
+    border-radius: 16px;
+    padding: 10px;
+    gap: 8px;
+  }
+  .screenWell {
+    aspect-ratio: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    /* Take all remaining space above the remote — no fixed aspect-ratio
+       so the screen actually fills the viewport instead of leaving a gap. */
+  }
+  .remote {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 12px;
+    /* Hard cap so 7 buttons + brand fit two rows max — keeps TV tall. */
+    max-height: 30dvh;
+    overflow: hidden;
+  }
+  .remoteBrand {
+    display: none; /* save space; brand line is decorative */
+  }
+  .btn {
+    flex: 1 0 calc(25% - 4px);
+    min-width: 0;
+    padding: 8px 4px;
+    gap: 2px;
+    border-radius: 6px;
+  }
+  .btnPlanet {
+    width: 10px;
+    height: 10px;
+  }
+  .btnNumber { font-size: 14px; }
+  .btnLabel {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    /* Prevent label from wrapping into a 3rd line and bloating button height. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .powerLed {
+    bottom: 8px;
+    right: 8px;
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tvStage {
+    padding: 6px;
+  }
+  .tv {
+    border-radius: 14px;
+    padding: 8px;
+    gap: 6px;
+  }
+  .screenWell {
+    border-radius: 10px;
+    padding: 4px;
+    /* No aspect-ratio override here — let the parent grid 1fr handle it
+       so the screen actually grows to fill the viewport. */
+  }
+  .screen {
+    border-radius: 8px;
+  }
+  .channel {
+    padding: 56px 14px 18px;
+  }
+  .hud {
+    font-size: 12px;
+  }
+  .hudTopLeft, .hudTopRight {
+    top: 10px;
+  }
+  .hudTopLeft { left: 12px; }
+  .hudTopRight { right: 12px; }
+  .hudBottomRight {
+    display: none;
+  }
+  /* Bump in-screen typography on phones */
+  .heroKicker { font-size: 13px; letter-spacing: 0.2em; }
+  .heroSub { font-size: 18px; }
+  .heroLead { font-size: 14.5px; line-height: 1.55; }
+  .sectionTitle { font-size: 30px; }
+  .sectionLead { font-size: 14px; }
+  .factLabel { font-size: 12px; letter-spacing: 0.16em; }
+  .factValue { font-size: 16px; }
+  .cardLabel { font-size: 12px; }
+  .cardTitle { font-size: 17px; }
+  .cardBody { font-size: 13.5px; }
+  .skillRow { font-size: 13px; padding: 10px 12px; }
+  .timelineRole { font-size: 17px; }
+  .timelineCompany { font-size: 12px; }
+  .timelineBlurb { font-size: 13.5px; }
+  .timelinePeriod { font-size: 12px; }
+  .trophyIssuer { font-size: 12px; }
+  .trophyName { font-size: 15px; }
+  .trophyYear { font-size: 11px; }
+  .writingDate { font-size: 12px; }
+  .writingTitle { font-size: 16px; }
+  .contactLabel { font-size: 12px; }
+  .contactValue { font-size: 17px; }
+  .linkBtn { font-size: 14px; padding: 12px 18px; box-shadow: 4px 4px 0 #000; }
+  .heroPortrait {
+    box-shadow: 4px 4px 0 #000, 4px 4px 0 4px var(--c-secondary);
+  }
+  .heroNameBlock {
+    box-shadow: 3px 3px 0 #000;
+  }
+  .timelineCard {
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+  }
+  .timelinePeriod {
+    border-right: none;
+    padding-right: 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  [dir='rtl'] .timelinePeriod {
+    border-left: none;
+    padding-left: 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .trophyCard {
+    grid-template-columns: 48px 1fr;
+    padding: 10px 12px;
+  }
+  .trophyMedal {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+  .topNav {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+  .exitLink, .langBtn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  .langBtn {
+    min-width: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sportLayout .hero {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  /* Hide the OP-style portrait on phones — it eats half the screen
+     and pushes the projects reel out of view. The hero text + CTA
+     is enough on mobile. */
+  .sportLayout .heroPortrait { display: none; }
+  .heroPortrait {
+    aspect-ratio: 16 / 9;
+  }
+  .heroPortraitMonogram {
+    font-size: clamp(64px, 18vw, 120px);
+  }
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+  .skillsList {
+    grid-template-columns: 1fr;
+  }
+  .skillsGroups {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-height: 640px) and (min-width: 901px) {
+  .tv {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ============== Remote button readability bump ==============
+   Remote (channel buttons) is the only nav: must always be readable. */
+@media (max-width: 900px) {
+  .btn {
+    flex: 1 0 calc(50% - 6px);
+    min-width: 130px;
+    padding: 12px 10px;
+  }
+  .btnLabel { font-size: 13px; }
+  .btnNumber { font-size: 18px; }
+  .remoteBrand { font-size: 12px; padding: 6px 0; }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    /* 4-up first row, then the 3 remaining wrap below — 7 channels in 2 rows */
+    flex: 1 0 calc(25% - 4px);
+    min-width: 0;
+    padding: 7px 4px;
+    gap: 1px;
+  }
+  .btnLabel { font-size: 10px; letter-spacing: 0.01em; }
+  .btnNumber { font-size: 13px; }
+  .btnPlanet { width: 8px; height: 8px; }
+  .heroSub { font-size: 16px; }
+  .heroLead { font-size: 14px; }
+  .sectionTitle { font-size: 26px; }
+  .channel { padding: 50px 12px 16px; }
+  .langBtn { font-size: 12px; min-width: 32px; padding: 6px 10px; }
+  .exitLink { font-size: 12px; padding: 6px 10px; }
+  .remote { max-height: 26dvh; padding: 6px; }
+}
+
+/* ============== Extra RTL safeguards ==============
+   The skillRow is force-LTR (pinned earlier); make sure RTL doesn't
+   re-flip the bar position. Also reset hud/portraitTag spacing for AR. */
+[dir='rtl'] .skillRow {
+  border-right: 3px solid var(--c-primary);
+  border-left: none;
+  /* Stay LTR — latin tokens dominate */
+  direction: ltr;
+  text-align: left;
+}
+
+[dir='rtl'] .heroSub,
+[dir='rtl'] .heroLead,
+[dir='rtl'] .heroKicker,
+[dir='rtl'] .sectionLead,
+[dir='rtl'] .cardBody,
+[dir='rtl'] .timelineBlurb,
+[dir='rtl'] .aboutText {
+  text-align: right;
+}
+
+[dir='rtl'] .heroKicker {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .factCard {
+  text-align: right;
+}
+
+[dir='rtl'] .contactCard {
+  text-align: right;
+}
+
+[dir='rtl'] .trophyCard {
+  text-align: right;
+}

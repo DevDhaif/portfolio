@@ -103,8 +103,8 @@
   display: flex;
   gap: clamp(16px, 2.4vw, 32px);
   font-family: var(--qm-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: 15px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -366,8 +366,8 @@
 
 .heroLabel {
   font-family: var(--qm-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.32em;
+  font-size: 17px;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--ruby);
   display: inline-flex;
@@ -387,8 +387,8 @@
 
 .heroName {
   font-family: var(--qm-display), serif;
-  font-size: clamp(56px, 9vw, 132px);
-  line-height: 0.92;
+  font-size: clamp(44px, 6.4vw, 92px);
+  line-height: 0.95;
   letter-spacing: -0.02em;
   font-weight: 600;
   color: var(--ink);
@@ -447,29 +447,42 @@
   align-items: center;
   gap: 8px;
   font-family: var(--qm-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 14px 22px;
-  border: 1px solid var(--ink);
+  padding: 16px 26px;
+  border: 2px solid var(--ink);
   background: var(--ink);
   color: var(--plaster);
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  transition: background 0.2s ease, color 0.2s ease,
+              transform 0.15s ease, box-shadow 0.15s ease;
   position: relative;
+  box-shadow: 4px 4px 0 var(--ruby);
 }
 
-.btn:hover { transform: translateY(-2px); }
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ruby);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ruby);
+}
 
 .btnGhost {
-  background: transparent;
+  background: var(--plaster);
   color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .btnGhost:hover {
   background: var(--ink);
   color: var(--plaster);
+  box-shadow: 6px 6px 0 var(--ruby);
 }
 
 /* ===== HERO RIGHT: QAMARIYA WINDOW ===== */
@@ -524,11 +537,11 @@
 .sectionLabel {
   text-align: center;
   font-family: var(--qm-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.4em;
+  font-size: 17px;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .sectionLabel::before,
@@ -541,13 +554,13 @@
 
 .sectionTitle {
   font-family: var(--qm-display), serif;
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 1;
+  font-size: clamp(44px, 5.6vw, 78px);
+  line-height: 1.05;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ink);
   margin: 0 0 clamp(40px, 5vw, 60px);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.012em;
 }
 
 .sectionTitle em {
@@ -821,19 +834,31 @@
   font-size: 13px;
   letter-spacing: 0.04em;
   color: color-mix(in srgb, var(--plaster) 88%, transparent);
+  /* Skill items are dominantly latin tokens (React, Next.js, Tailwind, etc.).
+     Pin LTR even inside the AR layout so the bullet sits at the start of the
+     line and tokens like "Next.js 15" don't get reordered visually. */
+  direction: ltr;
+  text-align: left;
+}
+
+.skillCol h3 {
+  /* Heading is per-language; keep it natural to the parent direction. */
+  direction: inherit;
+  text-align: start;
 }
 
 .skillCol li {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
 }
 
 .skillCol li::before {
   content: '◆';
   color: var(--ruby);
-  margin-right: 8px;
+  margin: 0;
   font-size: 10px;
+  flex: 0 0 auto;
 }
 
 /* ============== WRITING ============== */
@@ -1005,3 +1030,392 @@
 .animFadeUp { animation: qmFadeUp 700ms ease-out backwards; }
 .animFadeIn { animation: qmFadeIn 900ms ease-out backwards; }
 .animGlow   { animation: qmGlow 6s ease-in-out infinite; }
+
+/* ============== TOP BAR ACTIONS ============== */
+
+.topBarActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ============== HERO STATS ============== */
+
+.heroStats {
+  margin-top: clamp(28px, 4vw, 44px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 1.4vw, 18px);
+  padding-top: 18px;
+  border-top: 1px solid var(--plaster-shade);
+  max-width: 460px;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heroStatValue {
+  font-family: var(--qm-display), serif;
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ruby);
+  line-height: 1;
+}
+
+.heroStatLabel {
+  font-family: var(--qm-mono), monospace;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ============== PROJECT IMAGE ============== */
+
+.projectImage {
+  position: relative;
+  width: calc(100% + 56px);
+  margin: -28px -28px 4px;
+  aspect-ratio: 16 / 9;
+  background: var(--plaster);
+  border-bottom: 1px solid var(--ink);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.projectMonogram {
+  font-family: var(--qm-display), serif;
+  font-style: italic;
+  font-size: 56px;
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+/* ============== EMPTY NOTE ============== */
+
+.emptyNote {
+  font-family: var(--qm-mono), monospace;
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  padding: 30px;
+  border: 1px dashed var(--plaster-shade);
+  text-align: center;
+}
+
+/* ============== CURRENT CHIP ============== */
+
+.currentChip {
+  display: inline-block;
+  margin-inline-start: 8px;
+  padding: 1px 8px;
+  font-family: var(--qm-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--plaster);
+  background: var(--ruby);
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+/* ============== EXPERIENCE — HIGHLIGHTS + STACK CHIPS ============== */
+
+.expHighlights {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.expHighlights li {
+  position: relative;
+  padding-inline-start: 18px;
+}
+
+.expHighlights li::before {
+  content: '◆';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 6px;
+  font-size: 7px;
+  color: var(--ruby);
+}
+
+.expChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  font-family: var(--qm-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.expChips span {
+  padding: 3px 8px;
+  border: 1px solid var(--plaster-shade);
+  background: var(--plaster);
+}
+
+/* ============== WRITING FOOTER ============== */
+
+.writingFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* ============== RESPONSIVE ============== */
+
+@media (max-width: 900px) {
+  .topBar {
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+  }
+  .nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    gap: 16px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .heroStats {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .topBar {
+    align-items: flex-start;
+  }
+  .brand {
+    font-size: 16px;
+  }
+  .heroName {
+    font-size: clamp(40px, 11vw, 64px);
+  }
+  .heroNameArabic {
+    font-size: 0.55em;
+  }
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+  .skillCols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .expRow {
+    grid-template-columns: 1fr;
+  }
+  .writingItem {
+    grid-template-columns: 90px 1fr auto;
+    gap: 12px;
+  }
+  .writingTitle {
+    font-size: 17px;
+  }
+  .heroStatValue {
+    font-size: 22px;
+  }
+  .contactRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contactRow .btn {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .skillCols {
+    grid-template-columns: 1fr;
+  }
+  .heroStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  .projectImage {
+    width: calc(100% + 44px);
+    margin: -22px -22px 4px;
+  }
+  .project {
+    padding: 22px;
+  }
+}
+
+/* ============== RTL: extra fixes ============== */
+
+[dir='rtl'] .nav { direction: rtl; }
+[dir='rtl'] .heroStats { direction: rtl; }
+[dir='rtl'] .heroStatLabel,
+[dir='rtl'] .timelineYear,
+[dir='rtl'] .expPeriod,
+[dir='rtl'] .currentChip,
+[dir='rtl'] .expChips,
+[dir='rtl'] .projectMeta,
+[dir='rtl'] .navLink,
+[dir='rtl'] .sectionLabel,
+[dir='rtl'] .footer {
+  letter-spacing: 0;
+}
+
+[dir='rtl'] .expRow {
+  grid-template-columns: 180px 1fr;
+}
+
+@media (max-width: 700px) {
+  [dir='rtl'] .expRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+[dir='rtl'] .writingItem {
+  grid-template-columns: 110px 1fr auto;
+}
+
+[dir='rtl'] .writingArrow {
+  transform: scaleX(-1);
+}
+
+[dir='rtl'] .writingItem:hover {
+  transform: translateX(-8px);
+}
+
+[dir='rtl'] .writingItem:hover .writingArrow {
+  transform: scaleX(-1) translateX(6px);
+}
+
+[dir='rtl'] .heroLabel::before,
+[dir='rtl'] .heroLabel::after {
+  background: currentColor;
+}
+
+[dir='rtl'] .heroName,
+[dir='rtl'] .heroLead,
+[dir='rtl'] .heroBody,
+[dir='rtl'] .aboutProse,
+[dir='rtl'] .expRole,
+[dir='rtl'] .expBlurb,
+[dir='rtl'] .expHighlights,
+[dir='rtl'] .timelineTitle,
+[dir='rtl'] .timelineBlurb {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir='rtl'] .heroNameArabic { direction: ltr; text-align: left; }
+
+[dir='rtl'] .aboutProse p:first-child::first-letter {
+  float: right;
+  margin: 8px 0 -6px 12px;
+}
+
+[dir='rtl'] .timeline {
+  padding-left: 0;
+  padding-right: 28px;
+}
+
+[dir='rtl'] .timeline::before { left: auto; right: 7px; }
+[dir='rtl'] .timelineItem::before { left: auto; right: -28px; }
+
+[dir='rtl'] .navLink::after { transform-origin: right; }
+
+[dir='rtl'] .langBtn + .langBtn {
+  border-left: none;
+  border-right: 1px solid var(--ink);
+}
+
+[dir='rtl'] .project::before {
+  left: -10%;
+  right: auto;
+  mask-image: radial-gradient(ellipse at top left, black 0%, transparent 60%);
+}
+
+[dir='rtl'] .expPeriod { text-align: right; }
+
+/* ============== MOBILE TYPOGRAPHY READABILITY PASS ==============
+   Phones: bump nav, CTA, labels, body copy so nothing reads tiny.
+   Hide low-priority nav items so the remaining ones can grow. */
+
+@media (max-width: 700px) {
+  .nav { font-size: 16px; gap: 16px; letter-spacing: 0.1em; }
+  /* Hide low-priority nav items so the rest can breathe.
+     About / Experience / Words are still reachable by scroll. */
+  .nav a[href='#about'],
+  .nav a[href='#experience'],
+  .nav a[href='#words'] { display: none; }
+  .brand { font-size: 18px; gap: 10px; }
+  .brandMark { width: 24px; height: 24px; }
+
+  .btn { font-size: 14px; padding: 15px 22px; letter-spacing: 0.14em; }
+
+  .sectionLabel { font-size: 15px; letter-spacing: 0.28em; }
+  .heroLabel { font-size: 15px; letter-spacing: 0.2em; }
+
+  .heroLead { font-size: 17px; line-height: 1.4; }
+  .heroBody { font-size: 15px; line-height: 1.65; }
+
+  .aboutProse { font-size: 16px; line-height: 1.7; }
+
+  .projectTitle { font-size: 20px; }
+  .projectBlurb { font-size: 14px; }
+
+  .expRole { font-size: 19px; }
+  .expCompany { font-size: 15px; }
+  .expBlurb { font-size: 14px; }
+  .expHighlights { font-size: 14px; }
+  .expPeriod { font-size: 13px; }
+
+  .timelineTitle { font-size: 17px; }
+  .timelineBlurb { font-size: 14px; }
+  .timelineYear { font-size: 12px; }
+
+  .skillCol h3 { font-size: 17px; }
+  .skillCol ul { font-size: 14px; }
+
+  .writingDate { font-size: 12px; }
+  .writingTitle { font-size: 18px; }
+
+  .certIssuer { font-size: 11px; }
+  .certName { font-size: 16px; }
+  .certYear { font-size: 12px; }
+
+  .contactQuote { font-size: 24px; line-height: 1.35; }
+
+  .footer { font-size: 12px; }
+
+  .exitLink, .langBtn { font-size: 12px; padding: 7px 12px; }
+
+  .heroStatValue { font-size: 24px; }
+  .heroStatLabel { font-size: 13px; }
+}
+
+@media (max-width: 420px) {
+  .nav { font-size: 15px; gap: 14px; }
+  .heroLead { font-size: 16px; }
+  .contactQuote { font-size: 20px; }
+  .btn { font-size: 13px; padding: 14px 18px; }
+}
