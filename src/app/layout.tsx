@@ -7,6 +7,7 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { Toaster } from '@/components/ui/toaster';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
+import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -122,7 +123,7 @@ export default function RootLayout({
           {/* UI Components */}
           <ScrollToTop />
           <Toaster />
-
+          <AnalyticsProvider />
           <Analytics />
           <SpeedInsights />
         </>

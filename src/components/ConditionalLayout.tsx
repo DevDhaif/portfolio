@@ -10,13 +10,14 @@ import { ConsoleGreeting } from '@/components/ui/console-greeting';
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  const isAdminOrAuth =
+  const isBareLayout =
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/login') ||
     pathname?.startsWith('/auth') ||
-    pathname?.startsWith('/private');
+    pathname?.startsWith('/private') ||
+    pathname?.startsWith('/experiments');
 
-  if (isAdminOrAuth) {
+  if (isBareLayout) {
     return <>{children}</>;
   }
 
