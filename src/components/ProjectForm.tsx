@@ -110,7 +110,7 @@ export function ProjectForm({ project, onSubmit, isEditing = false }: ProjectFor
                             name="importance"
                             min={1}
                             max={5}
-                            defaultValue={3}
+                            defaultValue={project?.importance ?? 3}
                             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                         />
                     </div>

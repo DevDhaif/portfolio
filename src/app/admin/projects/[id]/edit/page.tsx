@@ -40,7 +40,8 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
                         liveUrl: data.live_url,
                         highlights: data.highlights,
                         createdAt: data.created_at,
-                        updatedAt: data.updated_at
+                        updatedAt: data.updated_at,
+                        importance: data.importance
                     }
                     setProject(mappedProject)
                 }
