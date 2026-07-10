@@ -73,7 +73,7 @@ export function ProjectsSection() {
                                 importance: project.importance,
                             };
                         })
-                        .sort((a, b) => a.importance - b.importance);
+                        .sort((a, b) => (a.importance ?? 99) - (b.importance ?? 99));
 
                     setProjects(projectsWithUrls);
                 }
