@@ -29,7 +29,7 @@ const filters = [
 export function ProjectsSection() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const [visibleProjects, setVisibleProjects] = useState(6);
+    const [visibleProjects, setVisibleProjects] = useState(12);
     const [activeTab, setActiveTab] = useState("all");
 
     useEffect(() => {
@@ -99,7 +99,7 @@ export function ProjectsSection() {
 
     const handleTabChange = (value: string) => {
         setActiveTab(value);
-        setVisibleProjects(6);
+        setVisibleProjects(12);
     };
 
     const handleLoadMore = () => {
