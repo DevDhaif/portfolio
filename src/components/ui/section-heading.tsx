@@ -1,8 +1,14 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
 import { SectionHeadingProps } from "@/types";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface Props extends SectionHeadingProps {
     index?: string;
@@ -23,9 +29,55 @@ export function SectionHeading({
     const sectionNumber = index ?? "";
     const sectionEyebrow = eyebrow ?? badge ?? "";
     const a = align ?? alignment ?? "left";
+    const ref = useRef<HTMLElement>(null);
+
+    // Wipe the signal underline(s) in from the start edge as the heading
+    // scrolls into view. Only runs with motion allowed, so the underline is
+    // fully visible for reduced-motion / no-JS.
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add("(prefers-reduced-motion: no-preference)", () => {
+                const bars = ref.current?.querySelectorAll<HTMLElement>(
+                    "h2 span[aria-hidden]",
+                );
+                if (bars?.length) {
+                    gsap.fromTo(
+                        bars,
+                        { scaleX: 0, transformOrigin: "left center" },
+                        {
+                            scaleX: 1,
+                            duration: 0.7,
+                            ease: "power3.inOut",
+                            stagger: 0.1,
+                            scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
+                        },
+                    );
+                }
+
+                // Depth: drift the oversized outline numeral against the scroll.
+                const numeral = ref.current?.querySelector<HTMLElement>(".section-numeral");
+                if (numeral) {
+                    gsap.to(numeral, {
+                        yPercent: -30,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: ref.current,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true,
+                        },
+                    });
+                }
+            });
+            return () => mm.revert();
+        },
+        { scope: ref },
+    );
 
     return (
         <motion.header
+            ref={ref}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.4 }}

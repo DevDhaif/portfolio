@@ -1,0 +1,580 @@
+/* ===========================================================
+   /select — one portfolio, two personas.
+   Professional (developer) vs Personal (notebook).
+   Each card carries a scaled CSS replica of the real theme.
+   =========================================================== */
+
+.root {
+  --picker-bg: #0a0b0e;
+  --picker-bg-2: #101318;
+  --picker-fg: #f4f1ea;
+  --picker-fg-soft: #b6b1a4;
+  --picker-fg-faint: #6f6c63;
+  --picker-signal: #00ff66;
+  --picker-accent: #ffd23a;
+  --picker-line: rgba(255, 255, 255, 0.08);
+
+  position: relative;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 70% 55% at 28% 0%, rgba(0, 255, 102, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 55% at 82% 100%, rgba(255, 210, 58, 0.06), transparent 60%),
+    linear-gradient(180deg, var(--picker-bg) 0%, var(--picker-bg-2) 100%);
+  color: var(--picker-fg);
+  font-family: var(--pick-display), system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  overflow-x: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 12% 88%, rgba(0, 255, 102, 0.05), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 88% 18%, rgba(255, 210, 58, 0.07), transparent 60%);
+}
+
+.bgDots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1.6px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 45%, black 20%, transparent 85%);
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, black, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, black, transparent 82%);
+}
+
+/* ============== Header ============== */
+.head {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(16px, 2vw, 26px) clamp(20px, 4vw, 56px);
+  border-bottom: 1px solid var(--picker-line);
+}
+
+.brandRow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--pick-display);
+  font-weight: 700;
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: -0.01em;
+}
+
+.brandMark {
+  color: var(--picker-signal);
+  font-size: 0.7em;
+  transform: translateY(-2px);
+}
+
+.brandName {
+  color: var(--picker-fg);
+}
+
+.langToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.langToggleLabel {
+  font-family: var(--pick-display);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--picker-fg-faint);
+  margin-inline-end: 4px;
+}
+
+.langChip {
+  appearance: none;
+  min-width: 40px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--picker-line);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--picker-fg-soft);
+  font-family: var(--pick-display);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.langChip:hover {
+  color: var(--picker-fg);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.langChipActive {
+  background: var(--picker-signal);
+  border-color: var(--picker-signal);
+  color: #062a13;
+}
+
+/* ============== Stage ============== */
+.stage {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 1.6vw, 20px);
+  padding: clamp(36px, 5vw, 72px) clamp(20px, 4vw, 56px);
+  text-align: center;
+}
+
+.kicker {
+  font-family: var(--pick-display);
+  font-size: clamp(11px, 1.1vw, 13px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--picker-signal);
+}
+
+.title {
+  font-family: var(--pick-display);
+  font-weight: 800;
+  font-size: clamp(30px, 4.6vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 20ch;
+}
+
+.lead {
+  font-family: var(--pick-display);
+  font-size: clamp(14px, 1.25vw, 17px);
+  color: var(--picker-fg-soft);
+  max-width: 54ch;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ============== Persona cards ============== */
+.personaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  width: 100%;
+  max-width: 1040px;
+  margin-top: clamp(10px, 1.6vw, 22px);
+  perspective: 1200px;
+}
+
+.personaCard {
+  appearance: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 20px;
+  border-radius: 18px;
+  border: 1.5px solid var(--picker-line);
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  text-align: start;
+  font-family: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.personaCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+/* Lift + tilt is driven by GSAP (magnetic pointer follow); keep the
+   shadow on hover as a CSS fallback for reduced-motion / no-JS. */
+.personaCard {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.personaCard:hover {
+  box-shadow: 0 26px 60px -28px rgba(0, 0, 0, 0.75);
+}
+
+.personaCard:focus-visible {
+  outline: 2px solid var(--picker-fg);
+  outline-offset: 4px;
+}
+
+.personaCard:disabled {
+  cursor: progress;
+}
+
+.personaCardLoading {
+  animation: cardPulse 1s ease-in-out infinite;
+}
+
+@keyframes cardPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.62; }
+}
+
+/* Persona accent tints */
+.professional:hover {
+  border-color: rgba(0, 255, 102, 0.5);
+  background: rgba(0, 255, 102, 0.03);
+}
+
+.personal:hover {
+  border-color: rgba(255, 210, 58, 0.55);
+  background: rgba(255, 210, 58, 0.03);
+}
+
+.personaFrame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--picker-line);
+  background: #000;
+}
+
+.personaBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.personaKind {
+  font-family: var(--pick-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--picker-fg-faint);
+}
+
+.professional .personaKind {
+  color: rgba(0, 255, 102, 0.85);
+}
+
+.personal .personaKind {
+  color: rgba(255, 210, 58, 0.9);
+}
+
+.personaName {
+  font-family: var(--pick-display);
+  font-weight: 800;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.personaDesc {
+  font-family: var(--pick-display);
+  font-size: clamp(13px, 1.05vw, 15px);
+  color: var(--picker-fg-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.personaFeatures {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.personaFeatures li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--pick-display);
+  font-size: 13px;
+  color: var(--picker-fg-soft);
+}
+
+.featureDot {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.professional .featureDot {
+  color: var(--picker-signal);
+}
+
+.personal .featureDot {
+  color: var(--picker-accent);
+}
+
+.personaEnter {
+  margin-top: 8px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pick-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.professional .personaEnter {
+  color: var(--picker-signal);
+}
+
+.personal .personaEnter {
+  color: var(--picker-accent);
+}
+
+[dir='rtl'] .personaEnter {
+  align-self: flex-end;
+}
+
+.footNote {
+  font-family: var(--pick-display);
+  font-size: 12px;
+  color: var(--picker-fg-faint);
+  margin: 6px 0 0;
+}
+
+/* ===========================================================
+   PREVIEW — Professional (developer theme replica)
+   =========================================================== */
+.previewPro {
+  position: absolute;
+  inset: 0;
+  background: #0a0a0b;
+  color: #f4f1ea;
+  padding: 14px 16px;
+  overflow: hidden;
+}
+
+.proGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 78%);
+}
+
+.proStatus {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pick-terminal), 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--picker-signal);
+}
+
+.proDotLive {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--picker-signal);
+  box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.2);
+}
+
+.proHeadline {
+  position: relative;
+  margin-top: 8px;
+  font-family: var(--pick-display);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: #f4f1ea;
+}
+
+.proHeadlineHi {
+  position: relative;
+  display: inline-block;
+}
+
+.proHeadlineHi::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 1px;
+  width: 100%;
+  height: 5px;
+  background: rgba(0, 255, 102, 0.8);
+  z-index: -1;
+}
+
+.proTerminal {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  font-family: var(--pick-terminal), 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6cffb3;
+}
+
+[dir='rtl'] .proTerminal {
+  direction: ltr;
+  text-align: left;
+}
+
+.proDim {
+  color: rgba(108, 255, 179, 0.5);
+}
+
+.proCursor {
+  display: inline-block;
+  margin-inline-start: 3px;
+  animation: termBlink 1s step-end infinite;
+}
+
+@keyframes termBlink {
+  50% { opacity: 0; }
+}
+
+/* ===========================================================
+   PREVIEW — Personal (notebook replica)
+   =========================================================== */
+.previewNotebook {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 17px, #b9d2ea 17px 18px),
+    #fbf6e8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #221a14;
+}
+
+.notebookHole {
+  position: absolute;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[dir='rtl'] .notebookHole {
+  left: auto;
+  right: 6px;
+}
+
+.notebookMargin {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 22px;
+  width: 1px;
+  background: #b91c1c;
+  opacity: 0.6;
+}
+
+[dir='rtl'] .notebookMargin {
+  left: auto;
+  right: 22px;
+}
+
+.notebookTape {
+  position: absolute;
+  width: 36px;
+  height: 14px;
+  background: rgba(255, 220, 120, 0.6);
+  border: 1px solid rgba(180, 140, 50, 0.3);
+}
+
+.notebookTapeTL {
+  top: 8px;
+  left: 36px;
+  transform: rotate(-8deg);
+}
+
+.notebookTapeBR {
+  bottom: 12px;
+  right: 18px;
+  transform: rotate(6deg);
+}
+
+.notebookText {
+  position: relative;
+  z-index: 2;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1d2a6b;
+  line-height: 1.1;
+  text-align: center;
+  padding-inline-start: 24px;
+}
+
+.notebookSub {
+  position: relative;
+  z-index: 2;
+  font-size: 13px;
+  color: #b91c1c;
+  font-weight: 500;
+  padding-inline-start: 24px;
+}
+
+/* ===========================================================
+   RESPONSIVE
+   =========================================================== */
+@media (max-width: 720px) {
+  .head {
+    padding: 14px 18px;
+  }
+  .brandName {
+    display: none;
+  }
+  .stage {
+    padding: 30px 18px 52px;
+  }
+  .personaGrid {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .personaCard,
+  .proCursor,
+  .personaCardLoading {
+    animation: none !important;
+    transition: none !important;
+  }
+}

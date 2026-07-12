@@ -7,6 +7,7 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top';
 import { Toaster } from '@/components/ui/toaster';
 import { ConditionalLayout } from '@/components/ConditionalLayout';
 import { ThemeSwitcherPill } from '@/components/ThemeSwitcherPill';
+import { SmoothScroll } from '@/components/ui/smooth-scroll';
 import { WEBSITE_SCHEMA, PERSON_SCHEMA } from '@/lib/schemas';
 import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
 
@@ -117,11 +118,11 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-paper font-sans text-ink antialiased overflow-x-hidden">
-        <>
+      <body className="min-h-screen bg-paper font-sans text-ink antialiased [overflow-x:clip]">
+        <SmoothScroll>
           <ConditionalLayout>{children}</ConditionalLayout>
 
-          {/* Persistent picker entry — hidden on /select itself */}
+          {/* Persistent picker entry — hidden on the landing picker (/) */}
           <ThemeSwitcherPill />
 
           {/* UI Components */}
@@ -130,7 +131,7 @@ export default function RootLayout({
           <AnalyticsProvider />
           <Analytics />
           <SpeedInsights />
-        </>
+        </SmoothScroll>
       </body>
     </html>
   );

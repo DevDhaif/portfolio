@@ -3,9 +3,16 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
-import { ArrowDownRight, Github, MapPin, Eye } from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { ArrowDownRight, Github, Linkedin, MapPin, Eye } from "lucide-react";
 import { Terminal } from "../ui/terminal";
 import { Magnetic } from "../ui/magnetic";
+import { HeroScene } from "../ui/hero-scene";
+
+gsap.registerPlugin(useGSAP, SplitText, DrawSVGPlugin);
 
 const terminalCommands = [
     "whoami",
@@ -24,12 +31,45 @@ const userJson: ReadonlyArray<{ key: string; value: JsonValue }> = [
 
 export function HeroSection() {
     const ref = useRef<HTMLElement>(null);
+    const titleRef = useRef<HTMLHeadingElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start start", "end start"],
     });
     const glowY = useTransform(scrollYProgress, [0, 1], [0, 100]);
     const glowOpacity = useTransform(scrollYProgress, [0, 1], [1, 0.2]);
+
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
+            mm.add("(prefers-reduced-motion: no-preference)", () => {
+                const lines = titleRef.current?.querySelectorAll<HTMLElement>("[data-hero-word]") ?? [];
+                const splits = Array.from(lines).map((el) =>
+                    SplitText.create(el, { type: "chars", aria: "auto" }),
+                );
+                const chars = splits.flatMap((s) => s.chars);
+
+                const tl = gsap.timeline();
+                gsap.set(chars, { transformPerspective: 600 });
+                tl.from(chars, {
+                    yPercent: 120,
+                    opacity: 0,
+                    rotateX: -80,
+                    stagger: 0.02,
+                    duration: 0.72,
+                    ease: "back.out(1.5)",
+                }).from(
+                    "#hero-underline path",
+                    { drawSVG: "0%", duration: 0.9, ease: "power2.inOut" },
+                    "-=0.25",
+                );
+
+                return () => splits.forEach((s) => s.revert());
+            });
+            return () => mm.revert();
+        },
+        { scope: ref },
+    );
 
     return (
         <section
@@ -40,6 +80,9 @@ export function HeroSection() {
             {/* Faded grid + scanline */}
             <div className="pointer-events-none absolute inset-0 bg-grid-dev-fade" />
             <div className="pointer-events-none absolute inset-0 bg-scanline" />
+
+            {/* Animated "system diagram" backdrop */}
+            <HeroScene className="pointer-events-none absolute inset-0 h-full w-full opacity-80 [mask-image:radial-gradient(ellipse_90%_80%_at_50%_35%,black,transparent_88%)]" />
 
             {/* Parallax signal glow */}
             <motion.div
@@ -78,20 +121,29 @@ export function HeroSection() {
                 {/* Headline + terminal split */}
                 <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
                     <div className="lg:col-span-7">
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7 }}
+                        <h1
+                            ref={titleRef}
                             className="stencil text-[clamp(3rem,9vw,8rem)] leading-[0.86] text-ink"
                         >
-                            <span className="block">Front-end</span>
+                            <span data-hero-word className="block">Front-end</span>
                             <span className="block">
                                 <span className="relative inline-block">
-                                    engineer
-                                    <span
+                                    <span data-hero-word>engineer</span>
+                                    <svg
+                                        id="hero-underline"
                                         aria-hidden="true"
-                                        className="absolute -bottom-2 left-0 h-2 w-full bg-signal/80"
-                                    />
+                                        viewBox="0 0 300 14"
+                                        preserveAspectRatio="none"
+                                        className="absolute -bottom-2 left-0 h-2.5 w-full overflow-visible"
+                                    >
+                                        <path
+                                            d="M2 9 Q 75 3 150 8 T 298 6"
+                                            fill="none"
+                                            stroke="hsl(var(--signal))"
+                                            strokeWidth="6"
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
                                 </span>
                             </span>
                             <span className="mt-4 block text-[clamp(1.25rem,2.4vw,2rem)] font-medium leading-tight tracking-tight text-ink-muted">
@@ -99,7 +151,7 @@ export function HeroSection() {
                                 accessible, durable web applications with React,
                                 Next.js & TypeScript.
                             </span>
-                        </motion.h1>
+                        </h1>
 
                         <motion.p
                             initial={{ opacity: 0, y: 8 }}
@@ -141,6 +193,15 @@ export function HeroSection() {
                             >
                                 <Github className="h-3.5 w-3.5" />
                                 github
+                            </Link>
+                            <Link
+                                href="https://linkedin.com/in/devdhaif"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="btn-ghost press"
+                            >
+                                <Linkedin className="h-3.5 w-3.5" />
+                                linkedin
                             </Link>
                         </motion.div>
                     </div>

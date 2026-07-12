@@ -2,33 +2,24 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 /**
- * Global "Switch theme" pill.
- * Fixed bottom-(start) on every page except /select itself.
- * Reads pf_lang cookie client-side to label in EN or AR.
- *
- * Tiny client component — required because we need usePathname
- * to know when to hide on /select.
+ * Global "Switch theme" pill → returns to the landing picker (/).
+ * Fixed bottom-(start) on every themed page; hidden on the picker itself.
+ * Language of the label is inferred from the current /…/ar path.
  */
 export function ThemeSwitcherPill() {
   const pathname = usePathname() || '';
-  const [lang, setLang] = useState<'en' | 'ar'>('en');
 
-  useEffect(() => {
-    const m = document.cookie.match(/(?:^|;\s*)pf_lang=(en|ar)/);
-    if (m) setLang(m[1] as 'en' | 'ar');
-  }, []);
+  // Hide on the landing picker — that IS the switcher.
+  if (pathname === '/') return null;
 
-  if (pathname.startsWith('/select')) return null;
-
-  const isAr = lang === 'ar';
+  const isAr = pathname.startsWith('/pro/ar') || pathname.startsWith('/note/ar');
   const label = isAr ? 'غيّر الثيم' : 'Switch theme';
 
   return (
     <Link
-      href="/select"
+      href="/"
       aria-label={label}
       dir={isAr ? 'rtl' : 'ltr'}
       style={{

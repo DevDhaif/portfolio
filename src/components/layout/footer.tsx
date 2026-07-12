@@ -11,11 +11,11 @@ const channels = [
 ];
 
 const sitemap = [
-    { label: "about", href: "/#about" },
-    { label: "work", href: "/#projects" },
-    { label: "stack", href: "/#skills" },
+    { label: "about", href: "/pro#about" },
+    { label: "work", href: "/pro#projects" },
+    { label: "stack", href: "/pro#skills" },
     { label: "blog", href: "/blog" },
-    { label: "contact", href: "/#contact" },
+    { label: "contact", href: "/pro#contact" },
 ];
 
 const buildHash = "main";

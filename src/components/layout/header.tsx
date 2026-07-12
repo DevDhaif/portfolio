@@ -31,13 +31,13 @@ function Monogram() {
 }
 
 const navItems = [
-    { href: "/#about", label: "about", index: "01" },
-    { href: "/#projects", label: "work", index: "02" },
-    { href: "/#skills", label: "stack", index: "03" },
-    { href: "/#blog", label: "blog", index: "04" },
-    { href: "/#experience", label: "experience", index: "05" },
-    { href: "/#certificates", label: "certs", index: "06" },
-    { href: "/#contact", label: "contact", index: "07" },
+    { href: "/pro#about", label: "about", index: "01" },
+    { href: "/pro#projects", label: "work", index: "02" },
+    { href: "/pro#skills", label: "stack", index: "03" },
+    { href: "/pro#blog", label: "blog", index: "04" },
+    { href: "/pro#experience", label: "experience", index: "05" },
+    { href: "/pro#certificates", label: "certs", index: "06" },
+    { href: "/pro#contact", label: "contact", index: "07" },
 ];
 
 export function Header() {
@@ -92,8 +92,8 @@ export function Header() {
     }, [open]);
 
     const isActive = (href: string) => {
-        if (href === "/#blog" && pathname?.startsWith("/blog")) return true;
-        if (href.startsWith("/#")) return activeId === href.slice(2);
+        if (href === "/pro#blog" && pathname?.startsWith("/blog")) return true;
+        if (href.startsWith("/pro#")) return activeId === href.slice(5);
         return false;
     };
 
@@ -108,7 +108,7 @@ export function Header() {
         >
             <div className="container-dev">
                 <div className="flex h-16 items-center justify-between md:h-[72px]">
-                    <Link href="/" className="group flex items-center gap-2.5">
+                    <Link href="/pro" className="group flex items-center gap-2.5">
                         <Monogram />
                         <span className="hidden font-mono text-sm tracking-tight text-ink sm:inline">
                             devdhaif<span className="text-signal animate-blink">_</span>

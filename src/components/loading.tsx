@@ -13,13 +13,13 @@ export function Loading({ text = "Loading..." }: LoadingProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 className="relative"
             >
-                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                <Loader2 className="w-8 h-8 animate-spin text-signal" />
             </motion.div>
             <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-blue-100/70 text-sm"
+                className="text-ink-muted text-sm font-mono"
             >
                 {text}
             </motion.p>

@@ -1,0 +1,2166 @@
+/* ===========================================================
+   Notebook experiment — 90s school composition book
+   + anime sticker collection. Self-contained.
+   =========================================================== */
+
+.root {
+  font-size: 18px;
+  /* Notebook palette */
+  --paper: #fbf6e8;
+  --paper-shade: #efe7cf;
+  --line-blue: #b9d2ea;       /* faint horizontal rule */
+  --margin-red: #b91c1c;      /* deeper, less-pink red */
+  --ink-blue: #1d2a6b;        /* ballpoint blue */
+  --ink-black: #221a14;
+  --ink-pencil: #4f4537;
+
+  /* Marble composition cover (dark teal/forest, no purple) */
+  --marble-1: #11161a;
+  --marble-2: #16261f;
+  --marble-3: #1d3a30;
+  --marble-fleck: #d8cdb6;
+
+  /* Sticker accents — green replaces pink */
+  --st-pink: #1d8f5c;          /* legacy alias → forest green */
+  --st-yellow: #ffd23a;
+  --st-cyan: #36c5e8;
+  --st-orange: #ff7a2d;
+  --st-green: #2fc163;
+  --st-green-deep: #1d8f5c;
+  --st-green-ink: #0e5436;
+  --st-purple: #1b3a6b;
+  --st-blue-deep: #1d4ed8;
+  --st-blue-ink: #0a2463;
+  --st-teal: #0e7c86;
+  --st-foil-1: #c8e7d4;
+  --st-foil-2: #c4f3ff;
+
+  background: var(--paper);
+  color: var(--ink-black);
+  font-family: var(--nb-body), system-ui, sans-serif;
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Ruled paper background — site-wide */
+.ruled {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    /* horizontal blue rules every 28px */
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 27px,
+      var(--line-blue) 27px 28px
+    ),
+    /* faint vertical fold-line down the center */
+    linear-gradient(
+      90deg,
+      transparent 49.85%,
+      rgba(0, 0, 0, 0.04) 49.95%,
+      rgba(0, 0, 0, 0.04) 50.05%,
+      transparent 50.15%
+    );
+  opacity: 0.55;
+}
+
+/* Paper grain + slight stain */
+.paperGrain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+/* Coffee/tea stain in the corner */
+.stain {
+  position: fixed;
+  top: 60vh;
+  right: 4vw;
+  width: 220px;
+  height: 220px;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(160, 110, 50, 0.18) 0%,
+    rgba(160, 110, 50, 0.10) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  transform: rotate(12deg);
+  filter: blur(4px);
+}
+
+/* Holes from a binder, down the left edge */
+.binderHoles {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 18px;
+  width: 24px;
+  z-index: 2;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    var(--paper-shade) 0,
+    var(--paper-shade) 6px,
+    transparent 7px
+  );
+  background-size: 24px 96px;
+  background-repeat: repeat-y;
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.05);
+  opacity: 0.85;
+}
+
+/* Margin red line — vertical, on the left */
+.marginLine {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 64px;
+  width: 1px;
+  background: var(--margin-red);
+  opacity: 0.55;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ============== SHELL ============== */
+
+.shell {
+  position: relative;
+  z-index: 10;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 0 clamp(44px, 5vw, 84px);
+}
+
+/* ============== TOP BAR ============== */
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 28px 0 18px;
+  position: relative;
+}
+
+.brand {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(26px, 2.4vw, 34px);
+  color: var(--ink-blue);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.brand .doodleStar {
+  color: var(--margin-red);
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 16px;
+  transform: translateY(-4px);
+  display: inline-block;
+}
+
+.nav {
+  display: flex;
+  gap: clamp(14px, 1.6vw, 24px);
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 20px;
+  color: var(--ink-blue);
+}
+
+.navLink {
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  padding: 2px 4px;
+  transition: color 0.15s ease;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 6px;
+  background: var(--st-yellow);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  opacity: 0.7;
+}
+
+.navLink:hover { color: var(--ink-black); }
+.navLink:hover::after { transform: scaleX(1); }
+
+.langToggle {
+  display: inline-flex;
+  border: 2.5px solid var(--ink-black);
+  background: var(--paper);
+  margin-right: 12px;
+  transform: rotate(-2deg);
+}
+
+.langBtn {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--ink-pencil);
+  text-decoration: none;
+  padding: 6px 12px;
+  background: transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+  min-width: 36px;
+  text-align: center;
+}
+
+.langBtn + .langBtn {
+  border-left: 2.5px solid var(--ink-black);
+}
+
+.langBtnActive {
+  background: var(--ink-blue);
+  color: white;
+}
+
+.exitLink {
+  position: absolute;
+  top: -8px;
+  right: -50px;
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 16px;
+  color: var(--ink-pencil);
+  text-decoration: none;
+  background: var(--paper);
+  padding: 4px 10px;
+  border: 1.5px dashed var(--ink-pencil);
+  transform: rotate(3deg);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.exitLink:hover {
+  background: var(--st-yellow);
+  transform: rotate(-2deg) scale(1.05);
+}
+
+/* ============== HERO: COMPOSITION BOOK COVER ============== */
+
+.hero {
+  position: relative;
+  margin: 24px 0 60px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(20px, 4vw, 60px);
+  align-items: center;
+}
+
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; }
+}
+
+/* The marble book cover */
+.bookCover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+  background:
+    radial-gradient(ellipse 30% 20% at 20% 30%, rgba(255,255,255,0.04), transparent),
+    radial-gradient(ellipse 25% 15% at 80% 70%, rgba(255,255,255,0.03), transparent),
+    linear-gradient(135deg, var(--marble-1) 0%, var(--marble-2) 50%, var(--marble-3) 100%);
+  box-shadow:
+    0 18px 30px -12px rgba(0, 0, 0, 0.45),
+    0 30px 60px -25px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 12px var(--marble-1);
+  transform: rotate(-2.5deg);
+  padding: 38px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  isolation: isolate;
+}
+
+/* Marbled fleck overlay */
+.bookCover::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  background-image:
+    radial-gradient(circle at 10% 20%, var(--marble-fleck) 0.6px, transparent 1.2px),
+    radial-gradient(circle at 80% 60%, var(--marble-fleck) 0.5px, transparent 1px),
+    radial-gradient(circle at 40% 80%, var(--marble-fleck) 0.7px, transparent 1.3px),
+    radial-gradient(circle at 65% 30%, var(--marble-fleck) 0.4px, transparent 0.9px);
+  background-size: 32px 32px, 50px 50px, 70px 70px, 40px 40px;
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.coverLabel {
+  background: var(--paper);
+  color: var(--ink-black);
+  padding: 16px 18px;
+  width: 80%;
+  text-align: center;
+  border: 2px solid var(--ink-black);
+  position: relative;
+  font-family: var(--nb-hand), cursive;
+  z-index: 1;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.coverLabelTop {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--ink-blue);
+  margin-bottom: 6px;
+}
+
+.coverLabelName {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-blue);
+}
+
+.coverLabelMeta {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 17px;
+  color: var(--ink-pencil);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.coverLabelArabic {
+  font-family: var(--nb-arabic), serif;
+  font-size: 17px;
+  color: var(--ink-pencil);
+  margin-top: 4px;
+  direction: rtl;
+}
+
+.coverSubject {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  color: var(--st-yellow);
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    3px 4px 0 var(--st-pink);
+  z-index: 1;
+  text-align: center;
+  line-height: 0.95;
+}
+
+.coverDoodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Tape on the cover */
+.tape {
+  position: absolute;
+  background: rgba(255, 240, 100, 0.7);
+  width: 84px;
+  height: 22px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 4px,
+    rgba(255, 255, 255, 0.18) 4px 5px
+  );
+}
+
+.tapeTopLeft {
+  top: -10px;
+  left: 8%;
+  transform: rotate(-12deg);
+}
+
+.tapeTopRight {
+  top: -10px;
+  right: 6%;
+  transform: rotate(8deg);
+}
+
+.tapeBottom {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+/* ===== Hero text ===== */
+
+.heroBlurb {
+  position: relative;
+  padding: 10px 0;
+}
+
+.heroLabel {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 18px;
+  color: var(--margin-red);
+  margin-bottom: 10px;
+  letter-spacing: 0.04em;
+}
+
+.heroLabel::before { content: '◆ '; }
+
+/* Bigger, green hero kicker (replaces .heroLabel for the AR hero) */
+.heroKicker {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  color: var(--st-green-deep);
+  margin-bottom: 12px;
+  line-height: 1.1;
+  display: inline-block;
+}
+
+.heroKicker::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 4px;
+  background: var(--st-green-deep);
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+.heroName {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(56px, 8vw, 110px);
+  line-height: 0.95;
+  color: var(--ink-blue);
+  margin: 0 0 6px;
+  font-weight: 700;
+  text-shadow: 2px 2px 0 rgba(217, 101, 102, 0.18);
+}
+
+.heroNameUnderline {
+  position: relative;
+  display: inline-block;
+}
+
+.heroNameUnderline::after {
+  content: '';
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: 4px;
+  height: 12px;
+  background: var(--st-yellow);
+  z-index: -1;
+  opacity: 0.7;
+  transform: skew(-3deg);
+}
+
+.heroSub {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: clamp(22px, 2vw, 30px);
+  color: var(--ink-blue);
+  margin: 0 0 18px;
+}
+
+.heroBody {
+  font-family: var(--nb-body), sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-pencil);
+  max-width: 34rem;
+  margin: 0 0 22px;
+}
+
+.heroNote {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--st-green-deep);
+  color: white;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  padding: 8px 12px;
+  border: 2px solid var(--ink-black);
+  transform: rotate(8deg);
+  box-shadow: 3px 3px 0 var(--ink-black);
+}
+
+.heroCta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  padding: 14px 26px;
+  background: var(--ink-blue);
+  color: white;
+  border: 2.5px solid var(--ink-black);
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 var(--ink-black);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink-black);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink-black);
+}
+
+.btnYellow { background: var(--st-yellow); color: var(--ink-black); }
+.btnPink { background: var(--st-green-deep); color: white; }
+.btnBlue { background: var(--st-green-deep); color: white; }
+.btnTeal { background: var(--st-teal); color: white; }
+
+/* ============== DOODLE MARGIN ITEMS ============== */
+
+.marginDoodle {
+  position: absolute;
+  font-family: var(--nb-hand), cursive;
+  color: var(--ink-pencil);
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+}
+
+/* Hopscotch grid floating in the margin */
+.hopscotch {
+  position: absolute;
+  left: -52px;
+  top: 280px;
+  width: 36px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+/* Concrete margin-doodle positions (desktop) */
+.marginDoodle1 {
+  right: -54px;
+  top: 540px;
+  font-size: 24px;
+  transform: rotate(12deg);
+}
+.marginDoodle2 {
+  right: -42px;
+  top: 920px;
+  font-size: 32px;
+}
+.marginDoodle3 {
+  right: -52px;
+  top: 1480px;
+  font-size: 20px;
+}
+
+/* ============== SECTION HEADER ============== */
+
+.section {
+  position: relative;
+  padding: clamp(40px, 6vw, 80px) 0 clamp(20px, 3vw, 40px);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.sectionNumber {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 16px;
+  color: var(--margin-red);
+  letter-spacing: 0.18em;
+  background: var(--paper);
+  padding: 4px 10px;
+  border: 2px solid var(--margin-red);
+  transform: rotate(-2deg);
+}
+
+.sectionTitle {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(42px, 5vw, 68px);
+  line-height: 1;
+  color: var(--ink-blue);
+  font-weight: 700;
+  margin: 0;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: -8%;
+  bottom: -10px;
+  height: 3px;
+  background: var(--ink-blue);
+  border-radius: 2px;
+  transform: skew(-2deg);
+  opacity: 0.6;
+}
+
+.sectionLead {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 22px;
+  color: var(--ink-pencil);
+  max-width: 44rem;
+  margin: 0 0 36px;
+  line-height: 1.55;
+}
+
+/* ============== PROJECTS — STICKER CARDS ============== */
+
+.stickerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: clamp(20px, 2.4vw, 32px);
+  padding: 12px;
+}
+
+.stickerCard {
+  position: relative;
+  background: white;
+  border: 3px solid var(--ink-black);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  box-shadow:
+    4px 4px 0 var(--ink-black),
+    8px 8px 0 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.stickerCard:nth-child(odd)  { transform: rotate(-1.4deg); }
+.stickerCard:nth-child(even) { transform: rotate(1.6deg); }
+.stickerCard:nth-child(3n)   { transform: rotate(-2.2deg); }
+.stickerCard:nth-child(4n)   { transform: rotate(0.8deg); }
+
+.stickerCard:hover {
+  transform: rotate(0deg) translate(-3px, -3px) scale(1.02);
+  box-shadow:
+    8px 8px 0 var(--ink-black),
+    12px 12px 0 0 rgba(0, 0, 0, 0.06);
+  z-index: 3;
+}
+
+/* The "card art" panel at the top — bright sticker color */
+.stickerArt {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--card-color, var(--st-pink));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-bottom: 3px solid var(--ink-black);
+}
+
+/* Halftone dots over the art */
+.stickerArt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.18) 1.2px,
+    transparent 1.8px
+  );
+  background-size: 8px 8px;
+  mask-image: linear-gradient(135deg, black 0%, transparent 80%);
+}
+
+/* Speed lines effect */
+.stickerArt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    105deg,
+    transparent 0 12px,
+    rgba(255, 255, 255, 0.3) 12px 13px,
+    transparent 13px 30px
+  );
+  mask-image: linear-gradient(80deg, black 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Holographic foil on hover */
+.stickerCard:hover .stickerArt {
+  background-image:
+    linear-gradient(
+      135deg,
+      var(--card-color, var(--st-pink)) 0%,
+      var(--st-foil-1) 40%,
+      var(--st-foil-2) 60%,
+      var(--card-color, var(--st-pink)) 100%
+    );
+  background-size: 200% 200%;
+  animation: foilShift 1.6s ease-in-out infinite;
+}
+
+@keyframes foilShift {
+  0%, 100% { background-position: 0% 0%; }
+  50%      { background-position: 100% 100%; }
+}
+
+.stickerMonogram {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: clamp(60px, 8vw, 110px);
+  color: white;
+  text-shadow:
+    -3px -3px 0 var(--ink-black),
+    3px -3px 0 var(--ink-black),
+    -3px 3px 0 var(--ink-black),
+    3px 3px 0 var(--ink-black),
+    8px 10px 0 rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 2;
+  letter-spacing: -0.02em;
+  text-align: center;
+  line-height: 0.85;
+}
+
+.rarityBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  background: var(--ink-black);
+  color: var(--st-yellow);
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  padding: 4px 9px;
+  border: 2px solid white;
+  transform: rotate(-6deg);
+}
+
+.cardNumber {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 3;
+  background: white;
+  color: var(--ink-black);
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 4px 9px;
+  border: 2px solid var(--ink-black);
+}
+
+.stickerInfo {
+  padding: 14px 16px 18px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.stickerTitle {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.1;
+  color: var(--ink-blue);
+  font-weight: 700;
+}
+
+.stickerStats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.stickerStats span {
+  background: var(--st-yellow);
+  color: var(--ink-black);
+  padding: 4px 9px;
+  border: 1.5px solid var(--ink-black);
+}
+
+.stickerBlurb {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-pencil);
+}
+
+.stickerFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: auto;
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 16px;
+  color: var(--ink-blue);
+  border-top: 2px dashed var(--paper-shade);
+  padding-top: 10px;
+}
+
+/* ============== ABOUT — TORN PAGE + POLAROIDS ============== */
+
+.aboutLayout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(28px, 4vw, 60px);
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .aboutLayout { grid-template-columns: 1fr; }
+}
+
+.aboutProse {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: clamp(20px, 1.7vw, 24px);
+  line-height: 1.75;
+  color: var(--ink-blue);
+}
+
+.aboutProse p {
+  margin: 0 0 16px;
+  position: relative;
+}
+
+.aboutProse mark {
+  background: var(--st-yellow);
+  color: var(--ink-black);
+  padding: 0 4px;
+  font-family: var(--nb-hand), cursive;
+  font-weight: 600;
+}
+
+.aboutProse strong {
+  font-family: var(--nb-hand), cursive;
+  color: var(--margin-red);
+  font-weight: 700;
+}
+
+/* Polaroid stack column */
+.polaroidStack {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding-top: 12px;
+}
+
+.polaroid {
+  background: white;
+  border: 1px solid var(--paper-shade);
+  padding: 10px 10px 38px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 8px 20px -8px rgba(0, 0, 0, 0.18);
+  position: relative;
+  font-family: var(--nb-hand), cursive;
+  text-align: center;
+  font-size: 18px;
+  color: var(--ink-blue);
+}
+
+.polaroid:nth-child(odd)  { transform: rotate(-3deg); }
+.polaroid:nth-child(even) { transform: rotate(2.4deg); }
+
+.polaroid::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 60px;
+  height: 14px;
+  background: rgba(255, 240, 100, 0.7);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 4px,
+    rgba(255, 255, 255, 0.18) 4px 5px
+  );
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.polaroidImg {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(
+    135deg,
+    var(--polaroid-color, var(--st-cyan)) 0%,
+    color-mix(in srgb, var(--polaroid-color, var(--st-cyan)) 40%, var(--ink-black)) 100%
+  );
+  position: relative;
+  margin-bottom: 12px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.polaroidImg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.25) 1px,
+    transparent 1.5px
+  );
+  background-size: 6px 6px;
+  mix-blend-mode: overlay;
+}
+
+.polaroidGlyph {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 64px;
+  color: white;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.polaroidCaption {
+  font-family: var(--nb-hand), cursive;
+  font-size: 20px;
+  color: var(--ink-blue);
+}
+
+.polaroidYear {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 15px;
+  color: var(--ink-pencil);
+  margin-top: 2px;
+}
+
+/* ============== SKILLS — CHECKLIST ============== */
+
+.checklist {
+  background: white;
+  border: 3px solid var(--ink-black);
+  box-shadow: 6px 6px 0 var(--ink-black);
+  padding: 24px clamp(24px, 3vw, 40px);
+  position: relative;
+  transform: rotate(-0.5deg);
+}
+
+.checklist::before {
+  content: 'TO-DO';
+  position: absolute;
+  top: -16px;
+  left: 28px;
+  background: var(--st-yellow);
+  color: var(--ink-black);
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  padding: 5px 12px;
+  border: 2.5px solid var(--ink-black);
+  transform: rotate(-2deg);
+}
+
+.checklist::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  right: 32px;
+  width: 36px;
+  height: 36px;
+  background: #c0c0c8;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle at 50% 50%, var(--paper) 0 6px, transparent 7px),
+    linear-gradient(135deg, #fafafa, #909098);
+  box-shadow:
+    inset 0 1px 0 white,
+    inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+    2px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.checkCols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.checkCol h3 {
+  font-family: var(--nb-hand), cursive;
+  font-size: 26px;
+  color: var(--ink-blue);
+  margin: 0 0 12px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--ink-blue);
+  display: inline-block;
+}
+
+.checkCol ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.checkCol li {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 19px;
+  color: var(--ink-blue);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.checkCol li::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--ink-blue);
+  display: inline-block;
+  flex-shrink: 0;
+  background: white;
+  position: relative;
+}
+
+.checkCol li.done::before {
+  background: var(--ink-blue);
+}
+
+.checkCol li.done::after {
+  content: '✓';
+  position: absolute;
+  left: 1px;
+  top: -3px;
+  color: white;
+  font-family: var(--nb-hand), cursive;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.checkCol li.done {
+  text-decoration: line-through;
+  text-decoration-color: var(--margin-red);
+  text-decoration-thickness: 2px;
+  opacity: 0.85;
+}
+
+/* ============== WRITING — DIARY ENTRIES ============== */
+
+.diaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.diaryEntry {
+  position: relative;
+  background: var(--paper);
+  padding: 22px 24px 24px 70px;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--line-blue);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.diaryEntry::before {
+  content: attr(data-day);
+  position: absolute;
+  left: 14px;
+  top: 22px;
+  font-family: var(--nb-hand), cursive;
+  font-size: 34px;
+  color: var(--margin-red);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.diaryEntry::after {
+  content: attr(data-month);
+  position: absolute;
+  left: 14px;
+  top: 60px;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  color: var(--ink-pencil);
+  letter-spacing: 0.16em;
+}
+
+.diaryEntry:hover {
+  background: var(--st-foil-2);
+  transform: translateX(8px);
+}
+
+.diaryTitle {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.25;
+  color: var(--ink-blue);
+}
+
+.diaryArrow {
+  font-family: var(--nb-hand), cursive;
+  font-size: 30px;
+  color: var(--margin-red);
+  transition: transform 0.2s ease;
+}
+
+.diaryEntry:hover .diaryArrow {
+  transform: translateX(6px);
+}
+
+/* ============== CONTACT — قراقيعان POUCH ============== */
+
+.contactWrap {
+  position: relative;
+  margin: clamp(60px, 8vw, 100px) auto 40px;
+  max-width: 720px;
+  text-align: center;
+}
+
+.pouch {
+  position: relative;
+  background:
+    linear-gradient(180deg, #d36633 0%, #a64020 100%);
+  padding: clamp(30px, 5vw, 50px) clamp(24px, 4vw, 40px) clamp(40px, 6vw, 60px);
+  color: var(--paper);
+  box-shadow:
+    0 18px 40px -16px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 4px var(--paper),
+    inset 0 0 0 6px var(--ink-black);
+  transform: rotate(-1.5deg);
+}
+
+.pouch::before {
+  /* drawstring tie at the top */
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 24px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink-black) 0 6px,
+    transparent 6px 9px
+  );
+  opacity: 0.7;
+}
+
+.pouchPattern {
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 16px,
+    rgba(255, 220, 160, 0.18) 16px 18px,
+    transparent 18px 32px
+  );
+  mix-blend-mode: overlay;
+}
+
+.pouchTitle {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1;
+  color: var(--paper);
+  margin: 0 0 6px;
+  font-weight: 700;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.pouchArabic {
+  font-family: var(--nb-arabic), serif;
+  font-size: clamp(22px, 2.4vw, 32px);
+  color: var(--st-yellow);
+  margin-bottom: 18px;
+  direction: rtl;
+}
+
+.pouchLead {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: clamp(19px, 1.6vw, 24px);
+  color: rgba(251, 246, 232, 0.92);
+  max-width: 28rem;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.pouchItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.candy {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  padding: 12px 22px;
+  background: var(--candy-color, var(--st-yellow));
+  color: var(--ink-black);
+  border: 2.5px solid var(--ink-black);
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--ink-black);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.candy:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink-black);
+}
+
+/* ============== FOOTER ============== */
+
+.footer {
+  position: relative;
+  z-index: 5;
+  padding: 30px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 17px;
+  color: var(--ink-pencil);
+  border-top: 2px dashed var(--paper-shade);
+  margin-top: 40px;
+}
+
+.footer .grade {
+  background: var(--margin-red);
+  color: white;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 16px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  letter-spacing: 0.18em;
+  transform: rotate(-3deg);
+}
+
+/* ============== STATS ROW ============== */
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  background: white;
+  border: 3px solid var(--ink-black);
+  box-shadow: 6px 6px 0 var(--ink-black);
+  padding: 18px;
+  margin-bottom: 36px;
+  transform: rotate(-0.4deg);
+}
+
+.statCell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-right: 2px dashed var(--paper-shade);
+  text-align: center;
+}
+
+.statCell:last-child { border-right: none; }
+
+[dir='rtl'] .statCell {
+  border-right: none;
+  border-left: 2px dashed var(--paper-shade);
+}
+[dir='rtl'] .statCell:last-child { border-left: none; }
+
+.statLabel {
+  font-family: var(--nb-hand), cursive;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--margin-red);
+  font-weight: 700;
+}
+
+
+.statValue {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(42px, 4.5vw, 64px);
+  line-height: 1;
+  color: var(--ink-blue);
+  font-weight: 700;
+}
+
+/* ============== ABOUT FACT CARDS (location, clock) ============== */
+
+.aboutCards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.factCardNB {
+  background: white;
+  border: 2px solid var(--ink-black);
+  padding: 16px 18px;
+  box-shadow: 4px 4px 0 var(--st-yellow);
+  transform: rotate(0.6deg);
+}
+
+.factCardNB:nth-child(even) { transform: rotate(-0.8deg); box-shadow: 4px 4px 0 var(--st-green-deep); }
+
+.factCardLabel {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--margin-red);
+  margin-bottom: 6px;
+}
+
+.factCardValue {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(24px, 2vw, 30px);
+  color: var(--ink-blue);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+/* ============== PRINCIPLES + SERVICES ============== */
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 36px);
+  margin-top: clamp(36px, 5vw, 56px);
+}
+
+@media (max-width: 800px) {
+  .aboutGrid { grid-template-columns: 1fr; }
+}
+
+.principlesCard {
+  background: var(--ink-blue);
+  color: var(--paper);
+  border: 3px solid var(--ink-black);
+  box-shadow: 6px 6px 0 var(--ink-black);
+  overflow: hidden;
+  transform: rotate(-0.6deg);
+}
+
+.principlesHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.principlesHeader .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+.principlesHeader .dot:nth-child(1) { background: #ff5f56; }
+.principlesHeader .dot:nth-child(2) { background: #ffbd2e; }
+.principlesHeader .dot:nth-child(3) { background: #27c93f; }
+
+.principlesFile {
+  margin-left: 10px;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+[dir='rtl'] .principlesFile { margin-left: 0; margin-right: 10px; }
+
+.principlesList {
+  list-style: none;
+  margin: 0;
+  padding: 22px 26px;
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 19px;
+  line-height: 1.9;
+  color: var(--paper);
+}
+
+.principlesList li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.principleKey { color: #7DD3FC; font-weight: 600; }
+.principleSep { color: rgba(255, 255, 255, 0.35); }
+.principleVal { color: #A7F3A0; }
+
+.servicesCard {
+  background: white;
+  border: 3px solid var(--ink-black);
+  box-shadow: 6px 6px 0 var(--ink-black);
+  transform: rotate(0.6deg);
+  overflow: hidden;
+}
+
+.servicesHeader {
+  background: var(--st-yellow);
+  border-bottom: 2.5px solid var(--ink-black);
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  padding: 12px 18px;
+  color: var(--ink-black);
+}
+
+.servicesList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 600px) {
+  .servicesList { grid-template-columns: 1fr; }
+}
+
+.serviceItem {
+  padding: 14px 16px;
+  border-bottom: 1.5px dashed var(--paper-shade);
+  border-right: 1.5px dashed var(--paper-shade);
+}
+
+[dir='rtl'] .serviceItem {
+  border-right: none;
+  border-left: 1.5px dashed var(--paper-shade);
+}
+
+.serviceItem:nth-child(2n) { border-right: none; }
+[dir='rtl'] .serviceItem:nth-child(2n) { border-left: none; }
+.serviceItem:nth-last-child(-n+2) { border-bottom: none; }
+
+.serviceTitle {
+  font-family: var(--nb-hand), cursive;
+  font-size: 22px;
+  color: var(--ink-blue);
+  font-weight: 700;
+  margin: 0 0 6px;
+  line-height: 1.15;
+}
+
+.serviceDesc {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 16px;
+  color: var(--ink-pencil);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============== STICKER PROJECT IMAGE ============== */
+
+.stickerImage {
+  object-fit: cover !important;
+  z-index: 1;
+}
+
+/* ============== EMPTY STATES ============== */
+
+.emptyNote {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 16px;
+  color: var(--ink-pencil);
+  background: var(--paper-shade);
+  border: 2px dashed var(--ink-pencil);
+  padding: 20px;
+  text-align: center;
+  margin: 16px 0;
+  border-radius: 4px;
+}
+
+/* ============== EXPERIENCE ENHANCEMENTS ============== */
+
+.currentChip {
+  display: inline-block;
+  background: var(--st-green-deep);
+  color: white;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  padding: 3px 9px;
+  margin-inline-start: 8px;
+  border: 1.5px solid var(--ink-black);
+  vertical-align: middle;
+  font-weight: 700;
+}
+
+.resumeAchievements {
+  list-style: none;
+  margin: 14px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.resumeAchievements li {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-blue);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.resumeBullet {
+  color: var(--margin-red);
+  font-family: var(--nb-hand), cursive;
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+.resumeChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1.5px dashed var(--paper-shade);
+}
+
+.resumeChip {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  background: var(--paper-shade);
+  color: var(--ink-blue);
+  padding: 4px 10px;
+  border: 1.5px solid var(--ink-pencil);
+}
+
+/* ============== DIARY FOOTER ============== */
+
+.diaryFooter {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============== EXPERIENCE — RESUME PAPERS ============== */
+
+.resumeStack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 48px);
+  padding: 12px;
+}
+
+.resumePaper {
+  position: relative;
+  background: white;
+  border: 1px solid var(--paper-shade);
+  padding: clamp(24px, 3vw, 36px) clamp(28px, 3.5vw, 44px) clamp(28px, 3vw, 40px);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 12px 28px -12px rgba(0, 0, 0, 0.18);
+  font-family: var(--nb-hand-neat), cursive;
+  color: var(--ink-blue);
+  isolation: isolate;
+}
+
+.resumePaper:nth-child(odd)  { transform: rotate(-0.6deg); }
+.resumePaper:nth-child(even) { transform: rotate(0.8deg); margin-left: 14px; }
+.resumePaper:nth-child(3n)   { transform: rotate(-1.2deg); margin-right: 18px; }
+
+.resumePaper::before {
+  content: '';
+  position: absolute;
+  inset: 4px 12% auto 12%;
+  height: 1px;
+  background: var(--line-blue);
+  opacity: 0.7;
+}
+
+.resumeTape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 90px;
+  height: 18px;
+  background: rgba(255, 240, 100, 0.7);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 4px,
+    rgba(255, 255, 255, 0.18) 4px 5px
+  );
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.resumePeriod {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--margin-red);
+  margin-bottom: 10px;
+}
+
+.resumeRole {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.05;
+  color: var(--ink-blue);
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.resumeCompany {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 20px;
+  color: var(--ink-pencil);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.resumeBlurb {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--ink-blue);
+  margin: 0;
+}
+
+.resumeIndex {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--ink-pencil);
+  border: 1.5px solid var(--ink-pencil);
+  padding: 4px 10px;
+  border-radius: 999px;
+  transform: rotate(2deg);
+}
+
+/* ============== CERTIFICATES — GOLD STAR STICKERS ============== */
+
+.starGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: clamp(20px, 2.4vw, 32px);
+  padding: 12px;
+}
+
+.starCard {
+  position: relative;
+  background: white;
+  border: 3px solid var(--ink-black);
+  padding: 28px 18px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 4px 4px 0 var(--ink-black);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.starCard:nth-child(odd)  { transform: rotate(-1.4deg); }
+.starCard:nth-child(even) { transform: rotate(1.6deg); }
+.starCard:nth-child(3n)   { transform: rotate(-2.2deg); }
+
+.starCard:hover {
+  transform: rotate(0deg) translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--ink-black);
+}
+
+.starShape {
+  width: 60px;
+  height: 60px;
+  color: var(--card-color, var(--st-yellow));
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.2));
+  margin-bottom: 4px;
+}
+
+.starCard:nth-child(1) .starShape { color: var(--st-yellow); }
+.starCard:nth-child(2) .starShape { color: var(--st-cyan); }
+.starCard:nth-child(3) .starShape { color: var(--st-green-deep); }
+.starCard:nth-child(4) .starShape { color: var(--st-orange); }
+.starCard:nth-child(5) .starShape { color: var(--st-green); }
+.starCard:nth-child(6) .starShape { color: var(--st-purple); }
+
+.starIssuer {
+  font-family: var(--nb-sticker), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--ink-pencil);
+}
+
+.starName {
+  font-family: var(--nb-hand), cursive;
+  font-size: clamp(19px, 1.6vw, 24px);
+  line-height: 1.15;
+  color: var(--ink-blue);
+  font-weight: 700;
+}
+
+.starYear {
+  font-family: var(--nb-hand-neat), cursive;
+  font-size: 16px;
+  color: var(--ink-pencil);
+}
+
+/* ============== ARABIC / RTL OVERRIDES ============== */
+
+[dir='rtl'] .marginLine { left: auto; right: 64px; }
+[dir='rtl'] .binderHoles { left: auto; right: 18px; box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05); }
+
+/* ============== RTL — DIRECTIONAL FIXES ============== */
+
+/* Spacing between brand block and lang toggle */
+[dir='rtl'] .langToggle { margin-right: 0; margin-left: 12px; }
+
+/* Margin doodles: flip from right-margin to left-margin on desktop RTL */
+[dir='rtl'] .marginDoodle1 { right: auto; left: -54px; transform: rotate(-12deg); }
+[dir='rtl'] .marginDoodle2 { right: auto; left: -42px; }
+[dir='rtl'] .marginDoodle3 { right: auto; left: -52px; }
+
+/* Hopscotch: lives on the right margin in RTL */
+[dir='rtl'] .hopscotch { left: auto; right: -52px; }
+
+/* Section title underline: in LTR extends past the right edge,
+   in RTL should extend past the left edge */
+[dir='rtl'] .sectionTitle::after {
+  left: -8%;
+  right: 0;
+  transform: skew(2deg);
+}
+
+/* Hero name yellow swipe — mirror skew so the slant feels right */
+[dir='rtl'] .heroNameUnderline::after { transform: skew(3deg); }
+
+/* Hero kicker green underline: live on the start (right) side */
+[dir='rtl'] .heroKicker::after { margin-inline-start: 0; }
+
+/* Lock the principles "traffic-light" dots to mac order (red on left)
+   regardless of document direction */
+.principlesHeader { direction: ltr; }
+
+/* Diary entries: padding mirror so the day-stamp gutter is on the right */
+[dir='rtl'] .diaryEntry { padding: 22px 70px 24px 24px; }
+[dir='rtl'] .diaryEntry::before,
+[dir='rtl'] .diaryEntry::after { left: auto; right: 14px; }
+[dir='rtl'] .diaryEntry:hover { transform: translateX(-8px); }
+[dir='rtl'] .diaryEntry:hover .diaryArrow { transform: translateX(-6px); }
+
+/* Hover lift direction — buttons travel toward the inline-start
+   (up-left in LTR, up-right in RTL) */
+[dir='rtl'] .btn:hover { transform: translate(2px, -2px); }
+[dir='rtl'] .btn:active { transform: translate(-2px, 2px); }
+[dir='rtl'] .candy:hover { transform: translate(2px, -2px); }
+[dir='rtl'] .stickerCard:hover {
+  transform: rotate(0deg) translate(3px, -3px) scale(1.02);
+}
+
+/* Resume papers: mirror the alternating margin offsets */
+[dir='rtl'] .resumePaper:nth-child(even) { margin-left: 0; margin-right: 14px; }
+[dir='rtl'] .resumePaper:nth-child(3n)   { margin-right: 0; margin-left: 18px; }
+
+/* The .servicesList nth-child(2n-1) border on mobile flips */
+@media (max-width: 800px) {
+  [dir='rtl'] .statCell:nth-child(2n-1) {
+    border-right: none;
+    border-left: 2px dashed var(--paper-shade);
+  }
+}
+
+/* ============== CONTACT POUCH RTL MIRROR ============== */
+
+/* The pouch leans counter-clockwise (-1.5deg) in LTR. In RTL the
+   bottom-left corner of that tilt pushes content off-screen left.
+   Mirror to a clockwise lean so the tilt feels natural in Arabic. */
+[dir='rtl'] .pouch { transform: rotate(1.5deg); }
+
+/* Candy buttons: hard offset shadows are LTR-shaped (down-right).
+   In RTL flip the X offset so the shadow falls on the inline-end. */
+[dir='rtl'] .candy { box-shadow: -3px 3px 0 var(--ink-black); }
+[dir='rtl'] .candy:hover { box-shadow: -5px 5px 0 var(--ink-black); }
+
+/* Pouch title text-shadow: same idea — flip the horizontal offset. */
+[dir='rtl'] .pouchTitle { text-shadow: -4px 4px 0 rgba(0, 0, 0, 0.25); }
+
+/* Make sure candy buttons can never overflow their parent on small
+   screens — cap width and let long emails wrap or ellipsis. */
+.candy { max-width: 100%; }
+@media (max-width: 480px) {
+  .candy {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+/* [dir='rtl'] .shell {
+  padding: 0 clamp(44px, 5vw, 84px);
+} */
+
+[dir='rtl'] .heroName,
+[dir='rtl'] .sectionTitle,
+[dir='rtl'] .sectionLead,
+[dir='rtl'] .heroSub,
+[dir='rtl'] .heroBody,
+[dir='rtl'] .aboutProse,
+[dir='rtl'] .resumeRole,
+[dir='rtl'] .resumeCompany,
+[dir='rtl'] .resumeBlurb {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir='rtl'] .exitLink { right: auto; left: -50px; transform: rotate(-3deg); }
+[dir='rtl'] .heroNote { right: auto; left: -10px; transform: rotate(-8deg); }
+
+[dir='rtl'] .navLink::after { transform-origin: right; }
+
+[dir='rtl'] .diaryEntry { padding: 18px 64px 20px 24px; }
+[dir='rtl'] .diaryEntry::before,
+[dir='rtl'] .diaryEntry::after { left: auto; right: 12px; }
+[dir='rtl'] .diaryEntry:hover { transform: translateX(-8px); }
+
+[dir='rtl'] .langBtn + .langBtn { border-left: none; border-right: 2.5px solid var(--ink-black); }
+
+[dir='rtl'] .resumeIndex { right: auto; left: 18px; transform: rotate(-2deg); }
+
+[dir='rtl'] .checklist { transform: rotate(0.5deg); }
+[dir='rtl'] .checklist::before { left: auto; right: 28px; }
+[dir='rtl'] .checklist::after { left: 32px; right: auto; }
+
+[dir='rtl'] .checkCol li { direction: rtl; }
+[dir='rtl'] .checkCol li.done::after { left: auto; right: 1px; }
+
+[dir='rtl'] .hopscotch { left: auto; right: -52px; }
+[dir='rtl'] .marginDoodle { right: -54px !important; left: auto !important; }
+
+/* Project sticker cards carry English DB content (name, description,
+   stack). Render them LTR AND in the Latin notebook fonts — even on the
+   Arabic page — so the cards are byte-for-byte identical to the English
+   notebook (same font metrics → same size). */
+[dir='rtl'] .stickerCard  { direction: ltr; }
+[dir='rtl'] .stickerInfo  { direction: ltr; text-align: left; }
+[dir='rtl'] .stickerArt   { direction: ltr; }
+[dir='rtl'] .stickerCard:hover { transform: rotate(0deg) translate(-3px, -3px) scale(1.02); }
+[dir='rtl'] .stickerTitle    { font-family: var(--nb-hand-latin), cursive; }
+[dir='rtl'] .stickerBlurb    { font-family: var(--nb-hand-neat-latin), cursive; }
+[dir='rtl'] .stickerStats    { font-family: var(--nb-sticker-latin), sans-serif; }
+[dir='rtl'] .stickerFoot     { font-family: var(--nb-hand-neat-latin), cursive; }
+[dir='rtl'] .stickerMonogram { font-family: var(--nb-sticker-latin), sans-serif; }
+[dir='rtl'] .cardNumber      { font-family: var(--nb-sticker-latin), sans-serif; }
+
+/* ---- Arabic display sizing ----
+   The Arabic notebook uses Marhey / Baloo Bhaijaan 2, which render heavier
+   and wider than the Latin Caveat / Patrick Hand. Scale the display text
+   down (and lighten its weight) so the Arabic page reads at the SAME visual
+   size / rhythm as the English one. */
+[dir='rtl'] .heroName      { font-size: clamp(40px, 5.6vw, 66px); font-weight: 500; line-height: 1.22; }
+[dir='rtl'] .heroKicker    { font-size: clamp(22px, 2.2vw, 30px); font-weight: 500; }
+[dir='rtl'] .heroSub       { font-size: clamp(17px, 1.7vw, 22px); font-weight: 500; }
+[dir='rtl'] .heroBody      { font-size: 17px; line-height: 1.95; }
+[dir='rtl'] .sectionTitle  { font-size: clamp(30px, 3.8vw, 48px); font-weight: 500; line-height: 1.12; }
+[dir='rtl'] .sectionLead   { font-size: 18px; line-height: 1.8; }
+[dir='rtl'] .sectionNumber { font-size: 14px; }
+[dir='rtl'] .aboutProse    { font-size: 18px; line-height: 2; }
+[dir='rtl'] .statValue     { font-size: clamp(32px, 3.4vw, 46px); font-weight: 500; }
+[dir='rtl'] .statLabel     { font-size: 18px; font-weight: 500; }
+[dir='rtl'] .factCardValue { font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; }
+[dir='rtl'] .principlesList { font-size: 17px; line-height: 1.9; }
+[dir='rtl'] .serviceTitle  { font-size: 19px; font-weight: 500; }
+[dir='rtl'] .serviceDesc   { font-size: 15px; }
+[dir='rtl'] .checkCol h3   { font-size: 22px; font-weight: 500; }
+[dir='rtl'] .checkCol li   { font-size: 17px; }
+[dir='rtl'] .resumeRole    { font-size: clamp(22px, 2.2vw, 30px); font-weight: 500; }
+[dir='rtl'] .resumeCompany { font-size: 18px; }
+[dir='rtl'] .resumeBlurb   { font-size: 16px; line-height: 1.75; }
+[dir='rtl'] .resumeAchievements li { font-size: 15px; line-height: 1.7; }
+[dir='rtl'] .diaryTitle    { font-size: clamp(18px, 1.8vw, 24px); font-weight: 500; }
+[dir='rtl'] .starName      { font-size: clamp(16px, 1.5vw, 20px); font-weight: 500; }
+[dir='rtl'] .pouchTitle    { font-size: clamp(30px, 3.8vw, 46px); font-weight: 500; }
+[dir='rtl'] .pouchLead     { font-size: 18px; line-height: 1.7; }
+[dir='rtl'] .brand         { font-size: clamp(22px, 2vw, 30px); font-weight: 500; }
+[dir='rtl'] .nav           { font-size: 18px; }
+[dir='rtl'] .coverLabelName { font-size: clamp(24px, 2.6vw, 34px); }
+[dir='rtl'] .footer        { font-size: 16px; }
+
+/* ============== ENTRANCE ANIMATIONS ============== */
+
+@keyframes nbFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes nbWobble {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50%      { transform: rotate(-1.5deg) translateY(-3px); }
+}
+
+.animFadeUp { animation: nbFadeUp 700ms ease-out backwards; }
+.animWobble { animation: nbWobble 5s ease-in-out infinite; }
+
+/* ===========================================================
+   MOBILE — < 800px
+   The fixed margin-line, binder holes, and overflowing margin
+   doodles all get out of the way; shell padding shrinks.
+   =========================================================== */
+@media (max-width: 800px) {
+  .root { font-size: 17px; }
+
+  .shell {
+    padding: 0 18px;
+  }
+
+  .marginLine,
+  .binderHoles,
+  .stain {
+    display: none !important;
+  }
+
+  /* Header stacks vertically */
+  .topBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 18px 0 14px;
+  }
+
+  .brand {
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Mobile nav: only the priority links (about/skills/experience) */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    padding: 4px 2px 8px;
+  }
+  .nav .navLink:not(.navPriority) { display: none; }
+  .navLink { white-space: nowrap; }
+
+  .langToggle {
+    align-self: center;
+    margin-right: 0;
+  }
+
+  .exitLink { display: none; }
+
+  /* Margin doodles + hopscotch — hidden on mobile.
+     Their absolute `top` values are calibrated for desktop section
+     heights; on phones they'd float over unrelated content or land
+     in voids. Decorative-only, so dropping them is the safe call. */
+  .marginDoodle,
+  .hopscotch {
+    display: none !important;
+  }
+
+  /* Replace with a small inline doodle at the start of every section
+     so the page still feels hand-drawn on mobile. */
+  .sectionHeader::before {
+    content: '✎';
+    font-family: var(--nb-hand), cursive;
+    font-size: 22px;
+    color: var(--st-green-deep);
+    margin-inline-end: 6px;
+    transform: rotate(-8deg);
+    display: inline-block;
+  }
+
+  /* Hero stacks; cover sits below text */
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin: 16px 0 36px;
+  }
+
+  .heroName { font-size: clamp(44px, 12vw, 64px); }
+  .heroSub  { font-size: 19px; }
+  .heroBody { font-size: 17px; max-width: 100%; }
+
+  .bookCover {
+    max-width: 320px;
+    padding: 28px 18px;
+  }
+
+  .heroNote {
+    top: -6px;
+    right: -6px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  /* Sections breathing room */
+  .section { padding: 32px 0 18px; }
+  .sectionHeader { gap: 12px; flex-wrap: wrap; }
+  .sectionNumber { font-size: 13px; padding: 3px 8px; }
+  .sectionTitle { font-size: clamp(32px, 8vw, 44px); line-height: 1.05; }
+  .sectionLead { font-size: 18px; }
+
+  /* Stats: 2 columns on small screens */
+  .statsRow {
+    grid-template-columns: 1fr 1fr;
+    padding: 14px;
+  }
+  .statCell { border-right: none; padding: 10px; }
+  .statCell:nth-child(2n-1) { border-right: 2px dashed var(--paper-shade); }
+  .statCell:nth-child(-n+2) { border-bottom: 2px dashed var(--paper-shade); }
+  .statValue { font-size: clamp(36px, 9vw, 52px); }
+  .statLabel { font-size: 18px; }
+
+  /* About → stack */
+  .aboutLayout { grid-template-columns: 1fr; gap: 24px; }
+  .aboutGrid   { grid-template-columns: 1fr; gap: 18px; }
+  .aboutProse { font-size: 18px; }
+  .aboutProse p:first-child::first-letter { font-size: 3em; }
+
+  /* Principles + services */
+  .principlesList { font-size: 17px; padding: 18px 18px; }
+  .principlesList li { gap: 6px; }
+  .servicesList { grid-template-columns: 1fr; }
+  .serviceItem { border-right: none !important; border-left: none !important; }
+  .serviceTitle { font-size: 19px; }
+  .serviceDesc  { font-size: 15px; }
+
+  /* Project sticker grid: single column on phones */
+  .stickerGrid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 4px;
+  }
+  .stickerCard:nth-child(odd),
+  .stickerCard:nth-child(even),
+  .stickerCard:nth-child(3n),
+  .stickerCard:nth-child(4n) { transform: rotate(-0.6deg); }
+  .stickerCard:nth-child(2n) { transform: rotate(0.6deg); }
+  .stickerArt { aspect-ratio: 16 / 10; }
+  .stickerTitle { font-size: 22px; }
+  .stickerBlurb { font-size: 16px; }
+
+  /* Skills checklist: 1 column */
+  .checkCols { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .checkCol h3 { font-size: 22px; }
+  .checkCol li { font-size: 16px; }
+
+  /* Resume papers: tighter padding, no negative margins */
+  .resumeStack { gap: 22px; padding: 4px; }
+  .resumePaper { padding: 22px 18px 28px; margin-left: 0 !important; margin-right: 0 !important; }
+  .resumePaper:nth-child(odd),
+  .resumePaper:nth-child(even),
+  .resumePaper:nth-child(3n) { transform: rotate(-0.4deg); }
+  .resumeRole { font-size: clamp(22px, 6.5vw, 28px); }
+  .resumeBlurb { font-size: 16px; }
+  .resumeAchievements li { font-size: 15px; gap: 8px; }
+  .resumeChips { gap: 5px; }
+  .resumeChip { font-size: 10px; padding: 3px 7px; }
+  .resumeIndex { bottom: 10px; right: 12px; font-size: 10px; padding: 3px 7px; }
+
+  /* Certificates */
+  .starGrid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 4px; }
+  .starCard { padding: 22px 14px 14px; }
+  .starShape { width: 50px; height: 50px; }
+  .starName { font-size: 17px; }
+  .starYear { font-size: 14px; }
+
+  /* Diary entries */
+  .diaryEntry {
+    padding: 18px 16px 18px 60px;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+  .diaryEntry::before { font-size: 26px; top: 18px; left: 12px; }
+  .diaryEntry::after  { font-size: 9px; top: 46px; left: 12px; }
+  .diaryTitle { font-size: 18px; }
+  .diaryArrow { font-size: 22px; }
+
+  /* Pouch contact */
+  .contactWrap { margin: 36px auto 24px; }
+  .pouch { padding: 28px 22px 36px; }
+  .pouchTitle { font-size: 36px; }
+  .pouchLead  { font-size: 17px; }
+  .pouchItems { flex-direction: column; align-items: stretch; }
+  .candy { justify-content: center; font-size: 13px; padding: 12px 18px; }
+
+  .footer {
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* RTL diary mirror */
+  [dir='rtl'] .diaryEntry { padding: 18px 60px 18px 16px; }
+  [dir='rtl'] .diaryEntry::before,
+  [dir='rtl'] .diaryEntry::after { left: auto; right: 12px; }
+}
+
+/* ===========================================================
+   PHONES — < 480px (extra-tight)
+   =========================================================== */
+@media (max-width: 480px) {
+  .root { font-size: 16px; }
+  .shell { padding: 0 14px; }
+  .heroName { font-size: clamp(38px, 11vw, 52px); }
+  .sectionTitle { font-size: clamp(28px, 8vw, 38px); }
+  .bookCover { max-width: 260px; padding: 22px 14px; }
+  .coverSubject { font-size: 20px; }
+  .coverLabelName { font-size: 26px; }
+  .coverLabelMeta,
+  .coverLabelArabic { font-size: 14px; }
+  .checkCols { grid-template-columns: 1fr; }
+  .starGrid { grid-template-columns: 1fr; }
+}
+

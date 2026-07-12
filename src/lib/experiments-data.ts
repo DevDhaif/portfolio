@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
+import { createPublicClient } from '@/utils/supabase/public';
 import type { Project, Certificate, Post } from '@/types';
 
 export type ExperimentData = {
@@ -14,10 +14,10 @@ export type ExperimentLoadOpts = {
 };
 
 /**
- * Shared Supabase loader for the experimental theme pages
- * (spacetoon + qamariya). Mirrors the inline loader used in
- * /experiments/notebook/ar so that all three themes show the same
- * canonical content with consistent shape transforms.
+ * Shared Supabase loader for the notebook (personal) theme pages.
+ * Both /experiments/notebook and /experiments/notebook/ar render the
+ * SAME canonical content as the professional theme — this is the single
+ * source of truth for the persona split, with consistent shape transforms.
  */
 export async function loadExperimentData(
   opts: ExperimentLoadOpts = {},
@@ -25,7 +25,7 @@ export async function loadExperimentData(
   const projectsLimit = opts.projectsLimit ?? 6;
   const postsLimit = opts.postsLimit ?? 6;
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const [projectsRes, certsRes, postsRes, postsCountRes] = await Promise.all([
     supabase

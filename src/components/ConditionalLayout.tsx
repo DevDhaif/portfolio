@@ -11,11 +11,13 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const isBareLayout =
+    pathname === '/' ||                 // landing picker (self-contained)
     pathname?.startsWith('/admin') ||
     pathname?.startsWith('/login') ||
     pathname?.startsWith('/auth') ||
     pathname?.startsWith('/private') ||
-    pathname?.startsWith('/experiments');
+    pathname?.startsWith('/note') ||    // notebook theme (self-contained)
+    pathname?.startsWith('/pro/ar');    // arabic pro theme (self-contained)
 
   if (isBareLayout) {
     return <>{children}</>;

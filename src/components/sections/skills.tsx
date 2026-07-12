@@ -75,6 +75,7 @@ export function SkillsSection() {
                     {featured.map((s) => (
                         <article
                             key={s.name}
+                            data-reveal
                             className="group relative flex flex-col justify-between rounded-lg border border-rule bg-paper-raised p-5 transition-colors hover:border-signal/50 frame-brackets aspect-[5/4]"
                         >
                             <Image
@@ -99,7 +100,7 @@ export function SkillsSection() {
                 {/* Grouped list */}
                 <div className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-rule bg-rule lg:grid-cols-3">
                     {groups.map((group) => (
-                        <div key={group.label} className="bg-paper-raised p-5">
+                        <div key={group.label} data-reveal className="bg-paper-raised p-5">
                             <div className="flex items-baseline justify-between border-b border-rule pb-3">
                                 <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-muted">
                                     {`// ${group.label}`}

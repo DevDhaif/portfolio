@@ -80,9 +80,17 @@ export function BlogSection() {
                 />
 
                 {loading ? (
-                    <div className="min-h-[400px] flex flex-col items-center justify-center gap-4">
-                        <Loader2 className="w-8 h-8 animate-spin text-accent-primary" />
-                        <p className="text-text-secondary text-sm">Loading latest posts...</p>
+                    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <div key={i} className="overflow-hidden rounded-lg border border-rule bg-paper-raised">
+                                <div className="aspect-video animate-pulse bg-rule" />
+                                <div className="space-y-3 p-5">
+                                    <div className="h-3 w-24 animate-pulse rounded bg-rule" />
+                                    <div className="h-5 w-3/4 animate-pulse rounded bg-rule" />
+                                    <div className="h-4 w-full animate-pulse rounded bg-rule" />
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <>
