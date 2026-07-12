@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { type CookieValue } from "@/types"
 
 export async function updateSession(request: NextRequest) {
     let response = NextResponse.next({
@@ -23,7 +24,7 @@ export async function updateSession(request: NextRequest) {
                         return []
                     }
                 },
-                setAll(cookies) {
+                setAll(cookies: CookieValue[]) {
                     try {
                         cookies.forEach((cookie) => {
 
