@@ -1,6 +1,6 @@
 // src/extensions/direction.ts
 import { Extension } from '@tiptap/core';
-import { Plugin, PluginKey } from 'prosemirror-state';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
 
 /**
  * Regex to detect RTL characters (Arabic, Hebrew, Persian, etc.)
