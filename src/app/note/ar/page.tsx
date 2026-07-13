@@ -3,12 +3,31 @@ import Image from 'next/image';
 import { createPublicClient } from '@/utils/supabase/public';
 import { Project, Certificate, Post } from '@/types';
 import { SOCIAL_LINKS, AUTHOR } from '@/lib/constants';
-import { GsapReveals } from '@/components/ui/gsap-reveals';
 import s from '../notebook.module.css';
 import { RiyadhClockNotebook } from './riyadh-clock';
 import { NotebookMotion } from '../notebook-motion';
+import { NotebookDeck, type DeckPage } from '../notebook-deck';
 
 export const revalidate = 60;
+
+const PAGES: DeckPage[] = [
+  { id: 'home', label: 'الغلاف' },
+  { id: 'about', label: 'عني' },
+  { id: 'projects', label: 'ألبوم الملصقات' },
+  { id: 'skills', label: 'العدّة' },
+  { id: 'experience', label: 'الخبرات' },
+  { id: 'certs', label: 'النجوم الذهبية' },
+  { id: 'diary', label: 'اليوميات' },
+  { id: 'contact', label: 'كلّمني' },
+];
+
+const DECK_COPY = {
+  turn: '↴ كمّل — اقلب الصفحة',
+  last: 'خلصت · شكرًا لقراءتك',
+  prev: 'الصفحة السابقة',
+  next: 'الصفحة التالية',
+  page: 'صفحة',
+};
 
 /* ===========================================================
    Server data loaders (cookie-free public client → ISR-cacheable)
@@ -96,36 +115,38 @@ export default async function NotebookArPage() {
       <div className={s.stain} />
       <div className={s.binderHoles} />
       <div className={s.marginLine} />
-      <GsapReveals y={20} start="top 90%" />
       <NotebookMotion />
 
       <div className={s.shell}>
-        <header className={s.topBar}>
-          <div className={s.brand}>
-            <span className={s.doodleStar}>★</span>
-            <span>دفتر ضيف</span>
-            <span className={s.doodleStar}>★</span>
-          </div>
-          <nav className={s.nav}>
-            <a className={`${s.navLink} ${s.navPriority}`} href="#about">عني</a>
-            <a className={s.navLink} href="#projects">الشغل</a>
-            <a className={`${s.navLink} ${s.navPriority}`} href="#skills">العدّة</a>
-            <a className={`${s.navLink} ${s.navPriority}`} href="#experience">الخبرات</a>
-            <a className={s.navLink} href="#certs">الشهادات</a>
-            <a className={s.navLink} href="#diary">المدونة</a>
-            <a className={s.navLink} href="#contact">كلّمني</a>
-          </nav>
-          <div className={s.langToggle}>
-            <Link href="/note" className={s.langBtn}>EN</Link>
-            <Link href="/note/ar" className={`${s.langBtn} ${s.langBtnActive}`}>ع</Link>
-          </div>
-        </header>
-
         <Hopscotch className={s.hopscotch} />
-        <span className={`${s.marginDoodle} ${s.marginDoodle1}`}>← ابدأ من هنا</span>
-        <span className={`${s.marginDoodle} ${s.marginDoodle2}`} style={{ color: 'var(--margin-red)' }}>★</span>
-        <span className={`${s.marginDoodle} ${s.marginDoodle3}`}>← الصفحة ٤</span>
 
+        <NotebookDeck
+          dir="rtl"
+          pages={PAGES}
+          copy={DECK_COPY}
+          header={
+            <header className={s.topBar}>
+              <div className={s.brand}>
+                <span className={s.doodleStar}>★</span>
+                <span>دفتر ضيف</span>
+                <span className={s.doodleStar}>★</span>
+              </div>
+              <nav className={s.nav}>
+                <a className={`${s.navLink} ${s.navPriority}`} href="#about">عني</a>
+                <a className={s.navLink} href="#projects">الشغل</a>
+                <a className={`${s.navLink} ${s.navPriority}`} href="#skills">العدّة</a>
+                <a className={`${s.navLink} ${s.navPriority}`} href="#experience">الخبرات</a>
+                <a className={s.navLink} href="#certs">الشهادات</a>
+                <a className={s.navLink} href="#diary">المدونة</a>
+                <a className={s.navLink} href="#contact">كلّمني</a>
+              </nav>
+              <div className={s.langToggle}>
+                <Link href="/note" className={s.langBtn}>EN</Link>
+                <Link href="/note/ar" className={`${s.langBtn} ${s.langBtnActive}`}>ع</Link>
+              </div>
+            </header>
+          }
+        >
         {/* ==================== HERO ==================== */}
         <section id="home" className={s.hero}>
           <div className={s.heroBlurb}>
@@ -493,12 +514,13 @@ export default async function NotebookArPage() {
               </div>
             </div>
           </div>
-        </section>
 
-        <footer className={s.footer}>
-          <span>© ٢٠٢٦ · مكتوب بقلم رصاص · ضيف الله أحمد الفروي</span>
-          <span className={s.grade}>قُرئ · ممتاز</span>
-        </footer>
+          <footer className={s.footer}>
+            <span>© ٢٠٢٦ · مكتوب بقلم رصاص · ضيف الله أحمد الفروي</span>
+            <span className={s.grade}>قُرئ · ممتاز</span>
+          </footer>
+        </section>
+        </NotebookDeck>
       </div>
     </div>
   );

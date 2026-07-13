@@ -8,7 +8,6 @@ import { ContactSection } from "@/components/sections/contact";
 import { Experience } from "@/components/home/experience";
 import { Certificates } from "@/components/Certificates";
 import { GsapReveals } from "@/components/ui/gsap-reveals";
-import { MarqueeStrip } from "@/components/ui/marquee-strip";
 
 export const metadata: Metadata = {
     title: "Dhaifallah Alfarawi (ضيف الله الفروي) | Front End Developer",
@@ -27,7 +26,6 @@ export default function ProfessionalHome() {
         <>
             <GsapReveals start="top 88%" />
             <HeroSection />
-            {/* <MarqueeStrip /> */}
             <AboutSection />
             <ProjectsShowcase />
             <SkillsSection />

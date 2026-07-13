@@ -2,13 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { loadExperimentData, getMonogram } from '@/lib/experiments-data';
 import { SOCIAL_LINKS, AUTHOR } from '@/lib/constants';
-import { GsapReveals } from '@/components/ui/gsap-reveals';
 import s from './notebook.module.css';
 import { RiyadhClockNotebook } from './riyadh-clock';
 import { NotebookMotion } from './notebook-motion';
+import { NotebookDeck, type DeckPage } from './notebook-deck';
 
-// ISR: statically generated, revalidated every 60s (loader uses the
-// cookie-free public client, so this page is cacheable → ~10ms TTFB).
 export const revalidate = 60;
 
 const ENGLISH_MONTHS = [
@@ -17,6 +15,25 @@ const ENGLISH_MONTHS = [
 ];
 
 const STICKER_COLORS = ['#1d8f5c', '#ff7a2d', '#0e7c86', '#2fc163', '#ffd23a', '#36c5e8'];
+
+const PAGES: DeckPage[] = [
+  { id: 'home', label: 'the cover' },
+  { id: 'about', label: 'about me' },
+  { id: 'projects', label: 'my sticker book' },
+  { id: 'skills', label: 'skills' },
+  { id: 'experience', label: 'experience' },
+  { id: 'certs', label: 'gold stars' },
+  { id: 'diary', label: 'diary' },
+  { id: 'contact', label: 'say hi' },
+];
+
+const DECK_COPY = {
+  turn: 'keep going — turn the page ↴',
+  last: 'the end · thanks for reading',
+  prev: 'previous page',
+  next: 'next page',
+  page: 'page',
+};
 
 /* ===========================================================
    Page — the SAME data as the professional theme, told like a
@@ -35,38 +52,38 @@ export default async function NotebookPage() {
       <div className={s.stain} />
       <div className={s.binderHoles} />
       <div className={s.marginLine} />
-      <GsapReveals y={20} start="top 90%" />
       <NotebookMotion />
 
       <div className={s.shell}>
-        <header className={s.topBar}>
-          <div className={s.brand}>
-            <span className={s.doodleStar}>★</span>
-            <span>dhaif&apos;s notebook</span>
-            <span className={s.doodleStar}>★</span>
-          </div>
-          <nav className={s.nav}>
-            <a className={s.navLink} href="#about">about</a>
-            <a className={s.navLink} href="#projects">work</a>
-            <a className={s.navLink} href="#skills">skills</a>
-            <a className={s.navLink} href="#experience">experience</a>
-            <a className={s.navLink} href="#certs">certs</a>
-            <a className={s.navLink} href="#diary">diary</a>
-            <a className={s.navLink} href="#contact">say hi</a>
-          </nav>
-          <div className={s.langToggle}>
-            <Link href="/note" className={`${s.langBtn} ${s.langBtnActive}`}>EN</Link>
-            <Link href="/note/ar" className={s.langBtn}>ع</Link>
-          </div>
-          <Link href="/" className={s.exitLink}>← switch theme</Link>
-        </header>
-
-        {/* Floating margin doodles */}
         <Hopscotch className={s.hopscotch} />
-        <span className={`${s.marginDoodle} ${s.marginDoodle1}`}>↓ start here</span>
-        <span className={`${s.marginDoodle} ${s.marginDoodle2}`} style={{ color: 'var(--margin-red)' }}>★</span>
-        <span className={`${s.marginDoodle} ${s.marginDoodle3}`}>page 4 →</span>
 
+        <NotebookDeck
+          dir="ltr"
+          pages={PAGES}
+          copy={DECK_COPY}
+          header={
+            <header className={s.topBar}>
+              <div className={s.brand}>
+                <span className={s.doodleStar}>★</span>
+                <span>dhaif&apos;s notebook</span>
+                <span className={s.doodleStar}>★</span>
+              </div>
+              <nav className={s.nav}>
+                <a className={s.navLink} href="#about">about</a>
+                <a className={s.navLink} href="#projects">work</a>
+                <a className={s.navLink} href="#skills">skills</a>
+                <a className={s.navLink} href="#experience">experience</a>
+                <a className={s.navLink} href="#certs">certs</a>
+                <a className={s.navLink} href="#diary">diary</a>
+                <a className={s.navLink} href="#contact">say hi</a>
+              </nav>
+              <div className={s.langToggle}>
+                <Link href="/note" className={`${s.langBtn} ${s.langBtnActive}`}>EN</Link>
+                <Link href="/note/ar" className={s.langBtn}>ع</Link>
+              </div>
+            </header>
+          }
+        >
         {/* ==================== HERO ==================== */}
         <section id="home" className={s.hero}>
           <div className={s.heroBlurb}>
@@ -422,12 +439,13 @@ export default async function NotebookPage() {
               </div>
             </div>
           </div>
-        </section>
 
-        <footer className={s.footer}>
-          <span>© 2026 · scribbled in pencil · dhaifallah alfarawi</span>
-          <span className={s.grade}>SEEN · A+</span>
-        </footer>
+          <footer className={s.footer}>
+            <span>© 2026 · scribbled in pencil · dhaifallah alfarawi</span>
+            <span className={s.grade}>SEEN · A+</span>
+          </footer>
+        </section>
+        </NotebookDeck>
       </div>
     </div>
   );
